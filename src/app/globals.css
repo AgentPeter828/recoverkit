@@ -35,10 +35,10 @@
   }
 }
 
+/* Tailwind v4 includes its own preflight reset in @layer base. */
+/* Do NOT add unlayered * { margin: 0; padding: 0 } — it overrides @layer utilities. */
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 html,
