@@ -1,15 +1,15 @@
 import { createBrowserClient as createClient } from "@supabase/ssr";
 
-export function createBrowserClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
-  if (!url || !key) {
-    throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
-      "Check your .env.local file."
-    );
+export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+export function createBrowserClient() {
+  if (!isSupabaseConfigured) {
+    // Return null when Supabase isn't configured (dev/preview mode)
+    return null;
   }
 
-  return createClient(url, key);
+  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
