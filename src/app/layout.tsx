@@ -3,6 +3,7 @@ import { PlausibleProvider } from "@/components/analytics/PlausibleProvider";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { MockToggle } from "@/components/MockToggle";
 import "./globals.css";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME || "Firestorm App";
@@ -53,6 +54,7 @@ export default function RootLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <MockToggle />
         </PostHogProvider>
       </body>
     </html>
