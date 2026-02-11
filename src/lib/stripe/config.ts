@@ -12,7 +12,7 @@ export const plans: Plan[] = [
     name: "Starter",
     description: "Perfect for getting started",
     price: 9,
-    priceId: "", // TODO: Set your Stripe Price ID (e.g., price_xxx)
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER || "",
     features: [
       "Up to 1,000 requests",
       "Basic analytics",
@@ -25,7 +25,7 @@ export const plans: Plan[] = [
     name: "Pro",
     description: "For growing businesses",
     price: 29,
-    priceId: "", // TODO: Set your Stripe Price ID
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO || "",
     features: [
       "Up to 50,000 requests",
       "Advanced analytics",
@@ -39,7 +39,7 @@ export const plans: Plan[] = [
     name: "Enterprise",
     description: "For large-scale operations",
     price: 99,
-    priceId: "", // TODO: Set your Stripe Price ID
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE || "",
     features: [
       "Unlimited requests",
       "Full analytics suite",
