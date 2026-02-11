@@ -8,14 +8,14 @@ export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
 export async function createServerComponentClient() {
   if (!isSupabaseConfigured) {
-    return null;
+    console.warn("[supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY not set");
   }
 
   const cookieStore = await cookies();
 
   return createServerClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY,
+    SUPABASE_URL || "http://localhost:54321",
+    SUPABASE_ANON_KEY || "placeholder",
     {
       cookies: {
         getAll() {

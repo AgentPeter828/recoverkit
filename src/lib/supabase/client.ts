@@ -7,9 +7,9 @@ export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
 export function createBrowserClient() {
   if (!isSupabaseConfigured) {
-    // Return null when Supabase isn't configured (dev/preview mode)
-    return null;
+    // Log warning but still return a client — callers expect non-null
+    console.warn("[supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY not set");
   }
 
-  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return createClient(SUPABASE_URL || "http://localhost:54321", SUPABASE_ANON_KEY || "placeholder");
 }
