@@ -21,48 +21,134 @@ async function handleCheckoutSessionCompleted(
 ) {
   const supabase = getSupabaseAdmin();
   const customerId = session.customer as string;
-  const customerEmail = session.customer_details?.email;
+  const subscriptionId = session.subscription as string;
+  const userId = session.metadata?.supabase_user_id;
 
-  // TODO: Update your database with the new subscription
-  // Example: upsert a record in your subscriptions table
-  console.log(
-    `[Stripe Webhook] Checkout completed for customer ${customerId} (${customerEmail})`
+  if (!userId) {
+    console.error("[Stripe Webhook] No supabase_user_id in session metadata");
+    return;
+  }
+
+  // Retrieve subscription details from Stripe
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const priceId = subscription.items.data[0]?.price.id ?? null;
+
+  const { error } = await supabase.from("subscriptions").upsert(
+    {
+      user_id: userId,
+      stripe_customer_id: customerId,
+      stripe_subscription_id: subscriptionId,
+      status: subscription.status,
+      price_id: priceId,
+      current_period_end: new Date(
+        subscription.current_period_end * 1000
+      ).toISOString(),
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id" }
   );
 
-  // Example implementation:
-  // const { error } = await supabase
-  //   .from("subscriptions")
-  //   .upsert({
-  //     stripe_customer_id: customerId,
-  //     email: customerEmail,
-  //     status: "active",
-  //     stripe_subscription_id: session.subscription as string,
-  //     updated_at: new Date().toISOString(),
-  //   }, { onConflict: "stripe_customer_id" });
+  if (error) {
+    console.error("[Stripe Webhook] Failed to upsert subscription:", error.message);
+    throw error;
+  }
+
+  console.log(
+    `[Stripe Webhook] Checkout completed for customer ${customerId}, user ${userId}`
+  );
 }
 
-async function handleSubscriptionUpdated(
-  subscription: Stripe.Subscription
-) {
+async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   const supabase = getSupabaseAdmin();
   const customerId = subscription.customer as string;
-  const status = subscription.status;
+  const priceId = subscription.items.data[0]?.price.id ?? null;
 
-  // TODO: Update subscription status in your database
+  const { error } = await supabase
+    .from("subscriptions")
+    .update({
+      status: subscription.status,
+      price_id: priceId,
+      current_period_end: new Date(
+        subscription.current_period_end * 1000
+      ).toISOString(),
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("stripe_customer_id", customerId);
+
+  if (error) {
+    console.error("[Stripe Webhook] Failed to update subscription:", error.message);
+    throw error;
+  }
+
   console.log(
-    `[Stripe Webhook] Subscription updated for customer ${customerId}: ${status}`
+    `[Stripe Webhook] Subscription updated for customer ${customerId}: ${subscription.status}`
   );
+}
 
-  // Example implementation:
-  // const { error } = await supabase
-  //   .from("subscriptions")
-  //   .update({
-  //     status,
-  //     current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-  //     cancel_at_period_end: subscription.cancel_at_period_end,
-  //     updated_at: new Date().toISOString(),
-  //   })
-  //   .eq("stripe_customer_id", customerId);
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const supabase = getSupabaseAdmin();
+  const customerId = subscription.customer as string;
+
+  const { error } = await supabase
+    .from("subscriptions")
+    .update({
+      status: "canceled",
+      cancel_at_period_end: false,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("stripe_customer_id", customerId);
+
+  if (error) {
+    console.error("[Stripe Webhook] Failed to cancel subscription:", error.message);
+    throw error;
+  }
+
+  console.log(`[Stripe Webhook] Subscription deleted for customer ${customerId}`);
+}
+
+async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
+  const supabase = getSupabaseAdmin();
+  const customerId = invoice.customer as string;
+  const subscriptionId = invoice.subscription as string | null;
+
+  if (!subscriptionId) return;
+
+  const { error } = await supabase
+    .from("subscriptions")
+    .update({
+      status: "active",
+      updated_at: new Date().toISOString(),
+    })
+    .eq("stripe_customer_id", customerId);
+
+  if (error) {
+    console.error("[Stripe Webhook] Failed to update after payment:", error.message);
+    throw error;
+  }
+
+  console.log(`[Stripe Webhook] Invoice paid for customer ${customerId}`);
+}
+
+async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
+  const supabase = getSupabaseAdmin();
+  const customerId = invoice.customer as string;
+
+  const { error } = await supabase
+    .from("subscriptions")
+    .update({
+      status: "past_due",
+      updated_at: new Date().toISOString(),
+    })
+    .eq("stripe_customer_id", customerId);
+
+  if (error) {
+    console.error("[Stripe Webhook] Failed to update after payment failure:", error.message);
+    throw error;
+  }
+
+  console.log(`[Stripe Webhook] Invoice payment failed for customer ${customerId}`);
 }
 
 export async function POST(request: NextRequest) {
@@ -93,7 +179,7 @@ export async function POST(request: NextRequest) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error(`[Stripe Webhook] Signature verification failed: ${message}`);
     return NextResponse.json(
-      { error: `Webhook signature verification failed` },
+      { error: "Webhook signature verification failed" },
       { status: 400 }
     );
   }
@@ -112,10 +198,17 @@ export async function POST(request: NextRequest) {
       }
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
-        console.log(
-          `[Stripe Webhook] Subscription deleted for customer ${subscription.customer}`
-        );
-        // TODO: Handle subscription cancellation
+        await handleSubscriptionDeleted(subscription);
+        break;
+      }
+      case "invoice.payment_succeeded": {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handleInvoicePaymentSucceeded(invoice);
+        break;
+      }
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handleInvoicePaymentFailed(invoice);
         break;
       }
       default:

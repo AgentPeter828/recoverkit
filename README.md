@@ -141,6 +141,37 @@ src/
     └── utils.ts           # Utility functions
 ```
 
+## Testing
+
+### Setup
+
+1. Copy `tests/.env.test.example` to `tests/.env.test` and fill in values
+2. Install Playwright browsers: `npx playwright install chromium`
+
+### Run Tests
+
+```bash
+# All E2E tests
+npm run test:e2e
+
+# Individual suites
+npm run test:e2e:smoke    # Homepage, health, static pages
+npm run test:e2e:auth     # Auth forms, protected routes
+npm run test:e2e:billing  # Stripe checkout, webhooks, portal
+
+# Debug mode
+npm run test:e2e:headed   # Run with visible browser
+npm run test:e2e:ui       # Playwright UI mode
+```
+
+### Test Suites
+
+- **Smoke** — Basic page loads, API health, mobile viewport
+- **Auth** — Form rendering, validation, unauthenticated redirects
+- **Billing** — Stripe checkout/portal endpoints, webhook signature verification
+
+> **Note:** Billing integration tests require Supabase and Stripe to be running. They are automatically skipped when services are unavailable.
+
 ## License
 
 Private — Firestorm internal use.
