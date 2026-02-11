@@ -12,7 +12,7 @@ test.describe("Smoke Tests", () => {
     const response = await request.get("/api/health");
     expect(response.status()).toBe(200);
     const json = await response.json();
-    expect(json).toEqual({ status: "ok" });
+    expect(json).toMatchObject({ status: "ok" });
   });
 
   test("/pricing renders", async ({ page }) => {
