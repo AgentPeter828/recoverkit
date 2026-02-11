@@ -29,11 +29,11 @@ export function LoginForm() {
 
     if (authError) {
       setError(authError.message);
+      setLoading(false);
     } else {
-      router.push("/dashboard");
-      router.refresh();
+      // Use window.location for full page navigation so middleware picks up new auth cookies
+      window.location.href = "/dashboard";
     }
-    setLoading(false);
   }
 
   async function handleMagicLink(e: React.FormEvent) {

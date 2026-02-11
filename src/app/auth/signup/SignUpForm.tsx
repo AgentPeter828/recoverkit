@@ -33,9 +33,8 @@ export function SignUpForm() {
     if (authError) {
       setError(authError.message);
     } else if (data.session) {
-      // Auto-confirmed — go to dashboard
-      router.push("/dashboard");
-      router.refresh();
+      // Auto-confirmed — full page nav so middleware picks up auth cookies
+      window.location.href = "/dashboard";
     } else {
       setMessage("Check your email to confirm your account, then log in.");
     }
