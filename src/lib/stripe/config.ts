@@ -2,7 +2,7 @@ export interface Plan {
   name: string;
   description: string;
   price: number;
-  priceId: string; // Stripe Price ID — set after creating products in Stripe Dashboard
+  priceId: string;
   features: string[];
   highlighted: boolean;
 }
@@ -10,43 +10,43 @@ export interface Plan {
 export const plans: Plan[] = [
   {
     name: "Starter",
-    description: "Perfect for getting started",
-    price: 9,
+    description: "For indie SaaS founders",
+    price: 29,
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER || "",
     features: [
-      "Up to 1,000 requests",
-      "Basic analytics",
-      "Email support",
-      "1 team member",
+      "100 recovery attempts/month",
+      "Smart retry scheduling",
+      "Basic email templates",
+      "Recovery dashboard",
     ],
     highlighted: false,
   },
   {
-    name: "Pro",
-    description: "For growing businesses",
-    price: 29,
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO || "",
+    name: "Growth",
+    description: "For growing SaaS businesses",
+    price: 79,
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH || "",
     features: [
-      "Up to 50,000 requests",
-      "Advanced analytics",
-      "Priority support",
-      "5 team members",
-      "Custom integrations",
+      "500 recovery attempts/month",
+      "AI-generated email templates",
+      "Custom branding",
+      "Priority retry timing",
+      "Email sequence builder",
     ],
     highlighted: true,
   },
   {
-    name: "Enterprise",
-    description: "For large-scale operations",
-    price: 99,
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE || "",
+    name: "Scale",
+    description: "For serious SaaS operations",
+    price: 149,
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE || "",
     features: [
-      "Unlimited requests",
-      "Full analytics suite",
-      "Dedicated support",
-      "Unlimited team members",
-      "Custom integrations",
-      "SLA guarantee",
+      "Unlimited recovery attempts",
+      "Priority retry scheduling",
+      "Advanced analytics",
+      "Custom payment pages",
+      "API access",
+      "Priority support",
     ],
     highlighted: false,
   },

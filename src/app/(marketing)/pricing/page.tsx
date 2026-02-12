@@ -23,7 +23,7 @@ export default function PricingPage() {
         </p>
       </div>
 
-      <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3" data-testid="pricing-cards">
         {plans.map((plan) => (
           <Card
             key={plan.name}

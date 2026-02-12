@@ -7,7 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { MockToggle } from "@/components/MockToggle";
 import "./globals.css";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME || "Firestorm App";
+const appName = process.env.NEXT_PUBLIC_APP_NAME || "RecoverKit";
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {

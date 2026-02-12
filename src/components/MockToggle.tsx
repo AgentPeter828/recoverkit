@@ -16,6 +16,7 @@ export function MockToggle() {
 
   return (
     <button
+      data-testid="mock-toggle"
       onClick={() => {
         const next = !mock;
         setMockMode(next);
