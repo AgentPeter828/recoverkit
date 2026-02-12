@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { analytics } from "@/lib/mixpanel";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -32,6 +33,7 @@ export function LoginForm() {
       setLoading(false);
     } else {
       // Use window.location for full page navigation so middleware picks up new auth cookies
+      analytics.login(email);
       window.location.href = "/dashboard";
     }
   }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PlausibleProvider } from "@/components/analytics/PlausibleProvider";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
+import { MixpanelProvider } from "@/components/analytics/MixpanelProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MockToggle } from "@/components/MockToggle";
@@ -51,10 +52,12 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <PostHogProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <MockToggle />
+          <MixpanelProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <MockToggle />
+          </MixpanelProvider>
         </PostHogProvider>
       </body>
     </html>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { analytics } from "@/lib/mixpanel";
 
 export function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -34,6 +35,7 @@ export function SignUpForm() {
       setError(authError.message);
     } else if (data.session) {
       // Auto-confirmed — full page nav so middleware picks up auth cookies
+      analytics.signUp(data.session.user.id, email);
       window.location.href = "/dashboard";
     } else {
       setMessage("Check your email to confirm your account, then log in.");
