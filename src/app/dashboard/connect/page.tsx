@@ -8,6 +8,7 @@ import { isMockMode } from "@/lib/mock/config";
 import { mockStripeConnection } from "@/lib/mock/data";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { analytics } from "@/lib/mixpanel";
+import { getStoredUTMParams } from "@/lib/utm";
 
 interface StripeConnection {
   id: string;
@@ -61,6 +62,9 @@ function ConnectPageInner() {
       }
     }
     fetchConnection();
+    if (success) {
+      analytics.track("first_action", { action: "connected_stripe", ...getStoredUTMParams() });
+    }
   }, [success]);
 
   async function handleConnect() {

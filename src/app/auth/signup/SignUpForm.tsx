@@ -6,6 +6,7 @@ import { createBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { analytics } from "@/lib/mixpanel";
+import { getStoredUTMParams } from "@/lib/utm";
 
 export function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -23,6 +24,9 @@ export function SignUpForm() {
     setError(null);
     setMessage(null);
 
+    const utm = getStoredUTMParams();
+    analytics.track("signup_started", { method: "password", ...utm });
+
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -36,6 +40,14 @@ export function SignUpForm() {
     } else if (data.session) {
       // Auto-confirmed — full page nav so middleware picks up auth cookies
       analytics.signUp(data.session.user.id, email);
+      analytics.track("signup_completed", { method: "password", ...utm });
+      // Save UTMs to profile
+      if (Object.keys(utm).length > 0) {
+        await supabase.from("profiles").upsert({
+          id: data.session.user.id,
+          ...utm,
+        }, { onConflict: "id" });
+      }
       window.location.href = "/dashboard";
     } else {
       setMessage("Check your email to confirm your account, then log in.");
@@ -48,6 +60,9 @@ export function SignUpForm() {
     setLoading(true);
     setError(null);
     setMessage(null);
+
+    const magicUtm = getStoredUTMParams();
+    analytics.track("signup_started", { method: "magic_link", ...magicUtm });
 
     const { error: authError } = await supabase.auth.signInWithOtp({
       email,

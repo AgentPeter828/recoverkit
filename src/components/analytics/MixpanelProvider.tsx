@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { analytics } from "@/lib/mixpanel";
+import { getStoredUTMParams } from "@/lib/utm";
 
 /**
  * Mixpanel provider — tracks page views on route change.
@@ -12,7 +13,8 @@ export function MixpanelProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    analytics.pageView(pathname);
+    const utm = getStoredUTMParams();
+    analytics.track("page_view", { path: pathname, ...utm });
   }, [pathname]);
 
   return <>{children}</>;

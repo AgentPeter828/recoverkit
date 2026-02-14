@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { PlausibleProvider } from "@/components/analytics/PlausibleProvider";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { MixpanelProvider } from "@/components/analytics/MixpanelProvider";
+import { UTMCapture } from "@/components/analytics/UTMCapture";
+import { ConversionPixels } from "@/components/analytics/ConversionPixels";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MockToggle } from "@/components/MockToggle";
@@ -57,6 +59,8 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
             <MockToggle />
+            <UTMCapture />
+            <ConversionPixels />
           </MixpanelProvider>
         </PostHogProvider>
       </body>
