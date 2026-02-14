@@ -63,3 +63,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* Ensure all interactive elements show pointer cursor */
+a, button, [role="button"], input[type="submit"], input[type="button"], .cursor-pointer {
+  cursor: pointer;
+}
