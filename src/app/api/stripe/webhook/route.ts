@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
 import { createClient } from "@supabase/supabase-js";
+import { trackServerEvent } from "@/lib/mixpanel-server";
 import type Stripe from "stripe";
 
 // Use Node.js runtime for Stripe webhook verification
@@ -53,6 +54,19 @@ async function handleCheckoutSessionCompleted(
     console.error("[Stripe Webhook] Failed to upsert subscription:", error.message);
     throw error;
   }
+
+  // Fetch UTM params from profile for attribution
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("utm_source, utm_medium, utm_campaign, utm_content")
+    .eq("id", userId)
+    .single();
+
+  await trackServerEvent("upgraded_to_paid", {
+    plan: priceId,
+    stripe_customer_id: customerId,
+    ...(profile || {}),
+  }, userId);
 
   console.log(
     `[Stripe Webhook] Checkout completed for customer ${customerId}, user ${userId}`
