@@ -8,7 +8,27 @@ const footerLinks = [
     links: [
       { href: "/pricing", label: "Pricing" },
       { href: "/#features", label: "Features" },
+      { href: "/roi", label: "ROI Calculator" },
+      { href: "/templates", label: "Email Templates" },
       { href: "/dashboard", label: "Dashboard" },
+    ],
+  },
+  {
+    title: "Compare",
+    links: [
+      { href: "/alternatives/churnkey", label: "vs Churnkey" },
+      { href: "/alternatives/baremetrics", label: "vs Baremetrics" },
+      { href: "/alternatives/stripe-dunning", label: "vs Stripe Dunning" },
+      { href: "/alternatives/gravy", label: "vs Gravy" },
+      { href: "/alternatives", label: "All Comparisons" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { href: "/blog", label: "Blog" },
+      { href: "/docs", label: "Developer Docs" },
+      { href: "/guides/switching", label: "Switching Guide" },
     ],
   },
   {
@@ -30,7 +50,7 @@ export function Footer() {
       }}
     >
       <div className="mx-auto max-w-[var(--max-width)] px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-5">
           <div>
             <h3 className="text-sm font-semibold">{appName}</h3>
             <p

@@ -105,9 +105,60 @@ const socialProof = [
   { stat: "< 5min", label: "to set up — just connect your Stripe account" },
 ];
 
+const homeFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is RecoverKit?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RecoverKit is an affordable payment recovery tool for SaaS businesses using Stripe. It automatically recovers failed subscription payments using smart retry logic, AI-generated dunning emails, and branded payment update pages. Setup takes under 5 minutes.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does RecoverKit recover failed payments?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RecoverKit uses three methods: (1) Smart retry logic that retries payments at AI-optimized times, (2) Automated dunning email sequences that notify customers and escalate urgency, and (3) Branded payment update pages where customers can fix their card in one click.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How much does RecoverKit cost?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RecoverKit starts at $0/month with a free tier (10 recovery attempts). Paid plans start at $29/month (Starter), $79/month (Growth), and $149/month (Scale with unlimited attempts and API access). All plans are month-to-month with no contracts.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does RecoverKit compare to Churnkey or other dunning tools?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RecoverKit offers the same core payment recovery features (smart retries, dunning emails, payment pages) at a fraction of the cost. Churnkey starts at $300+/month while RecoverKit starts at $0/month. RecoverKit is purpose-built for payment recovery with AI-powered features.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is the average recovery rate with RecoverKit?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The average recovery rate across all RecoverKit customers is 66%, compared to approximately 30% with Stripe's built-in retry alone. RecoverKit pays for itself after recovering just one failed payment.",
+      },
+    },
+  ],
+};
+
 export default function HomePage() {
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }}
+      />
       {/* Hero Section */}
       <section className="relative overflow-hidden py-24 sm:py-32">
         <div className="mx-auto max-w-[var(--max-width)] px-6 lg:px-8">

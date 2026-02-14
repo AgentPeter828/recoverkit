@@ -12,6 +12,9 @@ const appName = process.env.NEXT_PUBLIC_APP_NAME || "Firestorm App";
 const navLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/#features", label: "Features" },
+  { href: "/alternatives", label: "Compare" },
+  { href: "/templates", label: "Templates" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function Header() {

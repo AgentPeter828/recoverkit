@@ -8,9 +8,60 @@ export const metadata: Metadata = {
   title: "Pricing",
 };
 
+const pricingFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is there a free plan?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes — RecoverKit offers a free plan with up to 10 recovery attempts per month. No credit card required. It includes basic retry scheduling, default email templates, and the recovery dashboard.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What counts as a recovery attempt?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A recovery attempt is counted each time RecoverKit initiates a recovery campaign for a failed payment — including retry scheduling and dunning email sequences. One failed invoice = one recovery attempt, regardless of how many retries or emails are sent.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I cancel anytime?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes — all RecoverKit plans are month-to-month with no contracts. You can cancel, upgrade, or downgrade at any time from your dashboard. No cancellation fees.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How quickly does RecoverKit pay for itself?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RecoverKit pays for itself after recovering just one failed payment. At $29/month for the Starter plan, you only need to recover one $29+ subscription payment to break even. The average RecoverKit user recovers $2,800/month.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does RecoverKit pricing compare to Churnkey?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "RecoverKit is significantly more affordable. Churnkey starts at $300-500+/month with annual contracts. RecoverKit starts at $0/month (free tier) with paid plans from $29/month. That's a 90%+ cost savings for the same core payment recovery features.",
+      },
+    },
+  ],
+};
+
 export default function PricingPage() {
   return (
     <div className="mx-auto max-w-[var(--max-width)] px-6 py-20 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingFaqSchema) }}
+      />
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           Pricing plans for every stage
