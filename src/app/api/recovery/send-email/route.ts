@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { sendEmail, buildDunningEmailHtml } from "@/lib/services/email-service";
+import { trackServerEvent } from "@/lib/mixpanel-server";
 
 export const runtime = "nodejs";
 
@@ -89,6 +90,17 @@ export async function POST(request: NextRequest) {
     error_message: result.error || null,
     executed_at: new Date().toISOString(),
   });
+
+  // Track in Mixpanel
+  if (result.success) {
+    await trackServerEvent("dunning_email_sent", {
+      step_number: template.step_number,
+      campaign_id: campaign.id,
+      customer_email: campaign.customer_email,
+      subject: template.subject,
+      is_ai_generated: template.is_ai_generated,
+    }, user.id);
+  }
 
   return NextResponse.json({
     success: result.success,

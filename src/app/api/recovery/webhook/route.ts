@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getNextRetryTime } from "@/lib/services/retry-scheduler";
+import { trackServerEvent } from "@/lib/mixpanel-server";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -81,6 +82,14 @@ export async function POST(request: NextRequest) {
     console.error("[recovery/webhook] Failed to create campaign:", error.message);
     return NextResponse.json({ error: "Failed to create campaign" }, { status: 500 });
   }
+
+  // Track in Mixpanel
+  await trackServerEvent("payment_failed_detected", {
+    amount: invoice.amount_due,
+    currency: invoice.currency,
+    customer_email: invoice.customer_email,
+    failure_code: invoice.last_finalization_error?.code,
+  }, connection.user_id);
 
   console.log(`[recovery/webhook] Created recovery campaign for invoice ${invoice.id}`);
   return NextResponse.json({ received: true, campaign_created: true });

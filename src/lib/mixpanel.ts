@@ -62,4 +62,35 @@ export const analytics = {
   ctaClicked(label: string, location?: string) {
     this.track("CTA Clicked", { label, location });
   },
+
+  // --- RecoverKit product-specific events ---
+
+  paymentFailedDetected(properties?: {
+    amount?: number;
+    currency?: string;
+    customer_email?: string;
+    failure_code?: string;
+  }) {
+    this.track("payment_failed_detected", properties);
+  },
+
+  dunningEmailSent(properties?: {
+    step_number?: number;
+    campaign_id?: string;
+    customer_email?: string;
+    subject?: string;
+    is_ai_generated?: boolean;
+  }) {
+    this.track("dunning_email_sent", properties);
+  },
+
+  paymentRecovered(properties?: {
+    amount?: number;
+    currency?: string;
+    campaign_id?: string;
+    recovery_method?: string;
+    days_to_recover?: number;
+  }) {
+    this.track("payment_recovered", properties);
+  },
 };

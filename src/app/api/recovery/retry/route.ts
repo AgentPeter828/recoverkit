@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { retryPayment, getNextRetryTime } from "@/lib/services/retry-scheduler";
+import { trackServerEvent } from "@/lib/mixpanel-server";
 
 export const runtime = "nodejs";
 
@@ -68,6 +69,17 @@ export async function POST(request: NextRequest) {
 
   // Update campaign
   if (result.success) {
+    // Track recovery in Mixpanel
+    const createdAt = new Date(campaign.created_at);
+    const daysToRecover = Math.round((Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+    await trackServerEvent("payment_recovered", {
+      amount: campaign.amount_due,
+      currency: campaign.currency,
+      campaign_id: campaign.id,
+      recovery_method: "retry",
+      days_to_recover: daysToRecover,
+    }, user.id);
+
     await supabase
       .from("recovery_campaigns")
       .update({
