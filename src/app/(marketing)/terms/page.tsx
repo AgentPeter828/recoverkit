@@ -18,8 +18,7 @@ export default function TermsPage() {
         </p>
         <p>
           These Terms of Service (&quot;Terms&quot;) govern your use of RecoverKit
-          (&quot;Service&quot;, &quot;we&quot;, &quot;us&quot;), operated by The
-          Beagles Curiosity Trust, a trust registered in Victoria, Australia. By
+          (&quot;Service&quot;, &quot;we&quot;, &quot;us&quot;), operated by Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486), a company registered in Victoria, Australia. By
           creating an account or using RecoverKit you agree to these Terms in full.
           If you do not agree, do not use the Service.
         </p>
@@ -146,7 +145,7 @@ export default function TermsPage() {
         </h2>
         <p>
           All rights in the Service (code, design, branding) remain with The
-          Beagles Curiosity Trust. These Terms do not grant you any rights to our
+          Act Two Pty Ltd. These Terms do not grant you any rights to our
           trademarks or proprietary materials beyond what is needed to use the
           Service.
         </p>

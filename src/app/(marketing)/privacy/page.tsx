@@ -18,8 +18,7 @@ export default function PrivacyPage() {
         </p>
         <p>
           This Privacy Policy explains how RecoverKit (&quot;Service&quot;,
-          &quot;we&quot;, &quot;us&quot;), operated by The Beagles Curiosity Trust
-          (Victoria, Australia), collects, uses, and protects personal information.
+          &quot;we&quot;, &quot;us&quot;), operated by Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486), a company registered in Victoria, Australia, collects, uses, and protects personal information.
           We comply with the Australian Privacy Act 1988 (Cth), the Australian
           Privacy Principles (APPs), and the EU General Data Protection Regulation
           (GDPR) where applicable.
@@ -208,7 +207,7 @@ export default function PrivacyPage() {
           .
         </p>
         <p>
-          The Beagles Curiosity Trust
+          Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486)
           <br />
           Victoria, Australia
         </p>
