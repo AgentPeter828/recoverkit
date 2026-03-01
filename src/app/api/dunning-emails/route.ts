@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   // Verify sequence belongs to user
   const { data: seq } = await supabase
-    .from("dunning_sequences")
+    .from("rk_dunning_sequences")
     .select("id")
     .eq("id", sequence_id)
     .eq("user_id", user.id)
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   if (!seq) return NextResponse.json({ error: "Sequence not found" }, { status: 404 });
 
   const { data, error } = await supabase
-    .from("dunning_emails")
+    .from("rk_dunning_emails")
     .insert({
       user_id: user.id,
       sequence_id,

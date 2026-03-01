@@ -14,7 +14,7 @@ export async function GET(
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data: campaign, error } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*")
     .eq("id", id)
     .eq("user_id", user.id)
@@ -23,13 +23,13 @@ export async function GET(
   if (error || !campaign) return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
 
   const { data: attempts } = await supabase
-    .from("recovery_attempts")
+    .from("rk_recovery_attempts")
     .select("*")
     .eq("campaign_id", id)
     .order("attempt_number", { ascending: true });
 
   const { data: emails } = await supabase
-    .from("sent_emails")
+    .from("rk_sent_emails")
     .select("*")
     .eq("campaign_id", id)
     .order("sent_at", { ascending: true });
@@ -56,7 +56,7 @@ export async function PATCH(
   }
 
   const { data, error } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .update(updates)
     .eq("id", id)
     .eq("user_id", user.id)

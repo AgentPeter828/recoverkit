@@ -14,7 +14,7 @@ export async function GET(
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data: sequence, error } = await supabase
-    .from("dunning_sequences")
+    .from("rk_dunning_sequences")
     .select("*")
     .eq("id", id)
     .eq("user_id", user.id)
@@ -23,7 +23,7 @@ export async function GET(
   if (error || !sequence) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const { data: emails } = await supabase
-    .from("dunning_emails")
+    .from("rk_dunning_emails")
     .select("*")
     .eq("sequence_id", id)
     .order("step_number", { ascending: true });
@@ -50,7 +50,7 @@ export async function PATCH(
   }
 
   const { data, error } = await supabase
-    .from("dunning_sequences")
+    .from("rk_dunning_sequences")
     .update(updates)
     .eq("id", id)
     .eq("user_id", user.id)
@@ -72,7 +72,7 @@ export async function DELETE(
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { error } = await supabase
-    .from("dunning_sequences")
+    .from("rk_dunning_sequences")
     .delete()
     .eq("id", id)
     .eq("user_id", user.id);

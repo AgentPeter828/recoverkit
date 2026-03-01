@@ -11,7 +11,7 @@ async function getPage(slug: string) {
 
   const supabase = createClient(url, serviceKey);
   const { data } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .select("*")
     .eq("slug", slug)
     .eq("is_active", true)

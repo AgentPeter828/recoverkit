@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
   // Get campaign
   const { data: campaign } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*")
     .eq("id", campaign_id)
     .eq("user_id", user.id)
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
   // Get dunning email template
   const { data: template } = await supabase
-    .from("dunning_emails")
+    .from("rk_dunning_emails")
     .select("*")
     .eq("id", dunning_email_id)
     .eq("user_id", user.id)
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
   // Get payment update page for link
   const { data: updatePage } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .select("slug")
     .eq("user_id", user.id)
     .eq("is_active", true)
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
   });
 
   // Log sent email
-  await supabase.from("sent_emails").insert({
+  await supabase.from("rk_sent_emails").insert({
     user_id: user.id,
     campaign_id: campaign.id,
     dunning_email_id: template.id,
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
   });
 
   // Record as attempt
-  await supabase.from("recovery_attempts").insert({
+  await supabase.from("rk_recovery_attempts").insert({
     user_id: user.id,
     campaign_id: campaign.id,
     attempt_number: campaign.retry_count + 1,

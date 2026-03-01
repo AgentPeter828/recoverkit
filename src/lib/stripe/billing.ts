@@ -40,7 +40,7 @@ export async function getSubscription(
 ): Promise<Subscription | null> {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
-    .from("subscriptions")
+    .from("rk_subscriptions")
     .select("*")
     .eq("user_id", userId)
     .single();
@@ -60,7 +60,7 @@ export async function createOrGetCustomer(
 
   // Check if user already has a subscription record with a customer ID
   const { data: existing } = await supabase
-    .from("subscriptions")
+    .from("rk_subscriptions")
     .select("stripe_customer_id")
     .eq("user_id", userId)
     .single();
@@ -76,7 +76,7 @@ export async function createOrGetCustomer(
   });
 
   // Upsert a subscription record with the new customer ID
-  await supabase.from("subscriptions").upsert(
+  await supabase.from("rk_subscriptions").upsert(
     {
       user_id: userId,
       stripe_customer_id: customer.id,

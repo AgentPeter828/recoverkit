@@ -26,7 +26,7 @@ export default async function DashboardPage() {
 
   // Check Stripe connection
   const { data: connection } = await supabase
-    .from("stripe_connections")
+    .from("rk_stripe_connections")
     .select("stripe_account_id, business_name")
     .eq("user_id", user.id)
     .single();

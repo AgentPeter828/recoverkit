@@ -10,7 +10,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data, error } = await supabase
-    .from("dunning_sequences")
+    .from("rk_dunning_sequences")
     .select("*, dunning_emails(count)")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { data, error } = await supabase
-    .from("dunning_sequences")
+    .from("rk_dunning_sequences")
     .insert({
       user_id: user.id,
       name,

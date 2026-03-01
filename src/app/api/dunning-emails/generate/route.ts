@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   // Optionally save to sequence
   if (sequence_id) {
     const { data: saved, error } = await supabase
-      .from("dunning_emails")
+      .from("rk_dunning_emails")
       .insert({
         user_id: user.id,
         sequence_id,

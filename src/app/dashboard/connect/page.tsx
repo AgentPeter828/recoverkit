@@ -49,7 +49,7 @@ function ConnectPageInner() {
         if (!user) return;
 
         const { data } = await supabase
-          .from("stripe_connections")
+          .from("rk_stripe_connections")
           .select("*")
           .eq("user_id", user.id)
           .single();

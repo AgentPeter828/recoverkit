@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
   // Verify page exists and is active
   const { data: page } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .select("id, user_id")
     .eq("id", page_id)
     .eq("is_active", true)
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   // For MVP, simulate success
 
   const { data: connection } = await supabase
-    .from("stripe_connections")
+    .from("rk_stripe_connections")
     .select("access_token, stripe_account_id")
     .eq("user_id", page.user_id)
     .single();

@@ -11,20 +11,20 @@ export async function GET() {
 
   // Total campaigns
   const { count: totalCampaigns } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id);
 
   // Active campaigns
   const { count: activeCampaigns } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id)
     .eq("status", "active");
 
   // Recovered campaigns
   const { data: recoveredData } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("amount_due")
     .eq("user_id", user.id)
     .eq("status", "recovered");
@@ -34,20 +34,20 @@ export async function GET() {
 
   // Failed campaigns
   const { count: failedCampaigns } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id)
     .eq("status", "failed");
 
   // Emails sent
   const { count: emailsSent } = await supabase
-    .from("sent_emails")
+    .from("rk_sent_emails")
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id);
 
   // Total attempts
   const { count: totalAttempts } = await supabase
-    .from("recovery_attempts")
+    .from("rk_recovery_attempts")
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id);
 

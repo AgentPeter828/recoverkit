@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   const offset = parseInt(request.nextUrl.searchParams.get("offset") || "0");
 
   let query = supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*", { count: "exact" })
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   // Find the user who connected this Stripe account
   const { data: connection } = await supabase
-    .from("stripe_connections")
+    .from("rk_stripe_connections")
     .select("user_id")
     .eq("stripe_account_id", connectedAccountId)
     .single();
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
   // Check if campaign already exists for this invoice
   const { data: existing } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("id")
     .eq("stripe_invoice_id", invoice.id)
     .single();
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
 
   // Create recovery campaign
   const nextRetry = getNextRetryTime(1);
-  const { error } = await supabase.from("recovery_campaigns").insert({
+  const { error } = await supabase.from("rk_recovery_campaigns").insert({
     user_id: connection.user_id,
     stripe_invoice_id: invoice.id,
     stripe_customer_id: typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id ?? "",

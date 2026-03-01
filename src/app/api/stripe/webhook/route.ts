@@ -34,7 +34,7 @@ async function handleCheckoutSessionCompleted(
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   const priceId = subscription.items.data[0]?.price.id ?? null;
 
-  const { error } = await supabase.from("subscriptions").upsert(
+  const { error } = await supabase.from("rk_subscriptions").upsert(
     {
       user_id: userId,
       stripe_customer_id: customerId,
@@ -79,7 +79,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   const priceId = subscription.items.data[0]?.price.id ?? null;
 
   const { error } = await supabase
-    .from("subscriptions")
+    .from("rk_subscriptions")
     .update({
       status: subscription.status,
       price_id: priceId,
@@ -106,7 +106,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
 
   const { error } = await supabase
-    .from("subscriptions")
+    .from("rk_subscriptions")
     .update({
       status: "canceled",
       cancel_at_period_end: false,
@@ -130,7 +130,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   if (!subscriptionId) return;
 
   const { error } = await supabase
-    .from("subscriptions")
+    .from("rk_subscriptions")
     .update({
       status: "active",
       updated_at: new Date().toISOString(),
@@ -150,7 +150,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const customerId = invoice.customer as string;
 
   const { error } = await supabase
-    .from("subscriptions")
+    .from("rk_subscriptions")
     .update({
       status: "past_due",
       updated_at: new Date().toISOString(),

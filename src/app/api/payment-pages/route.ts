@@ -10,7 +10,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data, error } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .select("*")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   const slug = `pay-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
   const { data, error } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .insert({
       user_id: user.id,
       slug,

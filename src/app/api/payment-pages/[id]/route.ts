@@ -22,7 +22,7 @@ export async function PATCH(
   }
 
   const { data, error } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .update(updates)
     .eq("id", id)
     .eq("user_id", user.id)
@@ -44,7 +44,7 @@ export async function DELETE(
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { error } = await supabase
-    .from("payment_update_pages")
+    .from("rk_payment_update_pages")
     .delete()
     .eq("id", id)
     .eq("user_id", user.id);

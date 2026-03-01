@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     const result = await exchangeCode(code);
     const accountInfo = await getAccountInfo(result.stripe_account_id);
 
-    const { error: dbError } = await supabase.from("stripe_connections").upsert(
+    const { error: dbError } = await supabase.from("rk_stripe_connections").upsert(
       {
         user_id: user.id,
         stripe_account_id: result.stripe_account_id,

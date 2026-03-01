@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
   // Get campaign
   const { data: campaign, error: campError } = await supabase
-    .from("recovery_campaigns")
+    .from("rk_recovery_campaigns")
     .select("*")
     .eq("id", campaign_id)
     .eq("user_id", user.id)
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
   // Get connected Stripe account
   const { data: connection } = await supabase
-    .from("stripe_connections")
+    .from("rk_stripe_connections")
     .select("access_token")
     .eq("user_id", user.id)
     .single();
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
   const result = await retryPayment(campaign.stripe_invoice_id, connection.access_token);
 
   // Record attempt
-  await supabase.from("recovery_attempts").insert({
+  await supabase.from("rk_recovery_attempts").insert({
     user_id: user.id,
     campaign_id: campaign.id,
     attempt_number: attemptNumber,
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     }, user.id);
 
     await supabase
-      .from("recovery_campaigns")
+      .from("rk_recovery_campaigns")
       .update({
         status: "recovered",
         retry_count: attemptNumber,
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
       : null;
 
     await supabase
-      .from("recovery_campaigns")
+      .from("rk_recovery_campaigns")
       .update({
         retry_count: attemptNumber,
         status: attemptNumber >= campaign.max_retries ? "failed" : "active",

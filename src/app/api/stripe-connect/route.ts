@@ -21,7 +21,7 @@ export async function DELETE() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { error } = await supabase
-    .from("stripe_connections")
+    .from("rk_stripe_connections")
     .delete()
     .eq("user_id", user.id);
 
