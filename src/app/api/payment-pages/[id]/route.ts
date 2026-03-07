@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -50,5 +51,8 @@ export async function DELETE(
     .eq("user_id", user.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit(user.id, "payment_page_deleted", { page_id: id });
+
   return NextResponse.json({ success: true });
 }

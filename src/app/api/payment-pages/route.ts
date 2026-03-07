@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { paymentPageSchema } from "@/lib/validators";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -25,8 +27,15 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
-  const { title, message, brand_color, logo_url } = body;
+  const rawBody = await request.json();
+  const parsed = paymentPageSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
+  }
+  const { title, message, brand_color, logo_url } = parsed.data;
 
   // Generate a unique slug
   const slug = `pay-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
@@ -36,14 +45,17 @@ export async function POST(request: NextRequest) {
     .insert({
       user_id: user.id,
       slug,
-      title: title || "Update Your Payment Method",
-      message: message || "Your recent payment failed. Please update your payment method to continue your subscription.",
-      brand_color: brand_color || "#6366f1",
+      title,
+      message,
+      brand_color,
       logo_url: logo_url || null,
     })
     .select()
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit(user.id, "payment_page_created", { page_id: data.id, slug });
+
   return NextResponse.json({ page: data }, { status: 201 });
 }

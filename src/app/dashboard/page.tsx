@@ -82,7 +82,22 @@ export default async function DashboardPage() {
             <Button variant="ghost" size="sm">View All →</Button>
           </Link>
         </div>
-        <RecentCampaigns />
+        {!connection ? (
+          <Card className="p-8 text-center">
+            <p className="text-4xl mb-3">🔗</p>
+            <p className="font-semibold">Connect your Stripe account to start recovering revenue</p>
+            <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: "var(--color-text-secondary)" }}>
+              Once connected, RecoverKit will automatically detect failed payments and create recovery campaigns.
+            </p>
+            <div className="mt-4">
+              <Link href="/dashboard/connect">
+                <Button variant="primary" size="sm">Connect Stripe</Button>
+              </Link>
+            </div>
+          </Card>
+        ) : (
+          <RecentCampaigns />
+        )}
       </div>
 
       {/* Subscription Status */}

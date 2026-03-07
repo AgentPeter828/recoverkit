@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { dunningSequenceSchema } from "@/lib/validators";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -25,12 +27,15 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
-  const { name, description } = body;
-
-  if (!name || typeof name !== "string") {
-    return NextResponse.json({ error: "Name is required" }, { status: 400 });
+  const rawBody = await request.json();
+  const parsed = dunningSequenceSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
   }
+  const { name, description } = parsed.data;
 
   const { data, error } = await supabase
     .from("rk_dunning_sequences")
@@ -43,5 +48,8 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit(user.id, "sequence_created", { sequence_id: data.id, name });
+
   return NextResponse.json({ sequence: data }, { status: 201 });
 }

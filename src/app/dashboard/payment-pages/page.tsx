@@ -140,10 +140,16 @@ export default function PaymentPagesPage() {
       ) : pages.length === 0 ? (
         <Card className="p-8 text-center">
           <p className="text-4xl mb-3">🔗</p>
-          <p className="font-semibold">No payment pages yet</p>
-          <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-            Create a branded page where customers can update their payment method.
+          <p className="font-semibold">Create a branded payment update page for your customers</p>
+          <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: "var(--color-text-secondary)" }}>
+            Payment update pages let your customers securely update their card details.
+            Include links in your dunning emails to make it easy to fix failed payments.
           </p>
+          <div className="mt-4">
+            <Button variant="primary" size="sm" onClick={() => setShowCreate(true)}>
+              + Create Page
+            </Button>
+          </div>
         </Card>
       ) : (
         <div className="space-y-3">

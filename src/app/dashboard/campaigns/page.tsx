@@ -118,7 +118,16 @@ export default function CampaignsPage() {
       ) : filtered.length === 0 ? (
         <Card className="p-8 text-center">
           <p className="text-4xl mb-3">📭</p>
-          <p className="font-semibold">No campaigns found</p>
+          <p className="font-semibold">No recovery campaigns yet</p>
+          <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: "var(--color-text-secondary)" }}>
+            Failed payments will appear here automatically once Stripe is connected.
+            RecoverKit monitors your account and creates recovery campaigns for each failed invoice.
+          </p>
+          <div className="mt-4">
+            <Link href="/dashboard/connect">
+              <Button variant="outline" size="sm">Connect Stripe</Button>
+            </Link>
+          </div>
         </Card>
       ) : (
         <div className="space-y-3">

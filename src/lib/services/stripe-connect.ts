@@ -4,9 +4,12 @@
  */
 
 import { stripe } from "@/lib/stripe/client";
+import { cookies } from "next/headers";
 
 const STRIPE_CLIENT_ID = process.env.STRIPE_CLIENT_ID;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+const OAUTH_STATE_COOKIE = "stripe_oauth_state";
 
 interface ConnectResult {
   stripe_account_id: string;
@@ -16,10 +19,26 @@ interface ConnectResult {
   scope: string;
 }
 
-export function getOAuthUrl(): string {
+/**
+ * Generate OAuth URL with CSRF state parameter.
+ * Stores state in an httpOnly cookie for validation on callback.
+ */
+export async function getOAuthUrl(): Promise<string> {
+  const state = crypto.randomUUID();
+
+  // Store state in httpOnly cookie (expires in 10 minutes)
+  const cookieStore = await cookies();
+  cookieStore.set(OAUTH_STATE_COOKIE, state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 600, // 10 minutes
+    path: "/",
+  });
+
   if (!STRIPE_CLIENT_ID) {
     console.warn("[stripe-connect] No STRIPE_CLIENT_ID, returning mock OAuth URL");
-    return `${APP_URL}/api/stripe-connect/callback?code=mock_auth_code`;
+    return `${APP_URL}/api/stripe-connect/callback?code=mock_auth_code&state=${state}`;
   }
 
   const params = new URLSearchParams({
@@ -27,9 +46,27 @@ export function getOAuthUrl(): string {
     client_id: STRIPE_CLIENT_ID,
     scope: "read_write",
     redirect_uri: `${APP_URL}/api/stripe-connect/callback`,
+    state,
   });
 
   return `https://connect.stripe.com/oauth/authorize?${params.toString()}`;
+}
+
+/**
+ * Validate the OAuth state parameter against the stored cookie.
+ * Returns true if valid, false if CSRF mismatch.
+ */
+export async function validateOAuthState(state: string | null): Promise<boolean> {
+  if (!state) return false;
+
+  const cookieStore = await cookies();
+  const storedState = cookieStore.get(OAUTH_STATE_COOKIE)?.value;
+
+  // Clean up the cookie
+  cookieStore.delete(OAUTH_STATE_COOKIE);
+
+  if (!storedState) return false;
+  return state === storedState;
 }
 
 export async function exchangeCode(code: string): Promise<ConnectResult> {

@@ -134,10 +134,16 @@ export default function SequencesPage() {
       ) : sequences.length === 0 ? (
         <Card className="p-8 text-center">
           <p className="text-4xl mb-3">📧</p>
-          <p className="font-semibold">No email sequences yet</p>
-          <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-            Create your first dunning sequence to start recovering failed payments via email.
+          <p className="font-semibold">Create your first dunning email sequence</p>
+          <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: "var(--color-text-secondary)" }}>
+            Dunning sequences are automated email flows sent to customers with failed payments.
+            Each step escalates urgency — from friendly reminder to last chance.
           </p>
+          <div className="mt-4">
+            <Button variant="primary" size="sm" onClick={() => setShowCreate(true)}>
+              + Create Sequence
+            </Button>
+          </div>
         </Card>
       ) : (
         <div className="space-y-3">

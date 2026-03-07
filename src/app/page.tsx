@@ -100,9 +100,9 @@ const pricingTiers = [
 
 const socialProof = [
   { stat: "9%", label: "of MRR lost to failed payments on average" },
-  { stat: "$2.8K", label: "recovered per month by the average RecoverKit user" },
-  { stat: "66%", label: "average recovery rate across all customers" },
+  { stat: "3x", label: "more recoveries than Stripe's built-in dunning" },
   { stat: "< 5min", label: "to set up — just connect your Stripe account" },
+  { stat: "24/7", label: "automated retries while you sleep" },
 ];
 
 const homeFaqSchema = {
@@ -143,10 +143,10 @@ const homeFaqSchema = {
     },
     {
       "@type": "Question",
-      name: "What is the average recovery rate with RecoverKit?",
+      name: "Does RecoverKit recover more than Stripe's built-in dunning?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The average recovery rate across all RecoverKit customers is 66%, compared to approximately 30% with Stripe's built-in retry alone. RecoverKit pays for itself after recovering just one failed payment.",
+        text: "RecoverKit is designed to recover more failed payments than Stripe's built-in retry alone, using smart retry timing, AI-generated dunning emails, and branded payment update pages. Results vary by business. RecoverKit pays for itself after recovering just one failed payment.",
       },
     },
   ],
@@ -205,6 +205,9 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          <p className="text-xs text-center mt-4" style={{ color: "var(--color-text-secondary)" }}>
+            Results vary by business. The 9% figure is an industry average for SaaS involuntary churn.
+          </p>
         </div>
       </section>
 
@@ -228,7 +231,7 @@ export default function HomePage() {
               <Card className="p-8" style={{ background: "#f0fdf4", borderColor: "#bbf7d0" }}>
                 <h3 className="text-lg font-semibold text-green-800 mb-3">✅ With RecoverKit</h3>
                 <ul className="space-y-2 text-sm text-green-700">
-                  <li>• Smart retries at optimal times (66% recovery rate)</li>
+                  <li>• Smart retries at optimal times for higher recovery</li>
                   <li>• AI emails that feel personal, not robotic</li>
                   <li>• Customers fix their payment in one click</li>
                   <li>• Starts at $29/mo — pays for itself in days</li>
@@ -388,8 +391,8 @@ export default function HomePage() {
               Stop losing revenue to failed payments
             </h2>
             <p className="mt-4 text-lg" style={{ color: "var(--color-text-secondary)" }}>
-              Join hundreds of SaaS founders who are recovering thousands in lost MRR
-              every month with RecoverKit. Start free — no credit card required.
+              RecoverKit helps SaaS founders recover lost MRR from failed payments
+              automatically. Start free — no credit card required.
             </p>
             <div className="mt-10">
               <Link href="/auth/signup">

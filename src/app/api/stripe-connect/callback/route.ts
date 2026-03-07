@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
-import { exchangeCode, getAccountInfo } from "@/lib/services/stripe-connect";
+import { exchangeCode, getAccountInfo, validateOAuthState } from "@/lib/services/stripe-connect";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -14,9 +15,17 @@ export async function GET(request: NextRequest) {
 
   const code = request.nextUrl.searchParams.get("code");
   const error = request.nextUrl.searchParams.get("error");
+  const state = request.nextUrl.searchParams.get("state");
 
   if (error) {
     return NextResponse.redirect(new URL("/dashboard/connect?error=" + encodeURIComponent(error), request.url));
+  }
+
+  // Validate CSRF state parameter
+  const stateValid = await validateOAuthState(state);
+  if (!stateValid) {
+    console.error("[stripe-connect/callback] Invalid OAuth state — possible CSRF attack");
+    return NextResponse.redirect(new URL("/dashboard/connect?error=invalid_state", request.url));
   }
 
   if (!code) {
@@ -46,6 +55,12 @@ export async function GET(request: NextRequest) {
       console.error("[stripe-connect/callback] DB error:", dbError.message);
       return NextResponse.redirect(new URL("/dashboard/connect?error=db_error", request.url));
     }
+
+    await logAudit(user.id, "stripe_connected", {
+      stripe_account_id: result.stripe_account_id,
+      business_name: accountInfo.business_name,
+      livemode: result.livemode,
+    });
 
     return NextResponse.redirect(new URL("/dashboard/connect?success=true", request.url));
   } catch (err) {

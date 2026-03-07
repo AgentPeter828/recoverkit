@@ -5,11 +5,11 @@ export const runtime = "nodejs";
 
 /**
  * POST — handle payment method update from customer-facing page.
- * In production, this would create a Stripe SetupIntent and return a client secret.
- * For MVP, it simulates a successful update.
+ * Creates a Stripe SetupIntent for the connected account's customer,
+ * or falls back to a mock response in development.
  */
 export async function POST(request: NextRequest) {
-  const { page_id } = await request.json();
+  const { page_id, campaign_id } = await request.json();
 
   if (!page_id) {
     return NextResponse.json({ error: "Missing page_id" }, { status: 400 });
@@ -29,12 +29,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Page not found or inactive" }, { status: 404 });
   }
 
-  // In production, we'd:
-  // 1. Get the connected Stripe account for this user
-  // 2. Create a SetupIntent via the connected account
-  // 3. Return the client_secret for Stripe.js to handle
-  // For MVP, simulate success
-
+  // Get the connected Stripe account for this page's user
   const { data: connection } = await supabase
     .from("rk_stripe_connections")
     .select("access_token, stripe_account_id")
@@ -42,13 +37,43 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (connection && !connection.access_token.startsWith("sk_test_mock_")) {
-    // Real Stripe: would create SetupIntent here
     try {
       const Stripe = (await import("stripe")).default;
       const connectedStripe = new Stripe(connection.access_token, { apiVersion: "2025-02-24.acacia" });
+
+      // If we have a campaign_id, try to get the customer and create a portal session
+      if (campaign_id) {
+        const { data: campaign } = await supabase
+          .from("recovery_campaigns")
+          .select("stripe_customer_id")
+          .eq("id", campaign_id)
+          .single();
+
+        if (campaign?.stripe_customer_id) {
+          // Try Stripe Customer Portal for card update
+          try {
+            const portalSession = await connectedStripe.billingPortal.sessions.create({
+              customer: campaign.stripe_customer_id,
+              return_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pay/success`,
+              flow_data: {
+                type: "payment_method_update",
+              },
+            });
+            return NextResponse.json({
+              success: true,
+              portal_url: portalSession.url,
+            });
+          } catch {
+            // Fall through to SetupIntent
+          }
+        }
+      }
+
+      // Create a SetupIntent for card update
       const setupIntent = await connectedStripe.setupIntents.create({
         payment_method_types: ["card"],
       });
+
       return NextResponse.json({
         success: true,
         client_secret: setupIntent.client_secret,

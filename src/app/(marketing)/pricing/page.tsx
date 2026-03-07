@@ -41,7 +41,7 @@ const pricingFaqSchema = {
       name: "How quickly does RecoverKit pay for itself?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit pays for itself after recovering just one failed payment. At $29/month for the Starter plan, you only need to recover one $29+ subscription payment to break even. The average RecoverKit user recovers $2,800/month.",
+        text: "RecoverKit pays for itself after recovering just one failed payment. At $29/month for the Starter plan, you only need to recover one $29+ subscription payment to break even. Results vary by business.",
       },
     },
     {

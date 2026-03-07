@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { stripe } from "@/lib/stripe/client";
 import { getNextRetryTime } from "@/lib/services/retry-scheduler";
 import { trackServerEvent } from "@/lib/mixpanel-server";
+import { rateLimitWebhook } from "@/lib/rate-limit";
+import { checkPlanLimit } from "@/lib/plan-limits";
+import { logAudit } from "@/lib/audit";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -12,15 +16,39 @@ export const runtime = "nodejs";
  * This is separate from the main Stripe webhook (which handles our own billing).
  */
 export async function POST(request: NextRequest) {
-  const body = await request.text();
+  // Rate limit by IP
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  const limit = rateLimitWebhook(ip);
+  if (!limit.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
 
-  // In production, verify the webhook signature using the connected account's webhook secret.
-  // For MVP, we parse the event directly.
+  const body = await request.text();
   let event: Stripe.Event;
-  try {
-    event = JSON.parse(body) as Stripe.Event;
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+
+  const webhookSecret = process.env.RECOVERY_WEBHOOK_SECRET;
+  const isMock = !webhookSecret || process.env.NEXT_PUBLIC_MOCK_MODE === "true";
+
+  if (isMock) {
+    // Mock mode bypass for development
+    try {
+      event = JSON.parse(body) as Stripe.Event;
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
+  } else {
+    // Production: verify webhook signature
+    const signature = request.headers.get("stripe-signature");
+    if (!signature) {
+      return NextResponse.json({ error: "Missing stripe-signature header" }, { status: 400 });
+    }
+    try {
+      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      console.error(`[recovery/webhook] Signature verification failed: ${message}`);
+      return NextResponse.json({ error: "Webhook signature verification failed" }, { status: 400 });
+    }
   }
 
   if (event.type !== "invoice.payment_failed") {
@@ -46,6 +74,18 @@ export async function POST(request: NextRequest) {
   if (!connection) {
     console.warn("[recovery/webhook] No connection found for account:", connectedAccountId);
     return NextResponse.json({ error: "Unknown connected account" }, { status: 404 });
+  }
+
+  // Check plan limits before creating campaign
+  const planLimit = await checkPlanLimit(connection.user_id);
+  if (!planLimit.allowed) {
+    console.warn(`[recovery/webhook] Plan limit reached for user ${connection.user_id}: ${planLimit.current}/${planLimit.limit} (${planLimit.planName})`);
+    return NextResponse.json({
+      error: "Plan limit reached",
+      current: planLimit.current,
+      limit: planLimit.limit,
+      plan: planLimit.planName,
+    }, { status: 403 });
   }
 
   // Check if campaign already exists for this invoice
@@ -82,6 +122,14 @@ export async function POST(request: NextRequest) {
     console.error("[recovery/webhook] Failed to create campaign:", error.message);
     return NextResponse.json({ error: "Failed to create campaign" }, { status: 500 });
   }
+
+  // Audit log
+  await logAudit(connection.user_id, "campaign_created", {
+    stripe_invoice_id: invoice.id,
+    amount_due: invoice.amount_due,
+    currency: invoice.currency,
+    customer_email: invoice.customer_email,
+  });
 
   // Track in Mixpanel
   await trackServerEvent("payment_failed_detected", {

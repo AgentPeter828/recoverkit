@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { retryPayment, getNextRetryTime } from "@/lib/services/retry-scheduler";
 import { trackServerEvent } from "@/lib/mixpanel-server";
+import { rateLimitApi } from "@/lib/rate-limit";
+import { retryRequestSchema } from "@/lib/validators";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -14,8 +17,22 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { campaign_id } = await request.json();
-  if (!campaign_id) return NextResponse.json({ error: "Missing campaign_id" }, { status: 400 });
+  // Rate limit
+  const limit = rateLimitApi(user.id);
+  if (!limit.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
+  // Validate input
+  const rawBody = await request.json();
+  const parsed = retryRequestSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
+  }
+  const { campaign_id } = parsed.data;
 
   // Get campaign
   const { data: campaign, error: campError } = await supabase
@@ -105,6 +122,15 @@ export async function POST(request: NextRequest) {
       })
       .eq("id", campaign.id);
   }
+
+  // Audit log
+  await logAudit(user.id, "retry_attempted", {
+    campaign_id: campaign.id,
+    attempt_number: attemptNumber,
+    success: result.success,
+    error: result.error,
+    source: "manual",
+  });
 
   return NextResponse.json({
     success: result.success,

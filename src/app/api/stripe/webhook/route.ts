@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
 import { createClient } from "@supabase/supabase-js";
 import { trackServerEvent } from "@/lib/mixpanel-server";
+import { rateLimitWebhook } from "@/lib/rate-limit";
 import type Stripe from "stripe";
 
 // Use Node.js runtime for Stripe webhook verification
@@ -166,6 +167,13 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit by IP
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  const limit = rateLimitWebhook(ip);
+  if (!limit.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const body = await request.text();
   const signature = request.headers.get("stripe-signature");
 

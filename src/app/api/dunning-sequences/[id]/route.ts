@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -58,6 +59,9 @@ export async function PATCH(
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit(user.id, "sequence_edited", { sequence_id: id, updates: Object.keys(updates) });
+
   return NextResponse.json({ sequence: data });
 }
 
@@ -78,5 +82,8 @@ export async function DELETE(
     .eq("user_id", user.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit(user.id, "sequence_deleted", { sequence_id: id });
+
   return NextResponse.json({ success: true });
 }

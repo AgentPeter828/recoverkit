@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { dunningEmailSchema } from "@/lib/validators";
 
 export const runtime = "nodejs";
 
@@ -9,12 +10,15 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
-  const { sequence_id, subject, body_html, body_text, delay_hours, step_number } = body;
-
-  if (!sequence_id || !subject || !body_html) {
-    return NextResponse.json({ error: "Missing required fields: sequence_id, subject, body_html" }, { status: 400 });
+  const rawBody = await request.json();
+  const parsed = dunningEmailSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
   }
+  const { sequence_id, subject, body_html, body_text, step_number, delay_hours } = parsed.data;
 
   // Verify sequence belongs to user
   const { data: seq } = await supabase
@@ -31,11 +35,11 @@ export async function POST(request: NextRequest) {
     .insert({
       user_id: user.id,
       sequence_id,
-      step_number: step_number || 1,
+      step_number,
       subject,
       body_html,
       body_text: body_text || body_html.replace(/<[^>]*>/g, ""),
-      delay_hours: delay_hours || 24,
+      delay_hours,
     })
     .select()
     .single();
