@@ -23,18 +23,6 @@
   --header-height: 64px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0a0a0a;
-    --color-bg-secondary: #111111;
-    --color-bg-tertiary: #1a1a1a;
-    --color-text: #f9fafb;
-    --color-text-secondary: #9ca3af;
-    --color-text-tertiary: #6b7280;
-    --color-border: #374151;
-  }
-}
-
 /* Tailwind v4 includes its own preflight reset in @layer base. */
 /* Do NOT add unlayered * { margin: 0; padding: 0 } — it overrides @layer utilities. */
 * {

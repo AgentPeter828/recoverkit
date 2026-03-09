@@ -14,6 +14,7 @@ interface SimResult {
   amount: number;
   status: string;
   error?: string;
+  campaign_created?: boolean;
 }
 
 export default function TestPage() {
