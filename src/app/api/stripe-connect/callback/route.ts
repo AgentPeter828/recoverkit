@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { exchangeCode, getAccountInfo, validateOAuthState } from "@/lib/services/stripe-connect";
+import { seedDefaultSequence } from "@/lib/services/default-sequence";
 import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
@@ -61,6 +62,14 @@ export async function GET(request: NextRequest) {
       business_name: accountInfo.business_name,
       livemode: result.livemode,
     });
+
+    // Auto-seed default dunning sequence on first Stripe connect
+    try {
+      await seedDefaultSequence(supabase, user.id);
+    } catch (seedErr) {
+      // Non-blocking — user can still proceed without default sequence
+      console.warn("[stripe-connect/callback] Failed to seed default sequence:", seedErr);
+    }
 
     return NextResponse.redirect(new URL("/dashboard/connect?success=true", request.url));
   } catch (err) {

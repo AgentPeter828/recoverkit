@@ -27,6 +27,7 @@ export default function SequencesPage() {
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [creating, setCreating] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     fetchSequences();
@@ -72,6 +73,23 @@ export default function SequencesPage() {
       console.error("Failed to create sequence:", err);
     } finally {
       setCreating(false);
+    }
+  }
+
+  async function handleSeedDefault() {
+    setSeeding(true);
+    analytics.featureUsed("default_sequence_seeded", {});
+    try {
+      const res = await fetch("/api/dunning-sequences/seed-default", { method: "POST" });
+      if (res.ok) {
+        fetchSequences();
+      } else {
+        console.error("Failed to seed default sequence:", await res.text());
+      }
+    } catch (err) {
+      console.error("Failed to seed default sequence:", err);
+    } finally {
+      setSeeding(false);
     }
   }
 
@@ -143,9 +161,12 @@ export default function SequencesPage() {
             Dunning sequences are automated email flows sent to customers with failed payments.
             Each step escalates urgency — from friendly reminder to last chance.
           </p>
-          <div className="mt-4">
-            <Button variant="primary" size="sm" onClick={() => setShowCreate(true)}>
-              + Create Sequence
+          <div className="mt-4 flex gap-3 justify-center">
+            <Button variant="primary" size="sm" onClick={handleSeedDefault} disabled={seeding}>
+              {seeding ? "Creating..." : "⚡ Use Default Sequence (5 emails)"}
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setShowCreate(true)}>
+              + Create Custom
             </Button>
           </div>
         </Card>
