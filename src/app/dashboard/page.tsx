@@ -10,6 +10,7 @@ import { UpgradeButton } from "./UpgradeButton";
 import { ManageButton } from "./ManageButton";
 import { RecoveryStatsCards } from "@/components/dashboard/RecoveryStatsCards";
 import { RecentCampaigns } from "@/components/dashboard/RecentCampaigns";
+import { HowItWorks } from "@/components/dev/HowItWorks";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -35,7 +36,10 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-[var(--max-width)] px-6 py-12 lg:px-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Recovery Dashboard</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold">Recovery Dashboard</h1>
+            <HowItWorks section="dashboard" />
+          </div>
           <p className="mt-2" style={{ color: "var(--color-text-secondary)" }}>
             Welcome back, {user.email}
           </p>
@@ -72,12 +76,19 @@ export default async function DashboardPage() {
       )}
 
       {/* Recovery Stats */}
+      <div className="flex items-center gap-2 mb-3">
+        <h2 className="text-lg font-semibold">Recovery Metrics</h2>
+        <HowItWorks section="recoveryStats" />
+      </div>
       <RecoveryStatsCards />
 
       {/* Recent Campaigns */}
       <div className="mt-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Recent Recovery Campaigns</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-semibold">Recent Recovery Campaigns</h2>
+            <HowItWorks section="recentCampaigns" />
+          </div>
           <Link href="/dashboard/campaigns">
             <Button variant="ghost" size="sm">View All →</Button>
           </Link>
@@ -102,7 +113,10 @@ export default async function DashboardPage() {
 
       {/* Subscription Status */}
       <Card className="p-6 mt-8">
-        <h2 className="text-xl font-semibold mb-4">Your Subscription</h2>
+        <div className="flex items-center gap-2 mb-4">
+          <h2 className="text-xl font-semibold">Your Subscription</h2>
+          <HowItWorks section="subscription" />
+        </div>
         {isActive && currentPlan ? (
           <div className="space-y-3">
             <div className="flex items-center gap-2">

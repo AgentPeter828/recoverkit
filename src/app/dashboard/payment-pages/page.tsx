@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { isMockMode } from "@/lib/mock/config";
 import { mockPaymentPages } from "@/lib/mock/data";
 import { analytics } from "@/lib/mixpanel";
+import { HowItWorks } from "@/components/dev/HowItWorks";
 
 interface PaymentPage {
   id: string;
@@ -91,7 +92,10 @@ export default function PaymentPagesPage() {
     <div className="mx-auto max-w-4xl px-6 py-12">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Payment Update Pages</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Payment Update Pages</h1>
+            <HowItWorks section="paymentPages" />
+          </div>
           <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
             Branded pages where your customers can update their payment method
           </p>

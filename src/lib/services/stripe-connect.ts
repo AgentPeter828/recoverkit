@@ -7,7 +7,9 @@ import { stripe } from "@/lib/stripe/client";
 import { cookies } from "next/headers";
 
 const STRIPE_CLIENT_ID = process.env.STRIPE_CLIENT_ID;
+const STRIPE_TEST_CONNECTED_ACCOUNT = process.env.STRIPE_TEST_CONNECTED_ACCOUNT;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === "true";
 
 const OAUTH_STATE_COOKIE = "stripe_oauth_state";
 
@@ -37,8 +39,16 @@ export async function getOAuthUrl(): Promise<string> {
   });
 
   if (!STRIPE_CLIENT_ID) {
-    console.warn("[stripe-connect] No STRIPE_CLIENT_ID, returning mock OAuth URL");
-    return `${APP_URL}/api/stripe-connect/callback?code=mock_auth_code&state=${state}`;
+    if (IS_MOCK) {
+      console.warn("[stripe-connect] Mock mode: returning mock OAuth URL");
+      return `${APP_URL}/api/stripe-connect/callback?code=mock_auth_code&state=${state}`;
+    }
+    if (STRIPE_TEST_CONNECTED_ACCOUNT) {
+      console.warn("[stripe-connect] Test mode: using pre-seeded test account");
+      return `${APP_URL}/api/stripe-connect/callback?code=test_auth_code&state=${state}`;
+    }
+    console.error("[stripe-connect] No STRIPE_CLIENT_ID configured — cannot start OAuth flow");
+    return `${APP_URL}/dashboard/connect?error=missing_stripe_client_id`;
   }
 
   const params = new URLSearchParams({
@@ -70,12 +80,25 @@ export async function validateOAuthState(state: string | null): Promise<boolean>
 }
 
 export async function exchangeCode(code: string): Promise<ConnectResult> {
-  if (!STRIPE_CLIENT_ID || code === "mock_auth_code") {
+  // Mock mode — fully fake data
+  if (code === "mock_auth_code") {
     console.warn("[stripe-connect] Using mock OAuth exchange");
     return {
       stripe_account_id: "acct_mock_" + Math.random().toString(36).slice(2, 10),
       access_token: "sk_test_mock_" + Math.random().toString(36).slice(2, 18),
       refresh_token: "rt_mock_" + Math.random().toString(36).slice(2, 18),
+      livemode: false,
+      scope: "read_write",
+    };
+  }
+
+  // Test mode — real Stripe test account, no OAuth
+  if (code === "test_auth_code" && STRIPE_TEST_CONNECTED_ACCOUNT) {
+    console.warn("[stripe-connect] Using pre-seeded test connected account");
+    return {
+      stripe_account_id: STRIPE_TEST_CONNECTED_ACCOUNT,
+      access_token: "sk_test_connected_" + Math.random().toString(36).slice(2, 18),
+      refresh_token: null,
       livemode: false,
       scope: "read_write",
     };

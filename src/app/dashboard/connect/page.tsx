@@ -8,6 +8,7 @@ import { isMockMode } from "@/lib/mock/config";
 import { mockStripeConnection } from "@/lib/mock/data";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { analytics } from "@/lib/mixpanel";
+import { HowItWorks } from "@/components/dev/HowItWorks";
 import { getStoredUTMParams } from "@/lib/utm";
 
 interface StripeConnection {
@@ -108,7 +109,10 @@ function ConnectPageInner() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-2xl font-bold mb-6">Stripe Connection</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <h1 className="text-2xl font-bold">Stripe Connection</h1>
+        <HowItWorks section="connect" />
+      </div>
 
       {success && (
         <div className="mb-6 p-4 rounded-lg" style={{ background: "#d1fae5", color: "#065f46" }}>

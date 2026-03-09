@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { isMockMode } from "@/lib/mock/config";
 import { mockCampaigns } from "@/lib/mock/data";
+import { HowItWorks } from "@/components/dev/HowItWorks";
 
 interface Campaign {
   id: string;
@@ -81,7 +82,10 @@ export default function CampaignsPage() {
     <div className="mx-auto max-w-[var(--max-width)] px-6 py-12 lg:px-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Recovery Campaigns</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Recovery Campaigns</h1>
+            <HowItWorks section="campaigns" />
+          </div>
           <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
             {campaigns.length} total campaigns
           </p>

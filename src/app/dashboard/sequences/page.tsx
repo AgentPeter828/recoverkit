@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { isMockMode } from "@/lib/mock/config";
 import { mockDunningSequences } from "@/lib/mock/data";
 import { analytics } from "@/lib/mixpanel";
+import { HowItWorks } from "@/components/dev/HowItWorks";
 
 interface DunningSequence {
   id: string;
@@ -90,7 +91,10 @@ export default function SequencesPage() {
     <div className="mx-auto max-w-4xl px-6 py-12">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Email Sequences</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Email Sequences</h1>
+            <HowItWorks section="sequences" />
+          </div>
           <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
             Create dunning email sequences to recover failed payments
           </p>

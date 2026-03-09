@@ -33,6 +33,9 @@ yarn-error.log*
 .env.*
 !.env.example
 !.env.local.example
+!.env.mock
+!.env.test
+# .env.production is NOT committed — contains live keys
 
 # vercel
 .vercel
