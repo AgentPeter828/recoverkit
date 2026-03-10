@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { isMockMode } from "@/lib/mock/config";
-import { mockDunningSequences } from "@/lib/mock/data";
+import { mockDunningSequences, mockDunningEmails } from "@/lib/mock/data";
 import { analytics } from "@/lib/mixpanel";
 
 const TONES = [
@@ -68,6 +68,7 @@ export default function SequencesPage() {
   async function initSequences() {
     if (isMockMode()) {
       setSequences(mockDunningSequences as DunningSequence[]);
+      setEmails(mockDunningEmails as DunningEmail[]);
       setLoading(false);
       return;
     }

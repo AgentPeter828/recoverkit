@@ -14,6 +14,7 @@ const marketingLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/#features", label: "Features" },
   { href: "/alternatives", label: "Compare" },
+  { href: "/demo", label: "Demo" },
   { href: "/templates", label: "Templates" },
   { href: "/blog", label: "Blog" },
 ];
