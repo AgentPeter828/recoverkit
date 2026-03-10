@@ -10,6 +10,29 @@ import { mockPaymentPages } from "@/lib/mock/data";
 import { analytics } from "@/lib/mixpanel";
 import { HowItWorks } from "@/components/dev/HowItWorks";
 
+const MESSAGE_PRESETS = [
+  {
+    label: "🤝 Friendly",
+    text: "Your latest payment didn't go through. No worries, it happens! Update your payment method below and you're all set.",
+  },
+  {
+    label: "💼 Professional",
+    text: "We noticed a problem with your recent payment. Please update your card details below to keep your account active.",
+  },
+  {
+    label: "⚡ Direct",
+    text: "Your payment method needs updating. It only takes a moment to enter new card details and keep your subscription running smoothly.",
+  },
+  {
+    label: "😊 Warm",
+    text: "Hi there! Your recent payment was declined. Please update your billing information below so we can continue providing you with great service.",
+  },
+  {
+    label: "🏢 Formal",
+    text: "There was an issue processing your subscription payment. To avoid any interruption to your service, please update your payment details.",
+  },
+];
+
 interface PaymentPage {
   id: string;
   slug: string;
@@ -29,6 +52,8 @@ export default function PaymentPagesPage() {
   const [newTitle, setNewTitle] = useState("Update Your Payment Method");
   const [newMessage, setNewMessage] = useState("");
   const [newColor, setNewColor] = useState("#6366f1");
+  const [recommendedMessage, setRecommendedMessage] = useState<string | null>(null);
+  const [loadingRecommended, setLoadingRecommended] = useState(false);
 
   useEffect(() => {
     fetchPages();
@@ -86,6 +111,29 @@ export default function PaymentPagesPage() {
     }
   }
 
+  async function fetchRecommendedMessage() {
+    if (recommendedMessage) return; // Already fetched
+    setLoadingRecommended(true);
+    try {
+      const res = await fetch("/api/payment-pages/recommended-message");
+      if (res.ok) {
+        const data = await res.json();
+        setRecommendedMessage(data.message);
+      }
+    } catch {
+      // Silent fail — recommended is optional
+    } finally {
+      setLoadingRecommended(false);
+    }
+  }
+
+  // Fetch recommended message when create form opens
+  useEffect(() => {
+    if (showCreate && !recommendedMessage && !loadingRecommended) {
+      fetchRecommendedMessage();
+    }
+  }, [showCreate]);
+
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   return (
@@ -117,26 +165,43 @@ export default function PaymentPagesPage() {
             <Input placeholder="Page title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
             <div>
               <label className="block text-sm font-medium mb-1.5">Customer message</label>
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                {[
-                  "We noticed a problem with your recent payment. Please update your card details below to keep your account active.",
-                  "Your latest payment didn't go through. No worries, it happens! Update your payment method below and you're all set.",
-                  "There was an issue processing your subscription payment. To avoid any interruption to your service, please update your payment details.",
-                  "Your payment method needs updating. It only takes a moment to enter new card details and keep your subscription running smoothly.",
-                  "Hi there! Your recent payment was declined. Please update your billing information below so we can continue providing you with great service.",
-                ].map((prompt, i) => (
+              <p className="text-xs mb-2" style={{ color: "var(--color-text-secondary)" }}>
+                Choose a tone, or write your own
+              </p>
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {/* Recommended — AI generated based on their account */}
+                {(recommendedMessage || loadingRecommended) && (
                   <button
-                    key={i}
                     type="button"
-                    onClick={() => setNewMessage(prompt)}
-                    className="text-xs px-2.5 py-1.5 rounded-full border transition-colors hover:border-current"
+                    onClick={() => recommendedMessage && setNewMessage(recommendedMessage)}
+                    disabled={loadingRecommended}
+                    className="text-xs px-3 py-1.5 rounded-full border transition-colors hover:border-current flex items-center gap-1.5"
                     style={{
-                      borderColor: newMessage === prompt ? "var(--color-brand)" : "var(--color-border)",
-                      color: newMessage === prompt ? "var(--color-brand)" : "var(--color-text-secondary)",
-                      background: newMessage === prompt ? "color-mix(in srgb, var(--color-brand) 8%, transparent)" : "transparent",
+                      borderColor: newMessage === recommendedMessage ? "var(--color-brand)" : "var(--color-border)",
+                      color: newMessage === recommendedMessage ? "var(--color-brand)" : "var(--color-text-secondary)",
+                      background: newMessage === recommendedMessage ? "color-mix(in srgb, var(--color-brand) 8%, transparent)" : "transparent",
                     }}
                   >
-                    {prompt.slice(0, 50)}...
+                    {loadingRecommended ? (
+                      <>⏳ Analyzing your style...</>
+                    ) : (
+                      <>✨ Recommended for you</>
+                    )}
+                  </button>
+                )}
+                {MESSAGE_PRESETS.map((preset) => (
+                  <button
+                    key={preset.label}
+                    type="button"
+                    onClick={() => setNewMessage(preset.text)}
+                    className="text-xs px-3 py-1.5 rounded-full border transition-colors hover:border-current"
+                    style={{
+                      borderColor: newMessage === preset.text ? "var(--color-brand)" : "var(--color-border)",
+                      color: newMessage === preset.text ? "var(--color-brand)" : "var(--color-text-secondary)",
+                      background: newMessage === preset.text ? "color-mix(in srgb, var(--color-brand) 8%, transparent)" : "transparent",
+                    }}
+                  >
+                    {preset.label}
                   </button>
                 ))}
               </div>
