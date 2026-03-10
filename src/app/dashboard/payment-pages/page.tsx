@@ -115,13 +115,39 @@ export default function PaymentPagesPage() {
           <h3 className="font-semibold mb-4">Create Payment Update Page</h3>
           <div className="space-y-3">
             <Input placeholder="Page title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-            <textarea
-              className="w-full rounded-lg border px-3 py-2 text-sm min-h-[80px]"
-              style={{ background: "var(--color-bg)", borderColor: "var(--color-border)", color: "var(--color-text)" }}
-              placeholder="Custom message to your customers"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Customer message</label>
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {[
+                  "We noticed a problem with your recent payment. Please update your card details below to keep your account active.",
+                  "Your latest payment didn't go through. No worries, it happens! Update your payment method below and you're all set.",
+                  "There was an issue processing your subscription payment. To avoid any interruption to your service, please update your payment details.",
+                  "Your payment method needs updating. It only takes a moment to enter new card details and keep your subscription running smoothly.",
+                  "Hi there! Your recent payment was declined. Please update your billing information below so we can continue providing you with great service.",
+                ].map((prompt, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setNewMessage(prompt)}
+                    className="text-xs px-2.5 py-1.5 rounded-full border transition-colors hover:border-current"
+                    style={{
+                      borderColor: newMessage === prompt ? "var(--color-brand)" : "var(--color-border)",
+                      color: newMessage === prompt ? "var(--color-brand)" : "var(--color-text-secondary)",
+                      background: newMessage === prompt ? "color-mix(in srgb, var(--color-brand) 8%, transparent)" : "transparent",
+                    }}
+                  >
+                    {prompt.slice(0, 50)}...
+                  </button>
+                ))}
+              </div>
+              <textarea
+                className="w-full rounded-lg border px-3 py-2 text-sm min-h-[80px]"
+                style={{ background: "var(--color-bg)", borderColor: "var(--color-border)", color: "var(--color-text)" }}
+                placeholder="Or write your own message..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+            </div>
             <div className="flex items-center gap-2">
               <label className="text-sm" style={{ color: "var(--color-text-secondary)" }}>Brand Color:</label>
               <input type="color" value={newColor} onChange={(e) => setNewColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />
