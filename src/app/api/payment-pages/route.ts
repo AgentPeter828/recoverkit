@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { paymentPageSchema } from "@/lib/validators";
 import { logAudit } from "@/lib/audit";
+import { checkFeatureAccess } from "@/lib/plan-limits";
 
 export const runtime = "nodejs";
 
-// GET — list payment update pages
+// GET — list payment update pages (all plans can view, only Scale can create)
 export async function GET() {
   const supabase = await createServerComponentClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -21,11 +22,21 @@ export async function GET() {
   return NextResponse.json({ pages: data });
 }
 
-// POST — create a payment update page
+// POST — create a payment update page (Scale plan only)
 export async function POST(request: NextRequest) {
   const supabase = await createServerComponentClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Check plan access
+  const access = await checkFeatureAccess(user.id, "customPaymentPages");
+  if (!access.allowed) {
+    return NextResponse.json({
+      error: "Custom payment pages require the Scale plan.",
+      currentPlan: access.planName,
+      requiredPlan: "Scale",
+    }, { status: 403 });
+  }
 
   const rawBody = await request.json();
   const parsed = paymentPageSchema.safeParse(rawBody);

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { createDomain } from "@/lib/services/resend-domains";
 import { logAudit } from "@/lib/audit";
+import { checkFeatureAccess } from "@/lib/plan-limits";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,16 @@ export async function POST(request: NextRequest) {
   const supabase = await createServerComponentClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Check plan access
+  const access = await checkFeatureAccess(user.id, "customEmailDomain");
+  if (!access.allowed) {
+    return NextResponse.json({
+      error: "Custom email domains require the Growth plan or above.",
+      currentPlan: access.planName,
+      requiredPlan: "Growth",
+    }, { status: 403 });
+  }
 
   const body = await request.json();
   const domain = body.domain?.trim()?.toLowerCase();

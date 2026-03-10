@@ -9,6 +9,19 @@ export interface Plan {
 
 export const plans: Plan[] = [
   {
+    name: "Free",
+    description: "Get started with payment recovery",
+    price: 0,
+    priceId: "",
+    features: [
+      "10 recovery attempts/month",
+      "Smart retry scheduling",
+      "Default email templates",
+      "Recovery dashboard",
+    ],
+    highlighted: false,
+  },
+  {
     name: "Starter",
     description: "For indie SaaS founders",
     price: 29,
@@ -16,7 +29,7 @@ export const plans: Plan[] = [
     features: [
       "100 recovery attempts/month",
       "Smart retry scheduling",
-      "Basic email templates",
+      "Email sequence builder",
       "Recovery dashboard",
     ],
     highlighted: false,
@@ -28,10 +41,10 @@ export const plans: Plan[] = [
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH || "",
     features: [
       "500 recovery attempts/month",
-      "AI-generated email templates",
+      "AI-generated emails",
       "Custom branding",
+      "Custom email domain",
       "Priority retry timing",
-      "Email sequence builder",
     ],
     highlighted: true,
   },
@@ -42,9 +55,9 @@ export const plans: Plan[] = [
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE || "",
     features: [
       "Unlimited recovery attempts",
-      "Priority retry scheduling",
-      "Advanced analytics",
+      "Everything in Growth",
       "Custom payment pages",
+      "Advanced analytics",
       "API access",
       "Priority support",
     ],

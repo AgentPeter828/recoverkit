@@ -74,7 +74,7 @@ export default function PricingPage() {
         </p>
       </div>
 
-      <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3" data-testid="pricing-cards">
+      <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4" data-testid="pricing-cards">
         {plans.map((plan) => (
           <Card
             key={plan.name}
@@ -122,7 +122,7 @@ export default function PricingPage() {
                   variant={plan.highlighted ? "primary" : "outline"}
                   className="w-full"
                 >
-                  Get Started
+                  {plan.price === 0 ? "Start Free" : "Get Started"}
                 </Button>
               </Link>
             </div>
