@@ -74,7 +74,7 @@ const migrations = [
     notes: [
       "Notify Gravy you're switching — check your contract for notice period",
       "RecoverKit is fully automated, so there's no transition of human agents",
-      "You'll immediately start keeping 100% of recovered revenue instead of paying a revenue share",
+      "You'll immediately cut your recovery costs — from $250+ USD/mo with competitors (or opaque custom pricing) to $29 AUD/mo with RecoverKit",
       "Expect slightly different recovery dynamics (automated vs human-powered)",
     ],
     savings: "Varies — typically $500-5,000+/year",

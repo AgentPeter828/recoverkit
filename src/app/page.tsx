@@ -130,7 +130,7 @@ const homeFaqSchema = {
       name: "How much does RecoverKit cost?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit starts at $0/month with a free tier (10 recovery attempts). Paid plans start at $29/month (Starter), $79/month (Growth), and $149/month (Scale with unlimited attempts and API access). All plans are month-to-month with no contracts.",
+        text: "RecoverKit starts at $0 AUD/month with a free tier (10 recovery attempts). Paid plans start at $29 AUD/month (Starter), $79 AUD/month (Growth), and $149 AUD/month (Scale with unlimited attempts and API access). All plans are month-to-month with no contracts. All prices in AUD.",
       },
     },
     {
@@ -138,7 +138,7 @@ const homeFaqSchema = {
       name: "How does RecoverKit compare to Churnkey or other dunning tools?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit offers the same core payment recovery features (smart retries, dunning emails, payment pages) at a fraction of the cost. Churnkey starts at $300+/month while RecoverKit starts at $0/month. RecoverKit is purpose-built for payment recovery with AI-powered features.",
+        text: "RecoverKit offers the same core payment recovery features (smart retries, dunning emails, payment pages) at a fraction of the cost. Churnkey starts at $250 USD/month (~$355 AUD) while RecoverKit starts at $0 AUD/month. RecoverKit is purpose-built for payment recovery with AI-powered features.",
       },
     },
     {
@@ -225,7 +225,7 @@ export default function HomePage() {
                   <li>• Stripe&apos;s basic retry fails 70% of the time</li>
                   <li>• Customers churn without knowing their card failed</li>
                   <li>• You lose ~$900/month per $10K MRR</li>
-                  <li>• Competitors charge $300+/mo or take a revenue cut</li>
+                  <li>• Competitors charge $250+ USD/mo or take a revenue cut</li>
                 </ul>
               </Card>
               <Card className="p-8" style={{ background: "#f0fdf4", borderColor: "#bbf7d0" }}>
@@ -234,7 +234,7 @@ export default function HomePage() {
                   <li>• Smart retries at optimal times for higher recovery</li>
                   <li>• AI emails that feel personal, not robotic</li>
                   <li>• Customers fix their payment in one click</li>
-                  <li>• Starts at $29/mo — pays for itself in days</li>
+                  <li>• Starts at $29 AUD/mo — pays for itself in days</li>
                 </ul>
               </Card>
             </div>
@@ -362,7 +362,7 @@ export default function HomePage() {
                 </thead>
                 <tbody>
                   {[
-                    ["Starting price", "$0/mo", "$300/mo", "Free (basic)"],
+                    ["Starting price", "$0 AUD/mo", "$249 USD/mo", "Free (basic)"],
                     ["AI email generation", "✅", "❌", "❌"],
                     ["Smart retry timing", "✅", "✅", "⚠️ Basic"],
                     ["Custom email sequences", "✅", "✅", "❌"],

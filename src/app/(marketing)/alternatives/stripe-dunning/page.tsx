@@ -19,14 +19,14 @@ export default function StripeDunningAlternativePage() {
       competitorSlug="stripe-dunning"
       headline="Stripe's built-in retry isn't enough. Here's why."
       subheadline="Stripe's automatic retry schedule is basic — fixed intervals, no email sequences, no customer outreach. It recovers roughly 30% of failed payments. RecoverKit adds AI-powered dunning emails, smart retry timing, and payment update pages to recover 66%+ on average."
-      recoverKitPrice="$29/mo"
-      recoverKitPriceDetail="Starter plan · Free plan at $0/mo"
+      recoverKitPrice="$29 AUD/mo"
+      recoverKitPriceDetail="Starter plan (~$20 USD) · Free plan at $0/mo"
       competitorPrice="Free"
       competitorPriceDetail="Built into Stripe · Very basic functionality"
       setupTimeRecoverKit="Under 5 minutes"
       setupTimeCompetitor="Already active (default)"
       features={[
-        { name: "Price", recoverkit: "From $0/mo", competitor: "Free (built-in)" },
+        { name: "Price", recoverkit: "From $0 AUD/mo", competitor: "Free (built-in)" },
         { name: "Retry scheduling", recoverkit: "✅ AI-optimized timing", competitor: "⚠️ Fixed schedule (1, 3, 5, 7 days)" },
         { name: "Dunning emails", recoverkit: "✅ AI-generated sequences", competitor: "❌ None" },
         { name: "Payment update pages", recoverkit: "✅ Branded, one-click", competitor: "❌" },

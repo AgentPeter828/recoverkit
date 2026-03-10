@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { PricingComparisonChart } from "@/components/marketing/PricingComparisonChart";
 
 export const metadata: Metadata = {
   title: "RecoverKit Alternatives & Comparisons | RecoverKit",
@@ -13,20 +14,20 @@ const competitors = [
   {
     name: "Churnkey",
     slug: "churnkey",
-    price: "$300-500+/mo",
-    recoverKitSavings: "Save 90%+",
+    price: "$250 USD/mo (~$355 AUD)",
+    recoverKitSavings: "Save 92%",
     description:
-      "Full churn suite with enterprise pricing. Great for large SaaS, overkill and overpriced for most founders.",
-    keyDifference: "Same core recovery features at 10% of the cost",
+      "Full churn suite with premium pricing. Great for large SaaS, overkill and overpriced for most founders.",
+    keyDifference: "Same core recovery features at a fraction of the cost",
   },
   {
     name: "Baremetrics Recover",
     slug: "baremetrics",
-    price: "$58+/mo",
-    recoverKitSavings: "Save 50%+",
+    price: "$69 USD/mo (~$98 AUD)",
+    recoverKitSavings: "Save 70%+",
     description:
-      "Analytics-first platform with recovery as an add-on. Caps your recoveries based on plan tier.",
-    keyDifference: "No recovery caps, purpose-built for payment recovery",
+      "Analytics-first platform with recovery as an add-on. Pricing scales with your MRR.",
+    keyDifference: "Flat-rate pricing, AI-powered, purpose-built for recovery",
   },
   {
     name: "Stripe Built-In Retry",
@@ -40,20 +41,20 @@ const competitors = [
   {
     name: "Gravy Solutions",
     slug: "gravy",
-    price: "10-25% of recovered revenue",
-    recoverKitSavings: "Keep 100%",
+    price: "Custom (contact sales)",
+    recoverKitSavings: "Transparent pricing",
     description:
-      "Human-powered recovery with revenue share pricing. Costs grow as you recover more.",
-    keyDifference: "Flat-rate pricing — keep 100% of recovered revenue",
+      "Human-powered recovery with hidden custom pricing. Requires a sales call. Built for enterprise, overkill for most founders.",
+    keyDifference: "Automated recovery at a fraction of the cost",
   },
   {
     name: "Stunning",
     slug: "stunning",
-    price: "$100+/mo (legacy)",
-    recoverKitSavings: "Modern alternative",
+    price: "~$120 USD/mo (~$170 AUD)",
+    recoverKitSavings: "Save 83%",
     description:
-      "One of the original Stripe dunning tools, now discontinued/stagnant with dated features.",
-    keyDifference: "Active development, AI-powered, modern UX",
+      "One of the original Stripe dunning tools (since 2012). Reliable but uses MRR-based pricing that scales as you grow.",
+    keyDifference: "Flat-rate AUD pricing + AI-powered features",
   },
 ];
 
@@ -71,10 +72,18 @@ export default function AlternativesPage() {
               style={{ color: "var(--color-text-secondary)" }}
             >
               See how RecoverKit compares to other payment recovery and dunning
-              tools. Spoiler: you get the same core features at a fraction of the
-              cost.
+              tools. RecoverKit is priced in AUD — most competitors charge in USD.
+              Spoiler: you get the same core features at a fraction of the cost.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="pb-16">
+        <div className="mx-auto max-w-[var(--max-width)] px-6 lg:px-8">
+          <Card className="mx-auto max-w-3xl p-8 sm:p-10">
+            <PricingComparisonChart />
+          </Card>
         </div>
       </section>
 
@@ -117,7 +126,7 @@ export default function AlternativesPage() {
                         </span>{" "}
                         → <strong>RecoverKit:</strong>{" "}
                         <span style={{ color: "var(--color-brand)" }}>
-                          from $0/mo
+                          from $0 AUD/mo
                         </span>
                       </p>
                     </div>
@@ -145,7 +154,7 @@ export default function AlternativesPage() {
               className="mt-4 text-lg"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              Start free. Set up in 5 minutes. No credit card required.
+              Start free. Set up in 5 minutes. No credit card required. All prices in AUD.
             </p>
             <div className="mt-8">
               <Link href="/auth/signup">

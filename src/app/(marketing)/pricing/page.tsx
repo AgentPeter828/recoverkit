@@ -49,7 +49,7 @@ const pricingFaqSchema = {
       name: "How does RecoverKit pricing compare to Churnkey?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit is significantly more affordable. Churnkey starts at $300-500+/month with annual contracts. RecoverKit starts at $0/month (free tier) with paid plans from $29/month. That's a 90%+ cost savings for the same core payment recovery features.",
+        text: "RecoverKit is significantly more affordable. Churnkey starts at $250 USD/month (~$355 AUD). RecoverKit starts at $0 AUD/month (free tier) with paid plans from $29 AUD/month (~$20 USD). That's a 92% cost savings for the same core payment recovery features.",
       },
     },
   ],

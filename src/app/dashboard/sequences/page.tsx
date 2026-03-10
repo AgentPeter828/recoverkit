@@ -28,6 +28,7 @@ export default function SequencesPage() {
   const [newDesc, setNewDesc] = useState("");
   const [creating, setCreating] = useState(false);
   const [seeding, setSeeding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSequences();
@@ -56,6 +57,7 @@ export default function SequencesPage() {
   async function handleCreate() {
     if (!newName.trim()) return;
     setCreating(true);
+    setError(null);
     analytics.featureUsed("sequence_created", { name: newName });
     try {
       const res = await fetch("/api/dunning-sequences", {
@@ -68,9 +70,12 @@ export default function SequencesPage() {
         setNewName("");
         setNewDesc("");
         fetchSequences();
+      } else {
+        setError(`Failed to create sequence: ${res.status}. Please try again.`);
       }
     } catch (err) {
       console.error("Failed to create sequence:", err);
+      setError("Network error. Please try again.");
     } finally {
       setCreating(false);
     }
@@ -78,16 +83,20 @@ export default function SequencesPage() {
 
   async function handleSeedDefault() {
     setSeeding(true);
+    setError(null);
     analytics.featureUsed("default_sequence_seeded", {});
     try {
       const res = await fetch("/api/dunning-sequences/seed-default", { method: "POST" });
       if (res.ok) {
         fetchSequences();
       } else {
-        console.error("Failed to seed default sequence:", await res.text());
+        const text = await res.text();
+        console.error("Failed to seed default sequence:", text);
+        setError(`Failed to create sequence: ${res.status}. Please try again.`);
       }
     } catch (err) {
       console.error("Failed to seed default sequence:", err);
+      setError("Network error. Please try again.");
     } finally {
       setSeeding(false);
     }
@@ -155,6 +164,11 @@ export default function SequencesPage() {
         </div>
       ) : sequences.length === 0 ? (
         <Card className="p-8 text-center">
+          {error && (
+            <div className="mb-4 rounded-lg px-4 py-3 text-sm text-left" style={{ background: "#fef2f2", color: "#991b1b" }}>
+              {error}
+            </div>
+          )}
           <p className="text-4xl mb-3">📧</p>
           <p className="font-semibold">Create your first dunning email sequence</p>
           <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: "var(--color-text-secondary)" }}>

@@ -97,13 +97,13 @@ export default function CompleteGuidePost() {
         The payment recovery tool market has evolved significantly. Here&apos;s the current landscape:
       </p>
       <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Enterprise tools ($300-500+/mo):</strong> Churnkey, Churn Buster, and similar platforms offer full churn prevention suites including payment recovery, cancellation flows, and customer health scoring. Great for large SaaS with dedicated RevOps teams, but overkill and overpriced for most founders.
+        <strong>Enterprise tools ($250+ USD/mo):</strong> Churnkey ($250 USD/mo), Churn Buster ($249 USD/mo), and similar platforms offer full churn prevention suites including payment recovery, cancellation flows, and customer health scoring. Great for large SaaS with dedicated RevOps teams, but overkill and overpriced for most founders.
       </p>
       <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Analytics-bundled recovery ($58-200+/mo):</strong> Baremetrics Recover comes bundled with or as an add-on to analytics platforms. You often pay for features you don&apos;t use, and recovery may have caps.
+        <strong>Analytics-bundled recovery ($69-200+/mo):</strong> Baremetrics Recover comes bundled with or as an add-on to analytics platforms. You often pay for features you don&apos;t use, and recovery may have caps.
       </p>
       <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Revenue-share models (10-25% of recovered revenue):</strong> Services like Gravy Solutions take a percentage of every dollar they recover. Costs grow as you succeed, and incentives can feel misaligned.
+        <strong>Human-powered services (custom pricing):</strong> Services like Gravy Solutions use human agents to recover payments. Pricing isn&apos;t published — you need a sales call. Built for enterprise with high volume, overkill for most founders.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
         <strong>Affordable dedicated tools ($0-149/mo):</strong> The newest category, led by tools like <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link>. Focused exclusively on payment recovery with flat-rate pricing, AI-powered features, and self-serve setup. Best for indie SaaS founders and small-to-medium teams. See our <Link href="/alternatives" className="underline" style={{ color: "var(--color-brand)" }}>full comparison of recovery tools</Link>.

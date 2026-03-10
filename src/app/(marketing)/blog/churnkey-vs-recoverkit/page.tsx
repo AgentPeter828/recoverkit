@@ -6,10 +6,10 @@ import { Card } from "@/components/ui/Card";
 export const metadata: Metadata = {
   title: "Churnkey vs RecoverKit: Which Payment Recovery Tool Is Right? | RecoverKit",
   description:
-    "An honest comparison of Churnkey and RecoverKit — features, pricing, setup time, and who each tool is best for. Save $300+/mo without sacrificing recovery rates.",
+    "An honest comparison of Churnkey and RecoverKit — features, pricing, setup time, and who each tool is best for. Save $325+ AUD/mo without sacrificing recovery rates.",
   openGraph: {
     title: "Churnkey vs RecoverKit: Which Payment Recovery Tool Is Right for Your SaaS?",
-    description: "Full feature, pricing, and use-case comparison. Churnkey ($300+/mo) vs RecoverKit ($29/mo).",
+    description: "Full feature, pricing, and use-case comparison. Churnkey ($250 USD/mo) vs RecoverKit ($29 AUD/mo).",
   },
 };
 
@@ -27,10 +27,10 @@ export default function ChurnkeyVsRecoverKitPost() {
 
       <h2 className="text-2xl font-bold mt-12 mb-4">The Quick Overview</h2>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Churnkey</strong> is a full-featured churn prevention platform. It includes payment recovery (dunning), but also offers cancellation flows, customer health scoring, retention offers, and churn analytics. It&apos;s designed for mid-to-large SaaS companies with dedicated retention teams. Pricing starts at $300/month and typically requires annual contracts.
+        <strong>Churnkey</strong> is a full-featured churn prevention platform. It includes payment recovery (dunning), but also offers cancellation flows, customer health scoring, retention offers, and churn analytics. It&apos;s designed for mid-to-large SaaS companies with dedicated retention teams. Pricing starts at $250 USD/month (~$355 AUD), billed yearly.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>RecoverKit</strong> is a focused payment recovery tool. It does one thing — recover failed subscription payments — and does it well. It includes smart retry logic, AI-generated dunning emails, and payment update pages. It&apos;s designed for indie SaaS founders and small teams. Pricing starts at $0/month (free tier) with paid plans from $29/month.
+        <strong>RecoverKit</strong> is a focused payment recovery tool. It does one thing — recover failed subscription payments — and does it well. It includes smart retry logic, AI-generated dunning emails, and payment update pages. It&apos;s designed for indie SaaS founders and small teams. Pricing starts at $0 AUD/month (free tier) with paid plans from $29 AUD/month (~$20 USD).
       </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Feature Comparison</h2>
@@ -45,18 +45,18 @@ export default function ChurnkeyVsRecoverKitPost() {
           </thead>
           <tbody>
             {[
-              ["Smart payment retries", "✅ AI-optimized", "✅"],
-              ["Dunning email sequences", "✅ AI-generated", "✅ Manual"],
+              ["Smart payment retries", "✅ AI-optimized", "✅ Rules-based (Core $700+)"],
+              ["Dunning email sequences", "✅ AI-generated", "✅ Manual templates"],
               ["Payment update pages", "✅ Branded", "✅ Branded"],
-              ["Recovery dashboard", "✅", "✅"],
-              ["Cancellation flows", "❌", "✅"],
-              ["Retention offers", "❌", "✅"],
-              ["Customer health scoring", "❌", "✅"],
-              ["Churn analytics", "❌", "✅"],
+              ["Recovery dashboard", "✅", "✅ Customer Timelines"],
+              ["Cancel flows", "❌", "✅ All plans"],
+              ["A/B testing", "❌", "✅ Core plan ($700+ USD/mo)"],
+              ["Failed Payment Wall", "❌", "✅ Blocks access until paid"],
               ["AI email generation", "✅", "❌"],
-              ["Free tier", "✅", "❌"],
-              ["Self-serve setup", "✅ (5 min)", "❌ (1-2 weeks)"],
-              ["Monthly billing", "✅", "⚠️ Annual"],
+              ["Free tier", "✅", "❌ (14-day trial)"],
+              ["Self-serve setup", "✅ (5 min)", "⚠️ Trial available"],
+              ["Monthly billing", "✅ No contracts", "⚠️ Billed yearly"],
+              ["Pricing", "$0-149 AUD/mo", "$250-825 USD/mo"],
             ].map(([feature, rk, ck]) => (
               <tr key={feature} className="border-t" style={{ borderColor: "var(--color-border)" }}>
                 <td className="px-4 py-2 font-medium">{feature}</td>
@@ -73,18 +73,18 @@ export default function ChurnkeyVsRecoverKitPost() {
         This is where the two tools diverge most dramatically.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Churnkey</strong> starts at approximately $300/month for their entry-level plan, with most SaaS companies paying $500+/month. Annual contracts are typical, meaning you&apos;re committing $3,600-6,000+ upfront. Churnkey&apos;s pricing scales with your customer count.
+        <strong>Churnkey</strong> starts at $250 USD/month (~$355 AUD) for their Starter plan (billed yearly), with Core at $700 USD/month and Intelligence at $825 USD/month. Pricing scales with your monthly churn volume.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>RecoverKit</strong> offers four tiers: Free ($0/mo, 10 recovery attempts), Starter ($29/mo, 100 attempts), Growth ($79/mo, 500 attempts), and Scale ($149/mo, unlimited). All plans are month-to-month with no contracts. You can cancel anytime.
+        <strong>RecoverKit</strong> offers three paid tiers plus a free plan: Free ($0 AUD/mo, 10 recovery attempts), Starter ($29 AUD/mo, 100 attempts), Growth ($79 AUD/mo, 500 attempts), and Scale ($149 AUD/mo, unlimited). All plans are month-to-month with no contracts. All prices in AUD.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
         The annual cost difference is significant:
       </p>
       <ul className="mb-4 space-y-1" style={{ color: "var(--color-text-secondary)" }}>
-        <li>• <strong>Churnkey:</strong> $3,600 - $6,000+/year</li>
-        <li>• <strong>RecoverKit Starter:</strong> $348/year</li>
-        <li>• <strong>Savings:</strong> $3,252 - $5,652+/year</li>
+        <li>• <strong>Churnkey Starter:</strong> $3,000 USD/year (~$4,260 AUD)</li>
+        <li>• <strong>RecoverKit Starter:</strong> $348 AUD/year (~$245 USD)</li>
+        <li>• <strong>Savings:</strong> ~$3,912 AUD/year ($2,755 USD)</li>
       </ul>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Who Should Use Churnkey?</h2>
@@ -92,7 +92,7 @@ export default function ChurnkeyVsRecoverKitPost() {
         Churnkey is the right choice if:
       </p>
       <ul className="mb-4 space-y-1" style={{ color: "var(--color-text-secondary)" }}>
-        <li>• You have $500K+ ARR and can justify $300-500+/month tooling costs</li>
+        <li>• You have $500K+ ARR and can justify $250+ USD/month tooling costs</li>
         <li>• You need a full churn prevention suite (cancellation flows, retention offers, health scoring)</li>
         <li>• You have a dedicated customer success or RevOps team</li>
         <li>• Voluntary churn is your primary problem (not just involuntary/failed payments)</li>
@@ -130,7 +130,7 @@ export default function ChurnkeyVsRecoverKitPost() {
 
       <h2 className="text-2xl font-bold mt-12 mb-4">The Bottom Line</h2>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        If you need a full churn prevention suite and have the budget for it, Churnkey is a solid choice. But if your primary goal is recovering failed payments without breaking the bank, RecoverKit delivers comparable recovery rates at 90%+ less cost.
+        If you need a full churn prevention suite and have the budget for it, Churnkey is a solid choice. But if your primary goal is recovering failed payments without breaking the bank, RecoverKit delivers comparable recovery rates at 92% less cost.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
         For most indie SaaS founders and small teams, the math is clear: <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> provides the payment recovery features you need at a price that makes sense. You can always upgrade to a full churn suite later when your revenue justifies the investment.

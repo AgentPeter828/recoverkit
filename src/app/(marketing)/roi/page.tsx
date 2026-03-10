@@ -8,11 +8,11 @@ import { Card } from "@/components/ui/Card";
 const competitors = [
   { name: "None (no tool)", monthlyCost: 0 },
   { name: "Stripe Built-In (free)", monthlyCost: 0 },
-  { name: "Churnkey ($300/mo)", monthlyCost: 300 },
+  { name: "Churnkey ($250 USD/mo)", monthlyCost: 355 },
   { name: "Churnkey ($500/mo)", monthlyCost: 500 },
-  { name: "Baremetrics Recover ($58/mo)", monthlyCost: 58 },
+  { name: "Baremetrics Recover ($69 USD/mo)", monthlyCost: 98 },
   { name: "Baremetrics Recover ($108/mo)", monthlyCost: 108 },
-  { name: "Gravy (15% revenue share)", monthlyCost: -1 },
+  { name: "Gravy (custom pricing)", monthlyCost: -1 },
   { name: "Stunning ($100/mo)", monthlyCost: 100 },
 ];
 
