@@ -17,7 +17,7 @@ interface DefaultEmailStep {
 
 export const DEFAULT_SEQUENCE_NAME = "Default Recovery Sequence";
 export const DEFAULT_SEQUENCE_DESCRIPTION =
-  "5-step email sequence with increasing urgency — from friendly reminder to final notice.";
+  "5-step email sequence with increasing urgency, from friendly reminder to final notice.";
 
 /**
  * The 5 default dunning email steps.
@@ -28,40 +28,32 @@ export const DEFAULT_EMAIL_STEPS: DefaultEmailStep[] = [
   {
     step_number: 1,
     delay_hours: 4,
-    subject: "Heads up — your payment didn't go through",
+    subject: "Heads up, your payment didn't go through",
     body_html: `<p>Hi there,</p>
-<p>We just tried to process your payment, but it was declined. This happens sometimes — expired cards, bank holds, the usual.</p>
+<p>We just tried to process your payment, but it was declined. This happens sometimes with expired cards, bank holds, and the like.</p>
 <p>The good news: it only takes a minute to fix. Just update your payment method and you're all set.</p>
-<p style="font-size:14px;color:#6b7280;margin-top:24px;">If you've already updated your card, feel free to ignore this — we'll retry automatically.</p>`,
+<p style="font-size:14px;color:#6b7280;margin-top:24px;">If you've already updated your card, feel free to ignore this. We'll retry automatically.</p>`,
     body_text: `Hi there,
 
-We just tried to process your payment, but it was declined. This happens sometimes — expired cards, bank holds, the usual.
+We just tried to process your payment, but it was declined. This happens sometimes with expired cards, bank holds, and the like.
 
 The good news: it only takes a minute to fix. Just update your payment method and you're all set.
 
-If you've already updated your card, feel free to ignore this — we'll retry automatically.`,
+If you've already updated your card, feel free to ignore this. We'll retry automatically.`,
   },
   {
     step_number: 2,
     delay_hours: 24,
     subject: "Your payment still needs attention",
     body_html: `<p>Hi there,</p>
-<p>Just a quick follow-up — your recent payment is still outstanding. We'd hate for you to lose access to your account over a card issue.</p>
-<p>Common reasons payments fail:</p>
-<ul style="color:#374151;margin:12px 0;">
-  <li>Expired credit card</li>
-  <li>Insufficient funds</li>
-  <li>Bank security hold</li>
-</ul>
-<p>Updating your payment method takes less than a minute — click the button below to get it sorted.</p>`,
+<p>Just a quick follow-up. Your recent payment is still outstanding. We'd hate for you to lose access to your account over a card issue.</p>
+<p>Common reasons payments fail include expired credit cards, insufficient funds, and bank security holds.</p>
+<p>Updating your payment method takes less than a minute. Click the button below to get it sorted.</p>`,
     body_text: `Hi there,
 
-Just a quick follow-up — your recent payment is still outstanding. We'd hate for you to lose access to your account over a card issue.
+Just a quick follow-up. Your recent payment is still outstanding. We'd hate for you to lose access to your account over a card issue.
 
-Common reasons payments fail:
-- Expired credit card
-- Insufficient funds
-- Bank security hold
+Common reasons payments fail include expired credit cards, insufficient funds, and bank security holds.
 
 Updating your payment method takes less than a minute.`,
   },
@@ -72,14 +64,14 @@ Updating your payment method takes less than a minute.`,
     body_html: `<p>Hi there,</p>
 <p>We've attempted to charge your card a few times now, but it keeps getting declined. Your subscription is still active, but we'll need a valid payment method to keep it going.</p>
 <p><strong>Please update your payment details soon</strong> to avoid any interruption to your service.</p>
-<p style="font-size:14px;color:#6b7280;margin-top:24px;">If you're having trouble or need to chat about your account, just reply to this email — we're happy to help.</p>`,
+<p style="font-size:14px;color:#6b7280;margin-top:24px;">If you're having trouble or need to chat about your account, just reply to this email. We're happy to help.</p>`,
     body_text: `Hi there,
 
 We've attempted to charge your card a few times now, but it keeps getting declined. Your subscription is still active, but we'll need a valid payment method to keep it going.
 
 Please update your payment details soon to avoid any interruption to your service.
 
-If you're having trouble or need to chat about your account, just reply to this email — we're happy to help.`,
+If you're having trouble or need to chat about your account, just reply to this email. We're happy to help.`,
   },
   {
     step_number: 4,
@@ -108,28 +100,20 @@ We really don't want that to happen. Please take a moment to update your payment
 <p style="background:#fef2f2;border-left:3px solid #ef4444;padding:12px 16px;border-radius:4px;color:#991b1b;">
   <strong>Your account will be cancelled within 48 hours</strong> unless you update your payment method.
 </p>
-<p>Once cancelled:</p>
-<ul style="color:#374151;margin:12px 0;">
-  <li>You'll lose access to your account immediately</li>
-  <li>Your data may be permanently deleted after 30 days</li>
-  <li>Any active integrations will stop working</li>
-</ul>
+<p>Once cancelled, you'll lose access to your account immediately. Your data may be permanently deleted after 30 days, and any active integrations will stop working.</p>
 <p>If you'd like to keep your subscription, please update your payment now. It only takes a minute.</p>
-<p style="font-size:14px;color:#6b7280;margin-top:24px;">If you've decided to cancel, no action needed — we understand, and thanks for being a customer.</p>`,
+<p style="font-size:14px;color:#6b7280;margin-top:24px;">If you've decided to cancel, no action needed. We understand, and thanks for being a customer.</p>`,
     body_text: `Hi there,
 
 This is our final attempt to recover your payment. After multiple tries, we haven't been able to charge your card.
 
 Your account will be cancelled within 48 hours unless you update your payment method.
 
-Once cancelled:
-- You'll lose access to your account immediately
-- Your data may be permanently deleted after 30 days
-- Any active integrations will stop working
+Once cancelled, you'll lose access to your account immediately. Your data may be permanently deleted after 30 days, and any active integrations will stop working.
 
 If you'd like to keep your subscription, please update your payment now. It only takes a minute.
 
-If you've decided to cancel, no action needed — we understand, and thanks for being a customer.`,
+If you've decided to cancel, no action needed. We understand, and thanks for being a customer.`,
   },
 ];
 

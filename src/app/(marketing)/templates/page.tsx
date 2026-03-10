@@ -24,7 +24,7 @@ const templates = [
     preheader: "We noticed a small issue with your latest payment",
     body: `Hi {{first_name}},
 
-Just a quick heads up — we tried to process your {{product}} subscription payment of {{amount}}, but it didn't go through. This happens sometimes with expired cards or temporary bank holds, so no worries at all.
+Just a quick heads up. We tried to process your {{product}} subscription payment of {{amount}}, but it didn't go through. This happens sometimes with expired cards or temporary bank holds, so no worries at all.
 
 To keep your account active and avoid any interruption, you can update your payment method here:
 
@@ -32,14 +32,14 @@ To keep your account active and avoid any interruption, you can update your paym
 
 It only takes about 30 seconds. If the payment goes through on our next automatic retry, you can ignore this email entirely.
 
-Thanks for being a {{product}} customer — we appreciate you!
+Thanks for being a {{product}} customer. We appreciate you!
 
 Cheers,
 The {{product}} Team`,
     tips: [
       "Keep the tone warm and non-threatening",
       "Don't use words like 'failed', 'declined', or 'rejected'",
-      "Provide a direct link to update payment — don't make them search for it",
+      "Provide a direct link to update payment. Don't make them search for it",
       "Mention that it might resolve automatically to reduce anxiety",
     ],
   },
@@ -50,7 +50,7 @@ The {{product}} Team`,
     urgency: "High",
     urgencyColor: "#f59e0b",
     subjectLine: "Action needed: Your {{product}} account is at risk",
-    preheader: "Your subscription payment is still pending — update now to keep access",
+    preheader: "Your subscription payment is still pending. Update now to keep access",
     body: `Hi {{first_name}},
 
 We've been trying to process your {{product}} subscription payment of {{amount}} for the past week, but haven't been able to charge your card on file.
@@ -64,13 +64,13 @@ Your account is now at risk of being deactivated. Here's what you'd lose access 
 
 Update your payment method now to keep your account active:
 
-[Update Payment Method — Keep My Account →]
+[Update Payment Method: Keep My Account →]
 
 This takes less than a minute and will prevent any disruption to your service. If you're having trouble, just reply to this email and we'll help sort it out.
 
-— The {{product}} Team`,
+The {{product}} Team`,
     tips: [
-      "List specific features/data the customer will lose — make it tangible",
+      "List specific features/data the customer will lose. Make it tangible",
       "Create urgency without being aggressive or threatening",
       "Offer help in case they're having trouble (builds trust)",
       "Use a more action-oriented CTA button",
@@ -90,15 +90,15 @@ This is our final notice before we have to cancel your {{product}} subscription.
 
 Your account will be cancelled on {{cancellation_date}} unless you update your payment method.
 
-We'd genuinely hate to see you go — you've been using {{product}} for {{customer_duration}} and we know it's been valuable to your workflow.
+We'd genuinely hate to see you go. You've been using {{product}} for {{customer_duration}} and we know it's been valuable to your workflow.
 
-[Update Payment Method — This Is My Last Chance →]
+[Update Payment Method: This Is My Last Chance →]
 
-If there's anything going on that we can help with — billing questions, a temporary pause, or anything else — please just reply to this email. We're real people and we want to help.
+If there's anything going on that we can help with, whether billing questions, a temporary pause, or anything else, please just reply to this email. We're real people and we want to help.
 
-— The {{product}} Team`,
+The {{product}} Team`,
     tips: [
-      "Be empathetic — acknowledge the customer relationship",
+      "Be empathetic. Acknowledge the customer relationship",
       "State the specific cancellation date to create real urgency",
       "Mention how long they've been a customer (loss aversion)",
       "Offer alternatives like pausing the subscription",
@@ -110,11 +110,11 @@ If there's anything going on that we can help with — billing questions, a temp
     timing: "Send 2-3 days after cancellation (day 14-17)",
     urgency: "Recovery",
     urgencyColor: "#8b5cf6",
-    subjectLine: "We miss you at {{product}} — come back anytime",
+    subjectLine: "We miss you at {{product}}. Come back anytime",
     preheader: "Your data is safe and your account is ready to reactivate",
     body: `Hi {{first_name}},
 
-Your {{product}} subscription was cancelled due to a payment issue. We completely understand — these things happen and it's nobody's fault.
+Your {{product}} subscription was cancelled due to a payment issue. We completely understand. These things happen and it's nobody's fault.
 
 The good news: we've saved all your data, settings, and configurations. Everything is exactly as you left it.
 
@@ -122,17 +122,17 @@ If you'd like to come back, you can reactivate your account instantly:
 
 [Reactivate My Account →]
 
-No setup needed — just enter a new payment method and you're back in business. Everything will be right where you left it.
+No setup needed. Just enter a new payment method and you're back in business. Everything will be right where you left it.
 
 No hard feelings either way. We're just glad you gave {{product}} a try, and the door is always open.
 
 Warmly,
 The {{product}} Team`,
     tips: [
-      "Never guilt the customer — they didn't choose to leave",
+      "Never guilt the customer. They didn't choose to leave",
       "Emphasize that their data is safe (reduces reactivation anxiety)",
-      "Make reactivation sound effortless — 'instantly', 'one click'",
-      "This email often has a 10-15% reactivation rate — don't skip it",
+      "Make reactivation sound effortless. Use words like 'instantly' and 'one click'",
+      "This email often has a 10-15% reactivation rate. Don't skip it",
     ],
   },
   {
@@ -145,7 +145,7 @@ The {{product}} Team`,
     preheader: "Update your payment method to avoid any interruption to your {{product}} subscription",
     body: `Hi {{first_name}},
 
-Just a friendly heads up — the credit card you have on file for your {{product}} subscription (ending in {{last4}}) expires on {{expiry_date}}.
+Just a friendly heads up. The credit card you have on file for your {{product}} subscription (ending in {{last4}}) expires on {{expiry_date}}.
 
 To avoid any interruption to your service, you can update your payment method now:
 
@@ -155,12 +155,12 @@ This takes about 30 seconds and will ensure your subscription continues smoothly
 
 Thanks for being a {{product}} customer!
 
-— The {{product}} Team`,
+The {{product}} Team`,
     tips: [
-      "This is a PROACTIVE email — send it BEFORE the payment fails",
-      "Proactive card-update emails prevent 30-40% of expiration-related failures",
+      "This is a PROACTIVE email. Send it BEFORE the payment fails",
+      "Proactive card update emails prevent 30-40% of expiration related failures",
       "Reference the specific card (last 4 digits) so the customer knows exactly what to update",
-      "Keep it brief and action-oriented — no urgency needed yet",
+      "Keep it brief and action-oriented. No urgency needed yet",
     ],
   },
 ];
@@ -326,7 +326,7 @@ export default function TemplatesPage() {
         <div className="mx-auto max-w-[var(--max-width)] px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold">
-              Skip the manual work — let AI write your dunning emails
+              Skip the manual work. Let AI write your dunning emails
             </h2>
             <p
               className="mt-4 text-lg"
