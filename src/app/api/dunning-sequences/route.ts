@@ -13,7 +13,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("rk_dunning_sequences")
-    .select("*, dunning_emails(count)")
+    .select("*, rk_dunning_emails(count)")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 

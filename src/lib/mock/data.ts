@@ -136,7 +136,7 @@ export const mockDunningSequences = [
     is_default: true,
     is_active: true,
     created_at: "2026-01-20T10:00:00Z",
-    dunning_emails: [{ count: 5 }],
+    rk_dunning_emails: [{ count: 5 }],
   },
 ];
 

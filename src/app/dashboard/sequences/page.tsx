@@ -17,7 +17,7 @@ interface DunningSequence {
   is_default: boolean;
   is_active: boolean;
   created_at: string;
-  dunning_emails: { count: number }[];
+  rk_dunning_emails: { count: number }[];
 }
 
 export default function SequencesPage() {
@@ -46,9 +46,13 @@ export default function SequencesPage() {
       if (res.ok) {
         const data = await res.json();
         setSequences(data.sequences || []);
+      } else {
+        console.error("Failed to fetch sequences:", res.status);
+        setSequences([]);
       }
     } catch (err) {
       console.error("Failed to fetch sequences:", err);
+      setSequences([]);
     } finally {
       setLoading(false);
     }
@@ -206,7 +210,7 @@ export default function SequencesPage() {
                     <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>{seq.description}</p>
                   )}
                   <p className="text-xs mt-2" style={{ color: "var(--color-text-secondary)" }}>
-                    {seq.dunning_emails?.[0]?.count || 0} emails in sequence
+                    {seq.rk_dunning_emails?.[0]?.count || 0} emails in sequence
                   </p>
                 </div>
                 <div className="flex gap-2">
