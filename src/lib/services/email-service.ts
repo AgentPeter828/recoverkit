@@ -1,16 +1,18 @@
 /**
  * Email service — sends dunning emails via Resend.
  * Falls back to mock when RESEND_API_KEY is not set.
+ * Uses verified customer domain when available, otherwise defaults to RecoverKit sender.
  */
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || "RecoverKit <noreply@recoverkit.dev>";
+const DEFAULT_FROM_EMAIL = process.env.FROM_EMAIL || "RecoverKit <noreply@mail.recoverkit.dev>";
 
 interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
   text?: string;
+  from?: string; // Override sender (e.g. "AppName <billing@theirapp.com>")
 }
 
 interface SendEmailResult {
@@ -36,7 +38,7 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: FROM_EMAIL,
+        from: params.from || DEFAULT_FROM_EMAIL,
         to: params.to,
         subject: params.subject,
         html: params.html,

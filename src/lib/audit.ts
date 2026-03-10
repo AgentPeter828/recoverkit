@@ -11,7 +11,10 @@ export type AuditAction =
   | "payment_page_deleted"
   | "stripe_connected"
   | "stripe_disconnected"
-  | "default_sequence_seeded";
+  | "default_sequence_seeded"
+  | "email_domain_added"
+  | "email_domain_verified"
+  | "email_domain_deleted";
 
 /**
  * Log an audit event to the audit_log table.

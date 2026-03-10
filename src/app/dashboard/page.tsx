@@ -51,6 +51,9 @@ export default async function DashboardPage() {
           <Link href="/dashboard/payment-pages">
             <Button variant="outline" size="sm">Payment Pages</Button>
           </Link>
+          <Link href="/dashboard/email-setup">
+            <Button variant="outline" size="sm">📧 Email Setup</Button>
+          </Link>
           <Link href="/dashboard/connect">
             <Button variant={connection ? "ghost" : "primary"} size="sm">
               {connection ? "⚡ Connected" : "Connect Stripe"}
