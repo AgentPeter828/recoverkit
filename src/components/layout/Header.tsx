@@ -10,11 +10,20 @@ import type { User } from "@supabase/supabase-js";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME || "Firestorm App";
 
-const marketingLinks = [
+// Primary links shown directly in the nav bar (non-logged-in)
+const primaryLinks = [
+  { href: "/demo", label: "See Demo", highlight: true },
   { href: "/pricing", label: "Pricing" },
   { href: "/#features", label: "Features" },
   { href: "/alternatives", label: "Compare" },
+];
+
+// All marketing links (used in More dropdown for logged-in users)
+const marketingLinks = [
   { href: "/demo", label: "Demo" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/#features", label: "Features" },
+  { href: "/alternatives", label: "Compare" },
   { href: "/templates", label: "Templates" },
   { href: "/blog", label: "Blog" },
 ];
@@ -77,12 +86,24 @@ export function Header() {
               </>
             ) : (
               !isDashboard &&
-              marketingLinks.map((link) => (
+              primaryLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm transition-colors hover:opacity-70"
-                  style={{ color: "var(--color-text-secondary)" }}
+                  className={`text-sm transition-colors hover:opacity-70 ${
+                    "highlight" in link && link.highlight
+                      ? "font-semibold px-3 py-1.5 rounded-full"
+                      : ""
+                  }`}
+                  style={
+                    "highlight" in link && link.highlight
+                      ? {
+                          color: "var(--color-brand)",
+                          background: "var(--color-brand-50)",
+                          border: "1px solid var(--color-brand)",
+                        }
+                      : { color: "var(--color-text-secondary)" }
+                  }
                 >
                   {link.label}
                 </Link>
