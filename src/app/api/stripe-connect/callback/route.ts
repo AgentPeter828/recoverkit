@@ -81,6 +81,31 @@ export async function GET(request: NextRequest) {
       console.warn("[stripe-connect/callback] Failed to seed default sequence:", seedErr);
     }
 
+    // Auto-create default payment update page (idempotent — skip if one exists)
+    try {
+      const { data: existingPage } = await serviceClient
+        .from("rk_payment_update_pages")
+        .select("id")
+        .eq("user_id", user.id)
+        .limit(1)
+        .single();
+
+      if (!existingPage) {
+        const slug = "pay-" + crypto.randomUUID().slice(0, 12);
+        await serviceClient.from("rk_payment_update_pages").insert({
+          user_id: user.id,
+          slug,
+          title: "Update Your Payment Method",
+          message: "Your recent payment didn't go through. Please update your card to continue your subscription.",
+          brand_color: "#6366f1",
+          is_active: true,
+        });
+      }
+    } catch (pageErr) {
+      // Non-blocking — fallback /pay/update route will still work
+      console.warn("[stripe-connect/callback] Failed to create default payment page:", pageErr);
+    }
+
     return NextResponse.redirect(new URL("/dashboard/connect?success=true", request.url));
   } catch (err) {
     console.error("[stripe-connect/callback] Error:", err);
