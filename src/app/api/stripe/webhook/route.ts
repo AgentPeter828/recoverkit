@@ -3,6 +3,9 @@ import { stripe } from "@/lib/stripe/client";
 import { createClient } from "@supabase/supabase-js";
 import { trackServerEvent } from "@/lib/mixpanel-server";
 import { rateLimitWebhook } from "@/lib/rate-limit";
+import { checkPlanLimit } from "@/lib/plan-limits";
+import { getNextRetryTime } from "@/lib/services/retry-scheduler";
+import { logAudit } from "@/lib/audit";
 import type Stripe from "stripe";
 
 // Use Node.js runtime for Stripe webhook verification
@@ -69,15 +72,67 @@ async function handleCheckoutSessionCompleted(
     ...(profile || {}),
   }, userId);
 
+  // Process any queued recovery campaigns with the new plan
+  try {
+    await processQueuedCampaigns(userId);
+  } catch (err) {
+    console.error("[Stripe Webhook] Failed to process queued campaigns:", err);
+  }
+
   console.log(
     `[Stripe Webhook] Checkout completed for customer ${customerId}, user ${userId}`
   );
+}
+
+/**
+ * Process queued recovery campaigns after a plan upgrade.
+ * Activates campaigns up to the new plan's capacity.
+ */
+async function processQueuedCampaigns(userId: string) {
+  const supabase = getSupabaseAdmin();
+
+  const { data: queuedCampaigns } = await supabase
+    .from("rk_recovery_campaigns")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("status", "queued")
+    .order("created_at", { ascending: true });
+
+  if (!queuedCampaigns || queuedCampaigns.length === 0) return;
+
+  let activated = 0;
+  for (const campaign of queuedCampaigns) {
+    const limit = await checkPlanLimit(userId);
+    if (!limit.allowed) break;
+
+    const nextRetry = getNextRetryTime(1);
+    const { error } = await supabase
+      .from("rk_recovery_campaigns")
+      .update({ status: "active", next_retry_at: nextRetry.toISOString() })
+      .eq("id", campaign.id);
+
+    if (!error) {
+      activated++;
+      await logAudit(userId, "campaign_activated_from_queue", { campaign_id: campaign.id });
+    }
+  }
+
+  if (activated > 0) {
+    console.log(`[Stripe Webhook] Activated ${activated} queued campaigns for user ${userId}`);
+  }
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   const supabase = getSupabaseAdmin();
   const customerId = subscription.customer as string;
   const priceId = subscription.items.data[0]?.price.id ?? null;
+
+  // Get old subscription to detect plan changes
+  const { data: existingSub } = await supabase
+    .from("rk_subscriptions")
+    .select("price_id, user_id")
+    .eq("stripe_customer_id", customerId)
+    .single();
 
   const { error } = await supabase
     .from("rk_subscriptions")
@@ -95,6 +150,15 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   if (error) {
     console.error("[Stripe Webhook] Failed to update subscription:", error.message);
     throw error;
+  }
+
+  // If plan changed (upgrade), process queued recovery campaigns
+  if (existingSub?.user_id && priceId !== existingSub.price_id) {
+    try {
+      await processQueuedCampaigns(existingSub.user_id);
+    } catch (err) {
+      console.error("[Stripe Webhook] Failed to process queued campaigns:", err);
+    }
   }
 
   console.log(

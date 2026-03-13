@@ -2,6 +2,8 @@ import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export type AuditAction =
   | "campaign_created"
+  | "campaign_queued"
+  | "campaign_activated_from_queue"
   | "retry_attempted"
   | "email_sent"
   | "sequence_created"

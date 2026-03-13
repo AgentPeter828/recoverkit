@@ -51,5 +51,21 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Redirect to onboarding if user hasn't completed it
+  // (skip if already on the onboarding page or hitting API routes)
+  if (
+    user &&
+    isProtectedRoute &&
+    !request.nextUrl.pathname.startsWith("/dashboard/onboarding") &&
+    !request.nextUrl.pathname.startsWith("/api/")
+  ) {
+    const onboardingDone = user.user_metadata?.onboarding_completed === true;
+    if (!onboardingDone) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard/onboarding";
+      return NextResponse.redirect(url);
+    }
+  }
+
   return supabaseResponse;
 }

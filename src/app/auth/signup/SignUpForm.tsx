@@ -48,7 +48,7 @@ export function SignUpForm() {
           ...utm,
         }, { onConflict: "id" });
       }
-      window.location.href = "/dashboard";
+      window.location.href = "/dashboard/onboarding";
     } else {
       setMessage("Check your email to confirm your account, then log in.");
     }

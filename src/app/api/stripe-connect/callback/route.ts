@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import { exchangeCode, getAccountInfo, validateOAuthState } from "@/lib/services/stripe-connect";
 import { seedDefaultSequence } from "@/lib/services/default-sequence";
 import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
+
+function createServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+}
 
 export async function GET(request: NextRequest) {
   const supabase = await createServerComponentClient();
@@ -36,8 +45,9 @@ export async function GET(request: NextRequest) {
   try {
     const result = await exchangeCode(code);
     const accountInfo = await getAccountInfo(result.stripe_account_id);
+    const serviceClient = createServiceClient();
 
-    const { error: dbError } = await supabase.from("rk_stripe_connections").upsert(
+    const { error: dbError } = await serviceClient.from("rk_stripe_connections").upsert(
       {
         user_id: user.id,
         stripe_account_id: result.stripe_account_id,
@@ -65,7 +75,7 @@ export async function GET(request: NextRequest) {
 
     // Auto-seed default dunning sequence on first Stripe connect
     try {
-      await seedDefaultSequence(supabase, user.id);
+      await seedDefaultSequence(serviceClient, user.id);
     } catch (seedErr) {
       // Non-blocking — user can still proceed without default sequence
       console.warn("[stripe-connect/callback] Failed to seed default sequence:", seedErr);

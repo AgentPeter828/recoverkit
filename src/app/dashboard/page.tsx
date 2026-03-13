@@ -4,12 +4,15 @@ import Link from "next/link";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { getSubscription } from "@/lib/stripe/billing";
 import { plans } from "@/lib/stripe/config";
+import { checkPlanLimit } from "@/lib/plan-limits";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { UpgradeButton } from "./UpgradeButton";
 import { ManageButton } from "./ManageButton";
 import { RecoveryStatsCards } from "@/components/dashboard/RecoveryStatsCards";
 import { RecentCampaigns } from "@/components/dashboard/RecentCampaigns";
+import { UsageBanner } from "@/components/dashboard/UsageBanner";
+import { QueuedPaymentsCard } from "@/components/dashboard/QueuedPaymentsCard";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -52,6 +55,14 @@ export default async function DashboardPage() {
   const setupComplete = hasStripe && hasSequence && hasEmailDomain;
   const stepsComplete = [hasStripe, hasSequence, hasEmailDomain].filter(Boolean).length;
 
+  // Plan usage data for banners
+  const planLimit = await checkPlanLimit(user.id);
+  const { count: queuedCount } = await supabase
+    .from("rk_recovery_campaigns")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("status", "queued");
+
   return (
     <div className="mx-auto max-w-[var(--max-width)] px-6 py-12 lg:px-8">
       {/* Header */}
@@ -65,6 +76,17 @@ export default async function DashboardPage() {
             : "Let's get your payment recovery up and running. It only takes a few minutes."}
         </p>
       </div>
+
+      {/* ─── USAGE BANNER ─── */}
+      <UsageBanner
+        current={planLimit.current}
+        limit={planLimit.limit}
+        queuedCount={queuedCount ?? 0}
+        planName={planLimit.planName}
+      />
+
+      {/* ─── QUEUED PAYMENTS ─── */}
+      <QueuedPaymentsCard initialCount={queuedCount ?? 0} />
 
       {/* ─── SETUP CHECKLIST ─── */}
       {!setupComplete && (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -129,6 +130,132 @@ export default function PricingPage() {
           </Card>
         ))}
       </div>
+
+      {/* ─── FEATURE COMPARISON TABLE ─── */}
+      <div className="mx-auto mt-24 max-w-5xl">
+        <h2 className="text-3xl font-bold text-center mb-2">Compare all features</h2>
+        <p className="text-center mb-12" style={{ color: "var(--color-text-secondary)" }}>
+          See exactly what you get with each plan
+        </p>
+
+        <div className="overflow-x-auto rounded-xl border" style={{ borderColor: "var(--color-border)" }}>
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: "var(--color-bg-secondary)" }}>
+                <th className="text-left px-6 py-4 font-semibold" style={{ width: "40%" }}>Feature</th>
+                {plans.map((plan) => (
+                  <th key={plan.name} className="px-4 py-4 text-center font-semibold" style={{ width: "15%" }}>
+                    <div>{plan.name}</div>
+                    <div className="text-xs font-normal mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
+                      {plan.price === 0 ? "Free" : `$${plan.price}/mo`}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARISON_FEATURES.map((section, si) => (
+                <Fragment key={`section-${si}`}>
+                  <tr>
+                    <td
+                      colSpan={5}
+                      className="px-6 py-3 text-xs font-bold uppercase tracking-wider"
+                      style={{ background: "var(--color-bg-tertiary)", color: "var(--color-text-secondary)" }}
+                    >
+                      {section.category}
+                    </td>
+                  </tr>
+                  {section.features.map((feature, fi) => (
+                    <tr
+                      key={`feature-${si}-${fi}`}
+                      className="border-t"
+                      style={{ borderColor: "var(--color-border)" }}
+                    >
+                      <td className="px-6 py-3.5">
+                        <span className="font-medium">{feature.name}</span>
+                        {feature.tooltip && (
+                          <span className="block text-xs mt-0.5" style={{ color: "var(--color-text-tertiary)" }}>
+                            {feature.tooltip}
+                          </span>
+                        )}
+                      </td>
+                      {feature.values.map((val, vi) => (
+                        <td key={vi} className="px-4 py-3.5 text-center">
+                          {val === true ? (
+                            <span style={{ color: "#22c55e", fontSize: 18 }}>✓</span>
+                          ) : val === false ? (
+                            <span style={{ color: "var(--color-text-tertiary)", fontSize: 18 }}>—</span>
+                          ) : (
+                            <span className="font-medium">{val}</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
+
+/* ─── Comparison data ─── */
+
+interface ComparisonFeature {
+  name: string;
+  tooltip?: string;
+  values: (boolean | string)[];  // [Free, Starter, Growth, Scale]
+}
+
+interface ComparisonSection {
+  category: string;
+  features: ComparisonFeature[];
+}
+
+const COMPARISON_FEATURES: ComparisonSection[] = [
+  {
+    category: "Recovery",
+    features: [
+      { name: "Recovery attempts/month", values: ["10", "100", "500", "Unlimited"] },
+      { name: "Smart retry scheduling", tooltip: "Automatic retries with exponential backoff", values: [true, true, true, true] },
+      { name: "Priority retry timing", tooltip: "Retries sent at optimal times for higher success", values: [false, false, true, true] },
+      { name: "Failed payment webhooks", values: [true, true, true, true] },
+    ],
+  },
+  {
+    category: "Emails",
+    features: [
+      { name: "Default email templates", tooltip: "Pre-written 5-step dunning sequence", values: [true, true, true, true] },
+      { name: "Email sequence builder", tooltip: "Create and edit custom email sequences", values: [false, true, true, true] },
+      { name: "AI-generated emails", tooltip: "Emails tailored to your industry and tone", values: [false, false, true, true] },
+      { name: "Custom email domain", tooltip: "Send from billing@yourdomain.com", values: [false, false, true, true] },
+      { name: "Email sequences", tooltip: "Number of different sequences you can create", values: ["1", "3", "10", "Unlimited"] },
+    ],
+  },
+  {
+    category: "Branding & Pages",
+    features: [
+      { name: "Recovery dashboard", values: [true, true, true, true] },
+      { name: "Custom branding", tooltip: "Your logo and colors on payment pages", values: [false, false, true, true] },
+      { name: "Custom payment pages", tooltip: "Branded pages for customers to update their card", values: [false, false, false, true] },
+    ],
+  },
+  {
+    category: "Analytics & Integrations",
+    features: [
+      { name: "Basic recovery stats", tooltip: "Revenue recovered, success rate, active campaigns", values: [true, true, true, true] },
+      { name: "Advanced analytics", tooltip: "Detailed breakdowns, trends, and cohort analysis", values: [false, false, false, true] },
+      { name: "API access", tooltip: "REST API for custom integrations", values: [false, false, false, true] },
+    ],
+  },
+  {
+    category: "Support",
+    features: [
+      { name: "Email support", values: [true, true, true, true] },
+      { name: "Priority support", tooltip: "Faster response times and dedicated help", values: [false, false, false, true] },
+    ],
+  },
+];

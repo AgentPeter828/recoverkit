@@ -6,6 +6,7 @@ import { trackServerEvent } from "@/lib/mixpanel-server";
 import { rateLimitWebhook } from "@/lib/rate-limit";
 import { checkPlanLimit } from "@/lib/plan-limits";
 import { logAudit } from "@/lib/audit";
+import { sendLimitReachedEmail } from "@/lib/services/limit-notifications";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -76,18 +77,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unknown connected account" }, { status: 404 });
   }
 
-  // Check plan limits before creating campaign
-  const planLimit = await checkPlanLimit(connection.user_id);
-  if (!planLimit.allowed) {
-    console.warn(`[recovery/webhook] Plan limit reached for user ${connection.user_id}: ${planLimit.current}/${planLimit.limit} (${planLimit.planName})`);
-    return NextResponse.json({
-      error: "Plan limit reached",
-      current: planLimit.current,
-      limit: planLimit.limit,
-      plan: planLimit.planName,
-    }, { status: 403 });
-  }
-
   // Check if campaign already exists for this invoice
   const { data: existing } = await supabase
     .from("rk_recovery_campaigns")
@@ -99,7 +88,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true, existing: true });
   }
 
-  // Create recovery campaign
+  // Check plan limits — queue instead of rejecting
+  const planLimit = await checkPlanLimit(connection.user_id);
+  const isQueued = !planLimit.allowed;
+
+  if (isQueued) {
+    console.warn(`[recovery/webhook] Plan limit reached for user ${connection.user_id}: ${planLimit.current}/${planLimit.limit} (${planLimit.planName}) — queuing campaign`);
+  }
+
+  // Create recovery campaign (active or queued)
   const nextRetry = getNextRetryTime(1);
   const { error } = await supabase.from("rk_recovery_campaigns").insert({
     user_id: connection.user_id,
@@ -110,12 +107,12 @@ export async function POST(request: NextRequest) {
     customer_name: invoice.customer_name ?? null,
     amount_due: invoice.amount_due,
     currency: invoice.currency,
-    status: "active",
+    status: isQueued ? "queued" : "active",
     failure_code: invoice.last_finalization_error?.code ?? null,
     failure_message: invoice.last_finalization_error?.message ?? null,
     retry_count: 0,
     max_retries: 5,
-    next_retry_at: nextRetry.toISOString(),
+    next_retry_at: isQueued ? null : nextRetry.toISOString(),
   });
 
   if (error) {
@@ -124,7 +121,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Audit log
-  await logAudit(connection.user_id, "campaign_created", {
+  await logAudit(connection.user_id, isQueued ? "campaign_queued" : "campaign_created", {
     stripe_invoice_id: invoice.id,
     amount_due: invoice.amount_due,
     currency: invoice.currency,
@@ -132,13 +129,31 @@ export async function POST(request: NextRequest) {
   });
 
   // Track in Mixpanel
-  await trackServerEvent("payment_failed_detected", {
+  await trackServerEvent(isQueued ? "payment_queued" : "payment_failed_detected", {
     amount: invoice.amount_due,
     currency: invoice.currency,
     customer_email: invoice.customer_email,
     failure_code: invoice.last_finalization_error?.code,
+    queued: isQueued,
   }, connection.user_id);
 
-  console.log(`[recovery/webhook] Created recovery campaign for invoice ${invoice.id}`);
-  return NextResponse.json({ received: true, campaign_created: true });
+  // Send limit-reached email (only once per billing period)
+  if (isQueued) {
+    // Count queued campaigns to include in the email
+    const { count: queuedCount } = await supabase
+      .from("rk_recovery_campaigns")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", connection.user_id)
+      .eq("status", "queued");
+
+    await sendLimitReachedEmail(
+      connection.user_id,
+      planLimit.planName,
+      planLimit.limit,
+      queuedCount ?? 1
+    );
+  }
+
+  console.log(`[recovery/webhook] ${isQueued ? "Queued" : "Created"} recovery campaign for invoice ${invoice.id}`);
+  return NextResponse.json({ received: true, campaign_created: !isQueued, queued: isQueued });
 }

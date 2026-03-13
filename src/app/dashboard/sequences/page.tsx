@@ -10,11 +10,11 @@ import { mockDunningSequences, mockDunningEmails } from "@/lib/mock/data";
 import { analytics } from "@/lib/mixpanel";
 
 const TONES = [
-  { id: "friendly", label: "🤝 Friendly", desc: "Casual, reassuring, human" },
-  { id: "professional", label: "💼 Professional", desc: "Clean, business-like" },
-  { id: "direct", label: "⚡ Direct", desc: "Short, action-oriented" },
-  { id: "empathetic", label: "😊 Empathetic", desc: "Warm, understanding" },
-  { id: "formal", label: "🏢 Formal", desc: "Corporate, polished" },
+  { id: "friendly", label: "Friendly", emoji: "🤝", desc: "Casual, reassuring, human", preview: "Hey! Looks like your payment didn't go through. No worries — it happens to everyone. Could you update your card?" },
+  { id: "professional", label: "Professional", emoji: "💼", desc: "Clean, business-like", preview: "We noticed your recent payment was unsuccessful. Please update your billing information to continue your service." },
+  { id: "direct", label: "Direct", emoji: "⚡", desc: "Short, action-oriented", preview: "Your payment failed. Update your card now to keep your subscription active." },
+  { id: "empathetic", label: "Empathetic", emoji: "😊", desc: "Warm, understanding", preview: "We understand things happen! Your last payment didn't go through, and we want to help you sort it out easily." },
+  { id: "formal", label: "Formal", emoji: "🏢", desc: "Corporate, polished", preview: "We wish to inform you that your most recent payment was not processed successfully. Kindly review your payment details." },
 ];
 
 interface DunningEmail {
@@ -42,9 +42,59 @@ function delayLabel(hours: number): string {
   return `Day ${days}`;
 }
 
+function delayLabelShort(hours: number): string {
+  if (hours < 24) return `${hours} hour${hours !== 1 ? "s" : ""}`;
+  const days = Math.round(hours / 24);
+  return `${days} day${days !== 1 ? "s" : ""}`;
+}
+
 function stepLabel(step: number): string {
   const labels = ["Friendly reminder", "Follow up", "Escalation", "Urgent notice", "Final notice"];
   return labels[step - 1] || `Step ${step}`;
+}
+
+/* ─── Inline SVG Illustrations ─── */
+
+function PaymentFailIcon() {
+  return (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="10" width="28" height="18" rx="4" stroke="#ef4444" strokeWidth="1.5" fill="#fef2f2" />
+      <rect x="4" y="15" width="28" height="4" fill="#fca5a5" />
+      <path d="M22 25 L26 21 M26 25 L22 21" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function EmailSentIcon({ step }: { step: number }) {
+  const colors = ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899"];
+  const color = colors[step - 1] || colors[0];
+  const bgColor = color + "15";
+  return (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="10" width="24" height="16" rx="3" stroke={color} strokeWidth="1.5" fill={bgColor} />
+      <path d="M6 14 L18 22 L30 14" stroke={color} strokeWidth="1.5" fill="none" />
+      <circle cx="28" cy="10" r="5" fill={color} />
+      <text x="28" y="13" fontSize="7" fill="#fff" fontFamily="system-ui" fontWeight="700" textAnchor="middle">{step}</text>
+    </svg>
+  );
+}
+
+function RecoveredIcon() {
+  return (
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="13" stroke="#22c55e" strokeWidth="1.5" fill="#d1fae5" />
+      <path d="M12 18 L16 22 L24 14" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function TimelineConnector() {
+  return (
+    <div
+      className="hidden sm:block w-8 h-0.5 shrink-0"
+      style={{ background: "var(--color-border)" }}
+    />
+  );
 }
 
 export default function SequencesPage() {
@@ -60,6 +110,8 @@ export default function SequencesPage() {
   const [error, setError] = useState<string | null>(null);
   const [expandedStep, setExpandedStep] = useState<number | null>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [showDunningExplainer, setShowDunningExplainer] = useState(false);
+  const [hoveredTone, setHoveredTone] = useState<string | null>(null);
 
   useEffect(() => {
     initSequences();
@@ -74,7 +126,6 @@ export default function SequencesPage() {
     }
 
     try {
-      // Fetch sequences
       const res = await fetch("/api/dunning-sequences");
       if (!res.ok) {
         setLoading(false);
@@ -84,16 +135,13 @@ export default function SequencesPage() {
       const seqs = data.sequences || [];
 
       if (seqs.length === 0) {
-        // Auto-seed the default sequence
         setSeeding(true);
         const seedRes = await fetch("/api/dunning-sequences/seed-default", { method: "POST" });
         if (seedRes.ok) {
-          // Re-fetch after seeding
           const res2 = await fetch("/api/dunning-sequences");
           if (res2.ok) {
             const data2 = await res2.json();
             setSequences(data2.sequences || []);
-            // Fetch emails for the default sequence
             if (data2.sequences?.[0]?.id) {
               await fetchEmails(data2.sequences[0].id);
             }
@@ -102,7 +150,6 @@ export default function SequencesPage() {
         setSeeding(false);
       } else {
         setSequences(seqs);
-        // Fetch emails for the default/first sequence
         const defaultSeq = seqs.find((s: DunningSequence) => s.is_default) || seqs[0];
         if (defaultSeq) {
           await fetchEmails(defaultSeq.id);
@@ -182,6 +229,7 @@ export default function SequencesPage() {
   }
 
   const defaultSeq = sequences.find((s) => s.is_default) || sequences[0];
+  const sortedEmails = [...emails].sort((a, b) => a.step_number - b.step_number);
 
   if (loading || seeding) {
     return (
@@ -204,7 +252,7 @@ export default function SequencesPage() {
         <div>
           <h1 className="text-2xl font-bold">Email Sequences</h1>
           <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-            These emails are sent automatically when a customer's payment fails
+            Automatic emails that help you recover failed payments
           </p>
         </div>
         <div className="flex gap-2">
@@ -213,6 +261,100 @@ export default function SequencesPage() {
           </Link>
         </div>
       </div>
+
+      {/* ─── VISUAL TIMELINE EXPLAINER ─── */}
+      <Card className="p-8 mb-8">
+        <h2 className="text-lg font-bold mb-2">When a payment fails, here&apos;s what happens:</h2>
+        <p className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
+          RecoverKit automatically sends a series of friendly emails to help your customer fix their payment
+        </p>
+
+        {/* Timeline */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-0 mb-6">
+          {/* Payment fails */}
+          <div className="flex flex-col items-center gap-1.5 text-center" style={{ minWidth: 72 }}>
+            <PaymentFailIcon />
+            <p className="text-xs font-semibold" style={{ color: "#ef4444" }}>Payment fails</p>
+          </div>
+
+          <TimelineConnector />
+
+          {/* Email nodes */}
+          {(sortedEmails.length > 0 ? sortedEmails : [
+            { step_number: 1, delay_hours: 1 },
+            { step_number: 2, delay_hours: 24 },
+            { step_number: 3, delay_hours: 72 },
+            { step_number: 4, delay_hours: 120 },
+            { step_number: 5, delay_hours: 168 },
+          ]).map((email, i) => (
+            <div key={i} className="contents">
+              <div className="flex flex-col items-center gap-1.5 text-center" style={{ minWidth: 72 }}>
+                <EmailSentIcon step={email.step_number} />
+                <p className="text-xs font-semibold">Email {email.step_number}</p>
+                <p className="text-[10px]" style={{ color: "var(--color-text-secondary)" }}>
+                  {delayLabelShort(email.delay_hours)}
+                </p>
+              </div>
+              {i < 4 && <TimelineConnector />}
+            </div>
+          ))}
+
+          <TimelineConnector />
+
+          {/* Recovered */}
+          <div className="flex flex-col items-center gap-1.5 text-center" style={{ minWidth: 72 }}>
+            <RecoveredIcon />
+            <p className="text-xs font-semibold" style={{ color: "#22c55e" }}>Recovered!</p>
+          </div>
+        </div>
+
+        <div
+          className="rounded-lg px-4 py-3 text-sm text-center"
+          style={{ background: "var(--color-brand-50)", color: "var(--color-brand-dark)" }}
+        >
+          Most customers fix their payment after the first or second email. The later emails are just in case!
+        </div>
+
+        {/* What are dunning emails? */}
+        <div className="mt-4">
+          <button
+            onClick={() => setShowDunningExplainer(!showDunningExplainer)}
+            className="flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity"
+            style={{ color: "var(--color-brand)" }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="var(--color-brand-light)" strokeWidth="1.5" fill="var(--color-brand-50)" />
+              <text x="9" y="13" fontSize="11" fill="var(--color-brand)" fontFamily="system-ui" fontWeight="700" textAnchor="middle">?</text>
+            </svg>
+            What are dunning emails?
+            <svg
+              className={`h-4 w-4 transition-transform ${showDunningExplainer ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {showDunningExplainer && (
+            <div
+              className="mt-3 rounded-lg p-4 text-sm"
+              style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+            >
+              <p className="mb-2">
+                <strong>Sometimes when someone buys something online, their credit card doesn&apos;t work.</strong> Maybe the card expired, or there wasn&apos;t enough money on it.
+              </p>
+              <p className="mb-2">
+                &quot;Dunning emails&quot; are friendly reminder emails that say: &quot;Hey, your payment didn&apos;t go through — here&apos;s how to fix it.&quot;
+              </p>
+              <p>
+                This helps you keep your customers and recover money that would otherwise be lost. Most people want to pay — they just need a reminder!
+              </p>
+            </div>
+          )}
+        </div>
+      </Card>
 
       {error && (
         <div className="mb-4 rounded-lg px-4 py-3 text-sm" style={{ background: "#fef2f2", color: "#991b1b" }}>
@@ -223,9 +365,8 @@ export default function SequencesPage() {
       {/* ─── EMAIL PREVIEW ─── */}
       {emails.length > 0 && (
         <div className="space-y-3 mb-6">
-          {emails
-            .sort((a, b) => a.step_number - b.step_number)
-            .map((email) => {
+          <h3 className="font-semibold text-lg">Your email sequence</h3>
+          {sortedEmails.map((email) => {
               const isExpanded = expandedStep === email.step_number;
               return (
                 <Card key={email.id} className="overflow-hidden">
@@ -279,7 +420,7 @@ export default function SequencesPage() {
                         </pre>
                         <div className="mt-3">
                           <Link href={`/dashboard/sequences/${defaultSeq?.id}`}>
-                            <Button variant="ghost" size="sm">✏️ Edit this email</Button>
+                            <Button variant="ghost" size="sm">Edit this email</Button>
                           </Link>
                         </div>
                       </div>
@@ -296,25 +437,46 @@ export default function SequencesPage() {
         <Card className="p-6 mb-6">
           <h3 className="font-semibold mb-1">Want a different tone?</h3>
           <p className="text-sm mb-4" style={{ color: "var(--color-text-secondary)" }}>
-            Click a style below to regenerate all 5 emails in that tone
+            Pick a style below and we&apos;ll rewrite all 5 emails to match. Hover to preview.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-3">
             {TONES.map((tone) => (
               <button
                 key={tone.id}
                 onClick={() => handleChangeTone(tone.id)}
+                onMouseEnter={() => setHoveredTone(tone.id)}
+                onMouseLeave={() => setHoveredTone(null)}
                 disabled={changingTone}
-                className="text-sm px-4 py-2 rounded-lg border transition-colors hover:border-current disabled:opacity-50"
-                style={{ borderColor: "var(--color-border)", color: "var(--color-text-secondary)" }}
+                className="text-sm px-4 py-3 rounded-lg border transition-all hover:border-current disabled:opacity-50"
+                style={{
+                  borderColor: hoveredTone === tone.id ? "var(--color-brand)" : "var(--color-border)",
+                  background: hoveredTone === tone.id ? "var(--color-brand-50)" : "transparent",
+                  color: "var(--color-text-secondary)",
+                }}
               >
-                <span className="block font-medium">{tone.label}</span>
-                <span className="block text-xs opacity-70">{tone.desc}</span>
+                <span className="block text-lg mb-0.5">{tone.emoji}</span>
+                <span className="block font-medium text-xs">{tone.label}</span>
+                <span className="block text-[10px] opacity-70">{tone.desc}</span>
               </button>
             ))}
           </div>
+
+          {/* Tone preview */}
+          {hoveredTone && (
+            <div
+              className="rounded-lg p-3 text-xs"
+              style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+            >
+              <p className="font-semibold mb-1" style={{ color: "var(--color-text)" }}>
+                Preview ({TONES.find(t => t.id === hoveredTone)?.label} tone):
+              </p>
+              <p className="italic">&quot;{TONES.find(t => t.id === hoveredTone)?.preview}&quot;</p>
+            </div>
+          )}
+
           {changingTone && (
             <p className="text-sm mt-3 animate-pulse" style={{ color: "var(--color-brand)" }}>
-              ✨ Regenerating emails in your chosen tone...
+              Regenerating emails in your chosen tone...
             </p>
           )}
         </Card>
@@ -329,10 +491,10 @@ export default function SequencesPage() {
           </p>
           <div className="flex justify-center gap-3">
             <Button variant="primary" size="sm" onClick={() => setConfirmed(true)}>
-              ✅ Looks good, activate
+              Looks good, activate
             </Button>
             <Link href={`/dashboard/sequences/${defaultSeq?.id}`}>
-              <Button variant="outline" size="sm">✏️ Edit individually</Button>
+              <Button variant="outline" size="sm">Edit individually</Button>
             </Link>
           </div>
         </Card>
@@ -340,9 +502,12 @@ export default function SequencesPage() {
 
       {confirmed && (
         <Card className="p-4 mb-6 text-center" style={{ background: "#d1fae5" }}>
-          <p className="text-sm font-medium" style={{ color: "#065f46" }}>
-            ✅ Email sequence activated! Emails will send automatically when a payment fails.
-          </p>
+          <div className="flex items-center justify-center gap-2">
+            <RecoveredIcon />
+            <p className="text-sm font-medium" style={{ color: "#065f46" }}>
+              Email sequence activated! Emails will send automatically when a payment fails.
+            </p>
+          </div>
         </Card>
       )}
 
