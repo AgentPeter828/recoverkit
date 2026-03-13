@@ -16,7 +16,9 @@ export type AuditAction =
   | "default_sequence_seeded"
   | "email_domain_added"
   | "email_domain_verified"
-  | "email_domain_deleted";
+  | "email_domain_deleted"
+  | "plan_upgraded"
+  | "plan_downgraded";
 
 /**
  * Log an audit event to the audit_log table.
