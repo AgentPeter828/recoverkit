@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
-import { createOrGetCustomer } from "@/lib/stripe/billing";
+import { createOrGetCustomer, getSubscription } from "@/lib/stripe/billing";
 import { createServerComponentClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
+/**
+ * POST — Create a Stripe Checkout session for FIRST-TIME subscribers only.
+ * If the user already has an active subscription, redirect them to use
+ * the change-plan endpoint instead.
+ */
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createServerComponentClient();
@@ -27,6 +32,16 @@ export async function POST(request: NextRequest) {
     if (!priceId) {
       return NextResponse.json(
         { error: "Missing priceId" },
+        { status: 400 }
+      );
+    }
+
+    // Check if user already has an active subscription
+    const existing = await getSubscription(user.id);
+    const isActive = existing?.status === "active" || existing?.status === "trialing";
+    if (isActive && existing?.stripe_subscription_id) {
+      return NextResponse.json(
+        { error: "You already have an active subscription. Use the change plan option instead.", useChangePlan: true },
         { status: 400 }
       );
     }

@@ -238,13 +238,18 @@ export default async function DashboardPage() {
             </div>
             <ManageButton />
           </div>
-        ) : (
-          <div className="space-y-4">
-            <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-              You&apos;re on the <strong>Free</strong> plan (10 recoveries/month). Upgrade to recover more revenue.
-            </p>
+        ) : null}
+
+        {/* Plan options — show upgrade/downgrade for all non-Scale users */}
+        {(!currentPlan || currentPlan.name !== "Scale") && (
+          <div className="space-y-4 mt-4">
+            {!currentPlan && (
+              <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                You&apos;re on the <strong>Free</strong> plan (10 recoveries/month). Upgrade to recover more revenue.
+              </p>
+            )}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {plans.filter((p) => p.price > 0).map((plan) => (
+              {plans.filter((p) => p.price > 0 && p.name !== currentPlan?.name).map((plan) => (
                 <Card
                   key={plan.name}
                   className={`p-4 ${plan.highlighted ? "ring-2" : ""}`}
@@ -266,7 +271,10 @@ export default async function DashboardPage() {
                     <UpgradeButton
                       priceId={plan.priceId}
                       planName={plan.name}
-                      variant={plan.highlighted ? "primary" : "outline"}
+                      currentPlanPrice={currentPlan?.price ?? 0}
+                      targetPlanPrice={plan.price}
+                      hasSubscription={isActive && !!subscription?.stripe_subscription_id}
+                      variant={plan.price > (currentPlan?.price ?? 0) ? (plan.highlighted ? "primary" : "outline") : "outline"}
                     />
                   </div>
                 </Card>
