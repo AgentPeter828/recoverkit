@@ -44,16 +44,23 @@ function getTimezoneOffsetHours(timezone: string): number {
  * @param attemptNumber - Which retry attempt (1-based)
  * @param fromDate - Base date to calculate from
  * @param timezone - Optional IANA timezone (e.g. "America/New_York") for "10am local"
+ * @param usePriorityTiming - Whether to snap to optimal hours (Growth+ only). Defaults to true.
  */
 export function getNextRetryTime(
   attemptNumber: number,
   fromDate: Date = new Date(),
-  timezone?: string
+  timezone?: string,
+  usePriorityTiming: boolean = true
 ): Date {
   const baseDelays = [4, 24, 72, 120, 168]; // hours
   const delayHours = baseDelays[Math.min(attemptNumber - 1, baseDelays.length - 1)];
 
   const targetDate = new Date(fromDate.getTime() + delayHours * 60 * 60 * 1000);
+
+  // Without priority timing, return raw exponential backoff
+  if (!usePriorityTiming) {
+    return targetDate;
+  }
 
   // Calculate offset: convert optimal local hour to UTC hour
   const offsetHours = timezone ? getTimezoneOffsetHours(timezone) : 0;

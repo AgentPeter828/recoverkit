@@ -3,6 +3,7 @@ import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { retryPayment, getNextRetryTime } from "@/lib/services/retry-scheduler";
 import { sendEmail, buildDunningEmailHtml } from "@/lib/services/email-service";
 import { logAudit } from "@/lib/audit";
+import { getUserPlan } from "@/lib/plan-limits";
 
 export const runtime = "nodejs";
 
@@ -268,9 +269,11 @@ async function processRetries(supabase: ReturnType<typeof getSupabaseAdmin>, now
         });
         succeeded++;
       } else {
+        // Check if user has priority retry timing
+        const { features } = await getUserPlan(campaign.user_id);
         const nextRetry =
           attemptNumber < campaign.max_retries
-            ? getNextRetryTime(attemptNumber + 1)
+            ? getNextRetryTime(attemptNumber + 1, new Date(), undefined, features.priorityRetryTiming)
             : null;
 
         await supabase

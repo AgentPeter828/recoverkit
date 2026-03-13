@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe/client";
 import { getNextRetryTime } from "@/lib/services/retry-scheduler";
 import { trackServerEvent } from "@/lib/mixpanel-server";
 import { rateLimitWebhook } from "@/lib/rate-limit";
-import { checkPlanLimit } from "@/lib/plan-limits";
+import { checkPlanLimit, getUserPlan } from "@/lib/plan-limits";
 import { logAudit } from "@/lib/audit";
 import { sendLimitReachedEmail } from "@/lib/services/limit-notifications";
 import type Stripe from "stripe";
@@ -96,8 +96,10 @@ export async function POST(request: NextRequest) {
     console.warn(`[recovery/webhook] Plan limit reached for user ${connection.user_id}: ${planLimit.current}/${planLimit.limit} (${planLimit.planName}) — queuing campaign`);
   }
 
+  // Check if user has priority retry timing
+  const { features } = await getUserPlan(connection.user_id);
   // Create recovery campaign (active or queued)
-  const nextRetry = getNextRetryTime(1);
+  const nextRetry = getNextRetryTime(1, new Date(), undefined, features.priorityRetryTiming);
   const { error } = await supabase.from("rk_recovery_campaigns").insert({
     user_id: connection.user_id,
     stripe_invoice_id: invoice.id,

@@ -48,6 +48,20 @@ export async function POST(request: NextRequest) {
   }
   const { title, message, brand_color, logo_url } = parsed.data;
 
+  // Check custom branding access — strip branding fields if not allowed
+  let appliedBrandColor: string | undefined = brand_color;
+  let appliedLogoUrl = logo_url || null;
+  let brandingNote: string | undefined;
+
+  if (brand_color !== "#6366f1" || logo_url) {
+    const brandingAccess = await checkFeatureAccess(user.id, "customBranding");
+    if (!brandingAccess.allowed) {
+      appliedBrandColor = undefined; // use DB default
+      appliedLogoUrl = null;
+      brandingNote = "Custom branding requires the Growth plan or above. Default branding applied.";
+    }
+  }
+
   // Generate a unique slug
   const slug = `pay-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
@@ -58,8 +72,8 @@ export async function POST(request: NextRequest) {
       slug,
       title,
       message,
-      brand_color,
-      logo_url: logo_url || null,
+      brand_color: appliedBrandColor,
+      logo_url: appliedLogoUrl,
     })
     .select()
     .single();
@@ -68,5 +82,5 @@ export async function POST(request: NextRequest) {
 
   await logAudit(user.id, "payment_page_created", { page_id: data.id, slug });
 
-  return NextResponse.json({ page: data }, { status: 201 });
+  return NextResponse.json({ page: data, ...(brandingNote && { note: brandingNote }) }, { status: 201 });
 }

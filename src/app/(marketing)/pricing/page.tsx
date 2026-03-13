@@ -223,6 +223,7 @@ const COMPARISON_FEATURES: ComparisonSection[] = [
       { name: "Smart retry scheduling", tooltip: "Automatic retries with exponential backoff", values: [true, true, true, true] },
       { name: "Priority retry timing", tooltip: "Retries sent at optimal times for higher success", values: [false, false, true, true] },
       { name: "Failed payment webhooks", values: [true, true, true, true] },
+      { name: "Basic recovery stats", tooltip: "Revenue recovered, success rate, active campaigns", values: [true, true, true, true] },
     ],
   },
   {
@@ -241,21 +242,6 @@ const COMPARISON_FEATURES: ComparisonSection[] = [
       { name: "Recovery dashboard", values: [true, true, true, true] },
       { name: "Custom branding", tooltip: "Your logo and colors on payment pages", values: [false, false, true, true] },
       { name: "Custom payment pages", tooltip: "Branded pages for customers to update their card", values: [false, false, false, true] },
-    ],
-  },
-  {
-    category: "Analytics & Integrations",
-    features: [
-      { name: "Basic recovery stats", tooltip: "Revenue recovered, success rate, active campaigns", values: [true, true, true, true] },
-      { name: "Advanced analytics", tooltip: "Detailed breakdowns, trends, and cohort analysis", values: [false, false, false, true] },
-      { name: "API access", tooltip: "REST API for custom integrations", values: [false, false, false, true] },
-    ],
-  },
-  {
-    category: "Support",
-    features: [
-      { name: "Email support", values: [true, true, true, true] },
-      { name: "Priority support", tooltip: "Faster response times and dedicated help", values: [false, false, false, true] },
     ],
   },
 ];
