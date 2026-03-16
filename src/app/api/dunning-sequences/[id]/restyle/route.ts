@@ -3,7 +3,7 @@ import { createServerComponentClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const TONE_DESCRIPTIONS: Record<string, string> = {
   friendly: "Casual, warm, human. Use contractions, be reassuring, sound like a helpful friend.",
@@ -63,7 +63,7 @@ export async function POST(
   }
 
   // Generate new copy for each email
-  if (!OPENAI_API_KEY) {
+  if (!OPENROUTER_API_KEY) {
     return NextResponse.json({
       error: "AI generation is not configured. Please contact support.",
     }, { status: 500 });
@@ -95,14 +95,16 @@ Respond in JSON format:
 ]`;
 
   try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
+        "HTTP-Referer": "https://recoverkit.dev",
+        "X-Title": "RecoverKit",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "google/gemini-3-flash-preview",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 2000,
         temperature: 0.7,
@@ -111,7 +113,7 @@ Respond in JSON format:
     });
 
     if (!res.ok) {
-      console.error("[restyle] OpenAI error:", await res.text());
+      console.error("[restyle] OpenRouter error:", await res.text());
       return NextResponse.json({ error: "AI generation failed" }, { status: 500 });
     }
 

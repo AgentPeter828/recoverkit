@@ -43,7 +43,7 @@ const PLAN_FEATURES: Record<PlanTier, PlanFeatures> = {
     advancedAnalytics: false,
     customPaymentPages: false,
     apiAccess: false,
-    customEmailDomain: false,
+    customEmailDomain: true,
     maxSequences: 3,
   },
   growth: {

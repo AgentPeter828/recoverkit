@@ -232,7 +232,7 @@ const COMPARISON_FEATURES: ComparisonSection[] = [
       { name: "Default email templates", tooltip: "Pre-written 5-step dunning sequence", values: [true, true, true, true] },
       { name: "Email sequence builder", tooltip: "Create and edit custom email sequences", values: [false, true, true, true] },
       { name: "AI-generated emails", tooltip: "Emails tailored to your industry and tone", values: [false, false, true, true] },
-      { name: "Custom email domain", tooltip: "Send from billing@yourdomain.com", values: [false, false, true, true] },
+      { name: "Custom email domain", tooltip: "Send from billing@yourdomain.com", values: [false, true, true, true] },
       { name: "Email sequences", tooltip: "Number of different sequences you can create", values: ["1", "3", "10", "Unlimited"] },
     ],
   },

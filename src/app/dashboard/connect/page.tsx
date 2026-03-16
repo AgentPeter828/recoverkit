@@ -217,18 +217,34 @@ function ConnectPageInner() {
       </div>
 
       {success && (
-        <div className="mb-6 p-4 rounded-lg flex items-center gap-3" style={{ background: "#d1fae5", color: "#065f46" }}>
-          <CelebrationIllustration />
-          <div>
-            <p className="font-semibold">Stripe account connected successfully!</p>
-            <p className="text-sm mt-1">You&apos;re all set — RecoverKit will now watch for failed payments.</p>
+        <div className="mb-6 rounded-lg overflow-hidden" style={{ background: "#d1fae5", color: "#065f46" }}>
+          <div className="p-4 flex items-center gap-3">
+            <CelebrationIllustration />
+            <div>
+              <p className="font-semibold">Stripe account connected successfully!</p>
+              <p className="text-sm mt-1">You&apos;re all set — RecoverKit will now watch for failed payments.</p>
+            </div>
+          </div>
+          <div className="px-4 pb-4">
+            <a href="/dashboard/sequences">
+              <Button variant="primary" size="lg" style={{ width: "100%" }}>
+                Next: Set up your recovery emails →
+              </Button>
+            </a>
           </div>
         </div>
       )}
 
       {error && (
         <div className="mb-6 p-4 rounded-lg" style={{ background: "#fee2e2", color: "#991b1b" }}>
-          Connection failed: {error}
+          {error === "stripe_account_taken" ? (
+            <>
+              <p className="font-semibold">This Stripe account is already connected to another RecoverKit account.</p>
+              <p className="text-sm mt-1">If you can&apos;t access that account, please contact support so we can help resolve this.</p>
+            </>
+          ) : (
+            <>Connection failed: {error}</>
+          )}
         </div>
       )}
 

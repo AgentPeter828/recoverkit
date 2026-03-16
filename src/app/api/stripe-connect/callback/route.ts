@@ -63,7 +63,11 @@ export async function GET(request: NextRequest) {
     );
 
     if (dbError) {
-      console.error("[stripe-connect/callback] DB error:", dbError.message);
+      console.error("[stripe-connect/callback] DB error:", dbError.message, dbError.code);
+      // 23505 = unique_violation — the Stripe account is already linked to another user
+      if (dbError.code === "23505" && dbError.message?.includes("stripe_account_id")) {
+        return NextResponse.redirect(new URL("/dashboard/connect?error=stripe_account_taken", request.url));
+      }
       return NextResponse.redirect(new URL("/dashboard/connect?error=db_error", request.url));
     }
 

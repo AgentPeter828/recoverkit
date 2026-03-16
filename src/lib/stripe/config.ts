@@ -30,6 +30,7 @@ export const plans: Plan[] = [
       "100 recovery attempts/month",
       "Smart retry scheduling",
       "Email sequence builder",
+      "Custom email domain",
       "Recovery dashboard",
     ],
     highlighted: false,

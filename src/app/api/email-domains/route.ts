@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   const access = await checkFeatureAccess(user.id, "customEmailDomain");
   if (!access.allowed) {
     return NextResponse.json({
-      error: "Custom email domains require the Growth plan or above.",
+      error: "Custom email domains require the Starter plan or above.",
       currentPlan: access.planName,
       requiredPlan: "Growth",
     }, { status: 403 });

@@ -101,7 +101,6 @@ export default function SequencesPage() {
   const [sequences, setSequences] = useState<DunningSequence[]>([]);
   const [emails, setEmails] = useState<DunningEmail[]>([]);
   const [loading, setLoading] = useState(true);
-  const [seeding, setSeeding] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
@@ -113,11 +112,18 @@ export default function SequencesPage() {
   const [showDunningExplainer, setShowDunningExplainer] = useState(false);
   const [hoveredTone, setHoveredTone] = useState<string | null>(null);
 
+  // ─── Generate form state ───
+  const [businessDescription, setBusinessDescription] = useState("");
+  const [selectedTone, setSelectedTone] = useState("friendly");
+  const [generating, setGenerating] = useState(false);
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [senderName, setSenderName] = useState("");
+
   useEffect(() => {
-    initSequences();
+    loadExistingSequences();
   }, []);
 
-  async function initSequences() {
+  async function loadExistingSequences() {
     if (isMockMode()) {
       setSequences(mockDunningSequences as DunningSequence[]);
       setEmails(mockDunningEmails as DunningEmail[]);
@@ -133,30 +139,16 @@ export default function SequencesPage() {
       }
       const data = await res.json();
       const seqs = data.sequences || [];
+      setSequences(seqs);
 
-      if (seqs.length === 0) {
-        setSeeding(true);
-        const seedRes = await fetch("/api/dunning-sequences/seed-default", { method: "POST" });
-        if (seedRes.ok) {
-          const res2 = await fetch("/api/dunning-sequences");
-          if (res2.ok) {
-            const data2 = await res2.json();
-            setSequences(data2.sequences || []);
-            if (data2.sequences?.[0]?.id) {
-              await fetchEmails(data2.sequences[0].id);
-            }
-          }
-        }
-        setSeeding(false);
-      } else {
-        setSequences(seqs);
+      if (seqs.length > 0) {
         const defaultSeq = seqs.find((s: DunningSequence) => s.is_default) || seqs[0];
         if (defaultSeq) {
           await fetchEmails(defaultSeq.id);
         }
       }
     } catch (err) {
-      console.error("Failed to init sequences:", err);
+      console.error("Failed to load sequences:", err);
     } finally {
       setLoading(false);
     }
@@ -171,6 +163,44 @@ export default function SequencesPage() {
       }
     } catch {
       // Silent
+    }
+  }
+
+  async function handleGenerate() {
+    if (!businessDescription.trim()) {
+      setError("Please describe your business so we can personalise your emails.");
+      return;
+    }
+
+    setGenerating(true);
+    setError(null);
+    analytics.featureUsed("sequence_generated", { tone: selectedTone });
+
+    try {
+      const res = await fetch("/api/dunning-sequences/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessDescription: businessDescription.trim(),
+          tone: selectedTone,
+          websiteUrl: websiteUrl.trim() || undefined,
+          senderName: senderName.trim() || undefined,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to generate emails. Please try again.");
+        return;
+      }
+
+      // Reload sequences and emails
+      await loadExistingSequences();
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setGenerating(false);
     }
   }
 
@@ -217,7 +247,7 @@ export default function SequencesPage() {
         setShowCreate(false);
         setNewName("");
         setNewDesc("");
-        initSequences();
+        loadExistingSequences();
       } else {
         setError("Failed to create sequence. Please try again.");
       }
@@ -230,16 +260,17 @@ export default function SequencesPage() {
 
   const defaultSeq = sequences.find((s) => s.is_default) || sequences[0];
   const sortedEmails = [...emails].sort((a, b) => a.step_number - b.step_number);
+  const hasEmails = emails.length > 0;
 
-  if (loading || seeding) {
+  if (loading) {
     return (
       <div className="mx-auto max-w-4xl px-6 py-12">
         <h1 className="text-2xl font-bold mb-6">Email Sequences</h1>
         <Card className="p-8 text-center">
           <p className="text-4xl mb-3 animate-pulse">📧</p>
-          <p className="font-semibold">{seeding ? "Setting up your emails..." : "Loading..."}</p>
+          <p className="font-semibold">Loading...</p>
           <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-            {seeding ? "Creating your 5-step dunning email sequence" : "Loading your email sequences"}
+            Loading your email sequences
           </p>
         </Card>
       </div>
@@ -271,7 +302,6 @@ export default function SequencesPage() {
 
         {/* Timeline */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-0 mb-6">
-          {/* Payment fails */}
           <div className="flex flex-col items-center gap-1.5 text-center" style={{ minWidth: 72 }}>
             <PaymentFailIcon />
             <p className="text-xs font-semibold" style={{ color: "#ef4444" }}>Payment fails</p>
@@ -279,13 +309,12 @@ export default function SequencesPage() {
 
           <TimelineConnector />
 
-          {/* Email nodes */}
           {(sortedEmails.length > 0 ? sortedEmails : [
-            { step_number: 1, delay_hours: 1 },
+            { step_number: 1, delay_hours: 4 },
             { step_number: 2, delay_hours: 24 },
             { step_number: 3, delay_hours: 72 },
             { step_number: 4, delay_hours: 120 },
-            { step_number: 5, delay_hours: 168 },
+            { step_number: 5, delay_hours: 240 },
           ]).map((email, i) => (
             <div key={i} className="contents">
               <div className="flex flex-col items-center gap-1.5 text-center" style={{ minWidth: 72 }}>
@@ -301,7 +330,6 @@ export default function SequencesPage() {
 
           <TimelineConnector />
 
-          {/* Recovered */}
           <div className="flex flex-col items-center gap-1.5 text-center" style={{ minWidth: 72 }}>
             <RecoveredIcon />
             <p className="text-xs font-semibold" style={{ color: "#22c55e" }}>Recovered!</p>
@@ -362,78 +390,196 @@ export default function SequencesPage() {
         </div>
       )}
 
-      {/* ─── EMAIL PREVIEW ─── */}
-      {emails.length > 0 && (
+      {/* ─── GENERATE FORM (shown when no emails exist yet) ─── */}
+      {!hasEmails && (
+        <Card className="p-8 mb-8">
+          <h2 className="text-lg font-bold mb-1">Tell us about your business</h2>
+          <p className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
+            We&apos;ll use AI to generate recovery emails tailored to your business and customers
+          </p>
+
+          {/* Business description */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">
+              What does your business do?
+            </label>
+            <textarea
+              value={businessDescription}
+              onChange={(e) => setBusinessDescription(e.target.value)}
+              placeholder="e.g. We're a project management SaaS for small teams. Our customers are freelancers, agencies, and small startups who pay $15-49/month for task tracking and collaboration tools."
+              rows={4}
+              className="w-full rounded-lg border px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2"
+              style={{
+                borderColor: "var(--color-border)",
+                background: "var(--color-bg)",
+                color: "var(--color-text)",
+              }}
+            />
+            <p className="text-xs mt-1.5" style={{ color: "var(--color-text-secondary)" }}>
+              Include what you sell, who your customers are, and your price range. The more detail, the better the emails.
+            </p>
+          </div>
+
+          {/* Website URL (optional) */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">
+              Website URL <span className="font-normal" style={{ color: "var(--color-text-secondary)" }}>(optional)</span>
+            </label>
+            <Input
+              value={websiteUrl}
+              onChange={(e) => setWebsiteUrl(e.target.value)}
+              placeholder="e.g. https://yourapp.com"
+            />
+            <p className="text-xs mt-1.5" style={{ color: "var(--color-text-secondary)" }}>
+              We&apos;ll link to your website in the emails so customers can find your support or login page.
+            </p>
+          </div>
+
+          {/* Sender name */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">
+              Who should the emails be from?
+            </label>
+            <Input
+              value={senderName}
+              onChange={(e) => setSenderName(e.target.value)}
+              placeholder="e.g. Sarah from Acme, The Acme Team, etc."
+            />
+            <p className="text-xs mt-1.5" style={{ color: "var(--color-text-secondary)" }}>
+              This name appears in the sign-off of each email. A real name feels more personal.
+            </p>
+          </div>
+
+          {/* Tone selector */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">
+              Choose a tone for your emails
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {TONES.map((tone) => (
+                <button
+                  key={tone.id}
+                  onClick={() => setSelectedTone(tone.id)}
+                  onMouseEnter={() => setHoveredTone(tone.id)}
+                  onMouseLeave={() => setHoveredTone(null)}
+                  className="text-sm px-3 py-3 rounded-lg border transition-all text-center"
+                  style={{
+                    borderColor: selectedTone === tone.id ? "var(--color-brand)" : "var(--color-border)",
+                    background: selectedTone === tone.id ? "var(--color-brand-50)" : "transparent",
+                    boxShadow: selectedTone === tone.id ? "0 0 0 1px var(--color-brand)" : "none",
+                  }}
+                >
+                  <span className="block text-lg mb-0.5">{tone.emoji}</span>
+                  <span className="block font-medium text-xs">{tone.label}</span>
+                  <span className="block text-[10px]" style={{ color: "var(--color-text-secondary)" }}>{tone.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tone preview */}
+          {(hoveredTone || selectedTone) && (
+            <div
+              className="rounded-lg p-3 text-xs mb-6"
+              style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+            >
+              <p className="font-semibold mb-1" style={{ color: "var(--color-text)" }}>
+                Preview ({TONES.find(t => t.id === (hoveredTone || selectedTone))?.label} tone):
+              </p>
+              <p className="italic">&quot;{TONES.find(t => t.id === (hoveredTone || selectedTone))?.preview}&quot;</p>
+            </div>
+          )}
+
+          {/* Generate button */}
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={handleGenerate}
+            disabled={generating || !businessDescription.trim()}
+            style={{ width: "100%" }}
+          >
+            {generating ? "Generating your emails..." : "Generate recovery emails →"}
+          </Button>
+
+          {generating && (
+            <p className="text-sm mt-3 text-center animate-pulse" style={{ color: "var(--color-brand)" }}>
+              Our AI is writing 5 personalised recovery emails for your business...
+            </p>
+          )}
+        </Card>
+      )}
+
+      {/* ─── EMAIL PREVIEW (shown after generation) ─── */}
+      {hasEmails && (
         <div className="space-y-3 mb-6">
           <h3 className="font-semibold text-lg">Your email sequence</h3>
           {sortedEmails.map((email) => {
-              const isExpanded = expandedStep === email.step_number;
-              return (
-                <Card key={email.id} className="overflow-hidden">
-                  <button
-                    className="w-full p-4 flex items-center gap-4 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
-                    onClick={() => setExpandedStep(isExpanded ? null : email.step_number)}
+            const isExpanded = expandedStep === email.step_number;
+            return (
+              <Card key={email.id} className="overflow-hidden">
+                <button
+                  className="w-full p-4 flex items-center gap-4 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
+                  onClick={() => setExpandedStep(isExpanded ? null : email.step_number)}
+                >
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                    style={{ background: "var(--color-brand)" }}
                   >
-                    {/* Step badge */}
-                    <div
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                      style={{ background: "var(--color-brand)" }}
-                    >
-                      {email.step_number}
+                    {email.step_number}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}>
+                        {delayLabel(email.delay_hours)}
+                      </span>
+                      <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                        {stepLabel(email.step_number)}
+                      </span>
                     </div>
+                    <p className="text-sm font-medium mt-1 truncate">{email.subject}</p>
+                  </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}>
-                          {delayLabel(email.delay_hours)}
-                        </span>
-                        <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
-                          {stepLabel(email.step_number)}
-                        </span>
-                      </div>
-                      <p className="text-sm font-medium mt-1 truncate">{email.subject}</p>
-                    </div>
+                  <svg
+                    className={`h-5 w-5 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                    style={{ color: "var(--color-text-secondary)" }}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
 
-                    <svg
-                      className={`h-5 w-5 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                      style={{ color: "var(--color-text-secondary)" }}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {isExpanded && (
-                    <div className="px-4 pb-4 pt-0">
-                      <div className="border-t pt-4" style={{ borderColor: "var(--color-border)" }}>
-                        <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-text-secondary)" }}>
-                          Subject: {email.subject}
-                        </p>
-                        <pre
-                          className="whitespace-pre-wrap text-sm p-4 rounded-lg mt-2"
-                          style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
-                        >
-                          {email.body_text || "(No plain text version)"}
-                        </pre>
-                        <div className="mt-3">
-                          <Link href={`/dashboard/sequences/${defaultSeq?.id}`}>
-                            <Button variant="ghost" size="sm">Edit this email</Button>
-                          </Link>
-                        </div>
+                {isExpanded && (
+                  <div className="px-4 pb-4 pt-0">
+                    <div className="border-t pt-4" style={{ borderColor: "var(--color-border)" }}>
+                      <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-text-secondary)" }}>
+                        Subject: {email.subject}
+                      </p>
+                      <pre
+                        className="whitespace-pre-wrap text-sm p-4 rounded-lg mt-2"
+                        style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+                      >
+                        {email.body_text || "(No plain text version)"}
+                      </pre>
+                      <div className="mt-3">
+                        <Link href={`/dashboard/sequences/${defaultSeq?.id}`}>
+                          <Button variant="ghost" size="sm">Edit this email</Button>
+                        </Link>
                       </div>
                     </div>
-                  )}
-                </Card>
-              );
-            })}
+                  </div>
+                )}
+              </Card>
+            );
+          })}
         </div>
       )}
 
-      {/* ─── TONE SELECTOR ─── */}
-      {emails.length > 0 && (
+      {/* ─── TONE SELECTOR (for restyling existing emails) ─── */}
+      {hasEmails && (
         <Card className="p-6 mb-6">
           <h3 className="font-semibold mb-1">Want a different tone?</h3>
           <p className="text-sm mb-4" style={{ color: "var(--color-text-secondary)" }}>
@@ -461,7 +607,6 @@ export default function SequencesPage() {
             ))}
           </div>
 
-          {/* Tone preview */}
           {hoveredTone && (
             <div
               className="rounded-lg p-3 text-xs"
@@ -483,7 +628,7 @@ export default function SequencesPage() {
       )}
 
       {/* ─── CONFIRM ─── */}
-      {emails.length > 0 && !confirmed && (
+      {hasEmails && !confirmed && (
         <Card className="p-6 mb-6 text-center" style={{ background: "color-mix(in srgb, var(--color-brand) 4%, transparent)" }}>
           <p className="font-semibold">Happy with these emails?</p>
           <p className="text-sm mt-1 mb-4" style={{ color: "var(--color-text-secondary)" }}>
@@ -507,6 +652,13 @@ export default function SequencesPage() {
             <p className="text-sm font-medium" style={{ color: "#065f46" }}>
               Email sequence activated! Emails will send automatically when a payment fails.
             </p>
+          </div>
+          <div className="mt-3">
+            <Link href="/dashboard/email-setup">
+              <Button variant="primary" size="sm">
+                Next: Set up your email domain →
+              </Button>
+            </Link>
           </div>
         </Card>
       )}
@@ -536,31 +688,33 @@ export default function SequencesPage() {
       )}
 
       {/* + New sequence */}
-      <div className="mt-6">
-        {!showCreate ? (
-          <button
-            onClick={() => setShowCreate(true)}
-            className="text-sm hover:opacity-70 transition-opacity"
-            style={{ color: "var(--color-text-secondary)" }}
-          >
-            + Create additional sequence
-          </button>
-        ) : (
-          <Card className="p-6">
-            <h3 className="font-semibold mb-4">Create New Sequence</h3>
-            <div className="space-y-3">
-              <Input placeholder="Sequence name" value={newName} onChange={(e) => setNewName(e.target.value)} />
-              <Input placeholder="Description (optional)" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} />
-              <div className="flex gap-2">
-                <Button variant="primary" size="sm" onClick={handleCreate} disabled={creating || !newName.trim()}>
-                  {creating ? "Creating..." : "Create"}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => setShowCreate(false)}>Cancel</Button>
+      {hasEmails && (
+        <div className="mt-6">
+          {!showCreate ? (
+            <button
+              onClick={() => setShowCreate(true)}
+              className="text-sm hover:opacity-70 transition-opacity"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              + Create additional sequence
+            </button>
+          ) : (
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4">Create New Sequence</h3>
+              <div className="space-y-3">
+                <Input placeholder="Sequence name" value={newName} onChange={(e) => setNewName(e.target.value)} />
+                <Input placeholder="Description (optional)" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} />
+                <div className="flex gap-2">
+                  <Button variant="primary" size="sm" onClick={handleCreate} disabled={creating || !newName.trim()}>
+                    {creating ? "Creating..." : "Create"}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowCreate(false)}>Cancel</Button>
+                </div>
               </div>
-            </div>
-          </Card>
-        )}
-      </div>
+            </Card>
+          )}
+        </div>
+      )}
     </div>
   );
 }
