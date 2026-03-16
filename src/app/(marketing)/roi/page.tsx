@@ -27,6 +27,7 @@ export default function ROICalculatorPage() {
   const [mrr, setMrr] = useState(10000);
   const [churnRate, setChurnRate] = useState(9);
   const [currentToolIndex, setCurrentToolIndex] = useState(0);
+  const [taxRate, setTaxRate] = useState(25);
 
   const monthlyLost = mrr * (churnRate / 100);
   const currentTool = competitors[currentToolIndex];
@@ -50,6 +51,8 @@ export default function ROICalculatorPage() {
   const totalMonthlyBenefit = additionalRecovery + Math.max(0, monthlySavingsOnTool);
   const annualBenefit = totalMonthlyBenefit * 12;
   const roi = RECOVERKIT_MONTHLY > 0 ? ((recoverKitRecovered - RECOVERKIT_MONTHLY) / RECOVERKIT_MONTHLY) * 100 : 0;
+  const effectiveCost = RECOVERKIT_MONTHLY * (1 - taxRate / 100);
+  const annualTaxSavings = RECOVERKIT_MONTHLY * (taxRate / 100) * 12;
 
   const fmt = (n: number) =>
     "$" + Math.round(n).toLocaleString("en-US");
@@ -149,6 +152,39 @@ export default function ROICalculatorPage() {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
+                    Your Business Tax Rate
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg font-bold" style={{ color: "var(--color-brand)" }}>
+                      {taxRate}%
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={47}
+                    step={1}
+                    value={taxRate}
+                    onChange={(e) => setTaxRate(Number(e.target.value))}
+                    className="w-full mt-2 accent-[var(--color-brand)]"
+                  />
+                  <div
+                    className="flex justify-between text-xs mt-1"
+                    style={{ color: "var(--color-text-tertiary)" }}
+                  >
+                    <span>0%</span>
+                    <span>47%</span>
+                  </div>
+                  <p
+                    className="text-xs mt-1"
+                    style={{ color: "var(--color-text-tertiary)" }}
+                  >
+                    Business software is a deductible expense. Your effective cost: {fmt(Math.round(effectiveCost))}/mo
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
                     Current Recovery Tool
                   </label>
                   <select
@@ -214,6 +250,12 @@ export default function ROICalculatorPage() {
                     <span className="text-sm text-green-700">RecoverKit cost</span>
                     <span className="font-bold text-green-800">{fmt(RECOVERKIT_MONTHLY)}/mo</span>
                   </div>
+                  {taxRate > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-sm text-green-700">After tax deduction ({taxRate}%)</span>
+                      <span className="font-bold text-green-800">{fmt(Math.round(effectiveCost))}/mo effective</span>
+                    </div>
+                  )}
                   {additionalRecovery > 0 && (
                     <div className="flex justify-between">
                       <span className="text-sm text-green-700">Additional recovery vs current</span>
@@ -246,8 +288,10 @@ export default function ROICalculatorPage() {
                   className="text-sm mb-4"
                   style={{ color: "var(--color-text-secondary)" }}
                 >
-                  At $29/mo, you only need to recover one $29+ subscription payment to
-                  break even. Everything else is pure profit.
+                  {taxRate > 0
+                    ? `At an effective cost of just ${fmt(Math.round(effectiveCost))}/mo after tax deductions, you only need to recover one failed payment to break even. Everything else is pure profit.`
+                    : "At $29/mo, you only need to recover one $29+ subscription payment to break even. Everything else is pure profit."
+                  }
                 </p>
                 <Link href="/auth/signup">
                   <Button variant="primary" size="lg">

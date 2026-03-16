@@ -47,6 +47,14 @@ const pricingFaqSchema = {
     },
     {
       "@type": "Question",
+      name: "Is RecoverKit tax deductible?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. RecoverKit is a business software subscription and is typically 100% tax deductible as an operating expense. Depending on your tax bracket, your effective cost could be as low as $19/month for the Starter plan. Consult your accountant for details specific to your situation.",
+      },
+    },
+    {
+      "@type": "Question",
       name: "How does RecoverKit pricing compare to Churnkey?",
       acceptedAnswer: {
         "@type": "Answer",
@@ -73,6 +81,10 @@ export default function PricingPage() {
         >
           Start free, then scale as you grow. No hidden fees. Cancel anytime.
         </p>
+        <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm" style={{ borderColor: "var(--color-brand)", background: "rgba(79, 70, 229, 0.05)" }}>
+          <span style={{ color: "var(--color-brand)" }}>💰</span>
+          <span>100% tax deductible as a business expense. Your effective cost is even lower.</span>
+        </div>
       </div>
 
       <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4" data-testid="pricing-cards">
@@ -109,6 +121,11 @@ export default function PricingPage() {
                 /month
               </span>
             </div>
+            {plan.price > 0 && (
+              <p className="mt-1 text-xs" style={{ color: "var(--color-text-tertiary)" }}>
+                As low as ~${Math.round(plan.price * 0.68)}/mo after tax deductions*
+              </p>
+            )}
             <ul className="mt-8 space-y-3 flex-1">
               {plan.features.map((feature) => (
                 <li key={feature} className="flex items-center gap-2 text-sm">
@@ -130,6 +147,11 @@ export default function PricingPage() {
           </Card>
         ))}
       </div>
+
+      {/* ─── TAX FOOTNOTE ─── */}
+      <p className="mx-auto mt-6 max-w-2xl text-center text-xs" style={{ color: "var(--color-text-tertiary)" }}>
+        *Effective cost based on a 32% marginal tax rate. RecoverKit is typically tax deductible as a business operating expense. Actual savings depend on your tax situation. Consult your accountant for specifics.
+      </p>
 
       {/* ─── FEATURE COMPARISON TABLE ─── */}
       <div className="mx-auto mt-24 max-w-5xl">
