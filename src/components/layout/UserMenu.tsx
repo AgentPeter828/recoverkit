@@ -129,9 +129,9 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
       {/* Dropdown */}
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-64 rounded-xl border shadow-lg overflow-hidden"
+          className="absolute right-0 top-full mt-2 w-64 rounded-xl border shadow-lg overflow-hidden z-50"
           style={{
-            background: "var(--color-bg)",
+            background: "#ffffff",
             borderColor: "var(--color-border)",
           }}
         >

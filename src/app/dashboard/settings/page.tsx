@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -28,12 +29,10 @@ export default function SettingsPage() {
     setSaving(true);
     setMessage("");
 
-    // Update auth metadata
     const { error: authError } = await supabase.auth.updateUser({
       data: { full_name: fullName },
     });
 
-    // Update profiles table
     const { error: profileError } = await supabase
       .from("profiles")
       .upsert(
@@ -45,8 +44,9 @@ export default function SettingsPage() {
       setMessage("Failed to save. Please try again.");
     } else {
       setMessage("Saved!");
-      // Refresh user data
-      const { data: { user: updated } } = await supabase.auth.getUser();
+      const {
+        data: { user: updated },
+      } = await supabase.auth.getUser();
       if (updated) setUser(updated);
     }
     setSaving(false);
@@ -65,11 +65,11 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-2xl py-8 px-4">
       <h1 className="text-2xl font-bold mb-8">Settings</h1>
 
-      <Card className="p-6">
+      {/* ─── PROFILE ─── */}
+      <Card className="p-6 mb-6">
         <h2 className="text-lg font-semibold mb-6">Profile</h2>
 
         <div className="space-y-5">
-          {/* Avatar preview */}
           <div className="flex items-center gap-4">
             <div
               className="flex h-16 w-16 items-center justify-center rounded-full text-xl font-bold text-white"
@@ -88,63 +88,62 @@ export default function SettingsPage() {
               <p className="font-medium">
                 {fullName || user.email?.split("@")[0]}
               </p>
-              <p
-                className="text-sm"
-                style={{ color: "var(--color-text-secondary)" }}
-              >
+              <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                 {user.email}
               </p>
             </div>
           </div>
 
-          {/* Name field */}
           <div>
-            <label className="block text-sm font-medium mb-1.5">
-              Display name
-            </label>
+            <label className="block text-sm font-medium mb-1.5">Display name</label>
             <Input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Your name"
             />
-            <p
-              className="text-xs mt-1"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
+            <p className="text-xs mt-1" style={{ color: "var(--color-text-secondary)" }}>
               This is shown in the navigation bar and on your account.
             </p>
           </div>
 
-          {/* Email (read-only) */}
           <div>
             <label className="block text-sm font-medium mb-1.5">Email</label>
             <Input type="email" value={user.email || ""} disabled />
           </div>
 
-          {/* Save */}
           <div className="flex items-center gap-3 pt-2">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={handleSave}
-              disabled={saving}
-            >
+            <Button variant="primary" size="sm" onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save Changes"}
             </Button>
             {message && (
               <span
                 className="text-sm"
                 style={{
-                  color: message === "Saved!"
-                    ? "var(--color-brand)"
-                    : "#ef4444",
+                  color: message === "Saved!" ? "var(--color-brand)" : "#ef4444",
                 }}
               >
                 {message}
               </span>
             )}
           </div>
+        </div>
+      </Card>
+
+      {/* ─── BILLING LINK ─── */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold">Billing & Plan</h2>
+            <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
+              Manage your subscription, upgrade, or view billing details.
+            </p>
+          </div>
+          <Link href="/dashboard/billing">
+            <Button variant="outline" size="sm">
+              Manage →
+            </Button>
+          </Link>
         </div>
       </Card>
     </div>

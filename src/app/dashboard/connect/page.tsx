@@ -356,8 +356,19 @@ function ConnectPageInner() {
             </div>
           </Card>
 
+          {/* Connect button */}
+          <Card className="p-8 text-center mb-6">
+            <h2 className="text-xl font-semibold mb-2">Ready to connect?</h2>
+            <p className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
+              Click below and follow the steps on Stripe&apos;s website
+            </p>
+            <Button variant="primary" size="lg" onClick={handleConnect} disabled={connecting}>
+              {connecting ? "Redirecting to Stripe..." : "Connect with Stripe →"}
+            </Button>
+          </Card>
+
           {/* Reassurance messages */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div
               className="rounded-lg p-4 text-center"
               style={{ background: "var(--color-bg-secondary)" }}
@@ -393,17 +404,6 @@ function ConnectPageInner() {
               <p className="text-xs mt-0.5" style={{ color: "var(--color-text-secondary)" }}>One click to remove</p>
             </div>
           </div>
-
-          {/* Connect button */}
-          <Card className="p-8 text-center">
-            <h2 className="text-xl font-semibold mb-2">Ready to connect?</h2>
-            <p className="text-sm mb-6" style={{ color: "var(--color-text-secondary)" }}>
-              Click below and follow the steps on Stripe&apos;s website
-            </p>
-            <Button variant="primary" size="lg" onClick={handleConnect} disabled={connecting}>
-              {connecting ? "Redirecting to Stripe..." : "Connect with Stripe →"}
-            </Button>
-          </Card>
         </>
       )}
     </div>

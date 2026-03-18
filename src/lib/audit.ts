@@ -20,7 +20,8 @@ export type AuditAction =
   | "plan_upgraded"
   | "plan_downgraded"
   | "email_oauth_connected"
-  | "email_oauth_disconnected";
+  | "email_oauth_disconnected"
+  | "subscription_cancelled";
 
 /**
  * Log an audit event to the audit_log table.
