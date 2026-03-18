@@ -756,6 +756,7 @@ export default function EmailSetupPage() {
                   <p className="font-semibold text-sm">Too technical? We&apos;ll set it up for you</p>
                   <p className="text-xs mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
                     Our team will configure your DNS records and verify everything works — one-time $50 fee.
+                    <strong> Free on the Scale plan.</strong>
                   </p>
                 </div>
               </div>
