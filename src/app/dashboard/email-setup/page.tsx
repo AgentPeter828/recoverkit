@@ -747,6 +747,29 @@ export default function EmailSetupPage() {
             </div>
           </Card>
 
+          {/* ─── "WE'LL DO IT FOR YOU" UPSELL ─── */}
+          <Card className="p-5" style={{ background: "linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%)", border: "1px solid var(--color-brand-light)" }}>
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl shrink-0">🛠️</span>
+                <div>
+                  <p className="font-semibold text-sm">Too technical? We&apos;ll set it up for you</p>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
+                    Our team will configure your DNS records and verify everything works — one-time $50 fee.
+                  </p>
+                </div>
+              </div>
+              <a
+                href="mailto:support@recoverkit.dev?subject=DNS%20Setup%20Request%20(%2450)&body=Hi%2C%20I%E2%80%99d%20like%20help%20setting%20up%20DNS%20for%20my%20domain.%0A%0AMy%20domain%3A%20%0AMy%20DNS%20provider%20(e.g.%20GoDaddy%2C%20Cloudflare)%3A%20"
+                className="shrink-0"
+              >
+                <Button variant="outline" size="sm">
+                  Request Setup — $50
+                </Button>
+              </a>
+            </div>
+          </Card>
+
           {/* ─── ADD DOMAIN BUTTON / FORM ─── */}
           {!showAdd && (
             <div className="flex justify-end">
