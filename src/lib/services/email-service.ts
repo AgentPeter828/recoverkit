@@ -383,6 +383,57 @@ async function sendViaResend(params: SendEmailParams): Promise<SendEmailResult> 
 }
 
 /**
+ * Send email using the user's connected provider (Gmail OAuth) if available,
+ * otherwise fall back to Resend.
+ */
+export async function sendEmailWithUserProvider(
+  userId: string,
+  params: SendEmailParams
+): Promise<SendEmailResult> {
+  // Check if user has a Gmail OAuth token
+  const { getSupabaseAdmin } = await import("@/lib/supabase/admin");
+  const admin = getSupabaseAdmin();
+
+  const { data: tokenRow } = await admin
+    .from("rk_email_oauth_tokens")
+    .select("email")
+    .eq("user_id", userId)
+    .eq("provider", "gmail")
+    .single();
+
+  if (tokenRow) {
+    const { sendViaGmail } = await import("@/lib/services/gmail-service");
+    return sendViaGmail(userId, {
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+      text: params.text,
+    });
+  }
+
+  // Check if user has an Outlook OAuth token
+  const { data: outlookTokenRow } = await admin
+    .from("rk_email_oauth_tokens")
+    .select("email")
+    .eq("user_id", userId)
+    .eq("provider", "outlook")
+    .single();
+
+  if (outlookTokenRow) {
+    const { sendViaOutlook } = await import("@/lib/services/outlook-service");
+    return sendViaOutlook(userId, {
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+      text: params.text,
+    });
+  }
+
+  // Fall back to Resend
+  return sendEmail(params);
+}
+
+/**
  * Build dunning email HTML with payment update link.
  */
 export function buildDunningEmailHtml(params: {
