@@ -85,6 +85,7 @@ export async function POST(request: NextRequest) {
     subject: template.subject,
     html,
     text: template.body_text || undefined,
+    userId: user.id,
   });
 
   // Log sent email

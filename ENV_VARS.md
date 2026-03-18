@@ -27,6 +27,10 @@
 | `RESEND_API_KEY` | Resend email API key | https://resend.com/api-keys | For live email sending |
 | `FROM_EMAIL` | Email sender address (e.g., `RecoverKit <noreply@recoverkit.dev>`) | Set in Resend dashboard | Optional (defaults to RecoverKit) |
 | `OPENAI_API_KEY` | OpenAI API key for AI email generation | https://platform.openai.com/api-keys | Optional (templates used as fallback) |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID for Gmail sending | https://console.cloud.google.com/apis/credentials | Optional (mock flow if unset) |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | https://console.cloud.google.com/apis/credentials | Optional (mock flow if unset) |
+| `MICROSOFT_CLIENT_ID` | Microsoft OAuth app client ID for Outlook sending | https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps | Optional (mock flow if unset) |
+| `MICROSOFT_CLIENT_SECRET` | Microsoft OAuth app client secret | https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps | Optional (mock flow if unset) |
 
 ## Analytics (optional)
 
@@ -51,3 +55,5 @@ All third-party integrations gracefully fall back to mock data when env vars are
 - **Resend**: Logs email details to console, returns mock message IDs
 - **OpenAI**: Uses pre-written dunning email templates (5-step sequence)
 - **Stripe Retry**: Simulates 60% success rate with random results
+- **Gmail OAuth**: Simulates OAuth flow, stores mock tokens, logs sends to console
+- **Outlook OAuth**: Simulates OAuth flow, stores mock tokens, logs sends to console

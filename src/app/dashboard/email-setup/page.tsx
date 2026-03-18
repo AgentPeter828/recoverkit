@@ -107,6 +107,12 @@ function DnsQuestionMark() {
   );
 }
 
+interface OAuthConnection {
+  provider: "gmail" | "outlook";
+  email: string;
+  status: string;
+}
+
 export default function EmailSetupPage() {
   const [domains, setDomains] = useState<EmailDomain[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,8 +125,29 @@ export default function EmailSetupPage() {
   const [copied, setCopied] = useState<string | null>(null);
   const [showDnsExplainer, setShowDnsExplainer] = useState(false);
 
+  // OAuth state
+  const [oauthConnections, setOauthConnections] = useState<OAuthConnection[]>([]);
+  const [oauthLoading, setOauthLoading] = useState(true);
+  const [disconnecting, setDisconnecting] = useState<string | null>(null);
+  const [connectingProvider, setConnectingProvider] = useState<string | null>(null);
+
   useEffect(() => {
     fetchDomains();
+    fetchOAuthStatus();
+
+    // Check URL params for OAuth callback result
+    const params = new URLSearchParams(window.location.search);
+    const connected = params.get("connected");
+    const oauthError = params.get("error");
+    if (connected) {
+      fetchOAuthStatus();
+      // Clean up URL
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+    if (oauthError) {
+      setError(`OAuth connection failed: ${oauthError.replace(/_/g, " ")}`);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
   }, []);
 
   async function fetchDomains() {
@@ -136,6 +163,51 @@ export default function EmailSetupPage() {
       setLoading(false);
     }
   }
+
+  async function fetchOAuthStatus() {
+    try {
+      const res = await fetch("/api/email-oauth/status");
+      if (res.ok) {
+        const data = await res.json();
+        setOauthConnections(data.connections || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch OAuth status:", err);
+    } finally {
+      setOauthLoading(false);
+    }
+  }
+
+  function handleOAuthConnect(provider: "gmail" | "outlook") {
+    setConnectingProvider(provider);
+    window.location.href = `/api/email-oauth/${provider}`;
+  }
+
+  async function handleOAuthDisconnect(provider: "gmail" | "outlook") {
+    if (!confirm(`Disconnect your ${provider === "gmail" ? "Gmail" : "Outlook"} account? Emails will fall back to the default sender.`)) return;
+
+    setDisconnecting(provider);
+    try {
+      const res = await fetch("/api/email-oauth/disconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider }),
+      });
+      if (res.ok) {
+        setOauthConnections((prev) => prev.filter((c) => c.provider !== provider));
+      } else {
+        setError("Failed to disconnect. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setDisconnecting(null);
+    }
+  }
+
+  const gmailConnection = oauthConnections.find((c) => c.provider === "gmail" && c.status === "connected");
+  const outlookConnection = oauthConnections.find((c) => c.provider === "outlook" && c.status === "connected");
+  const hasAnyOAuth = Boolean(gmailConnection || outlookConnection);
 
   async function handleAdd() {
     if (!newDomain.trim()) return;
@@ -354,6 +426,16 @@ export default function EmailSetupPage() {
               Verified
             </span>
           </div>
+        ) : hasAnyOAuth ? (
+          <div className="flex items-center gap-3">
+            <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
+            <span className="text-sm">
+              Emails send via <strong>{gmailConnection ? `Gmail (${gmailConnection.email})` : `Outlook (${outlookConnection!.email})`}</strong>
+            </span>
+            <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "#d1fae5", color: "#065f46" }}>
+              Connected
+            </span>
+          </div>
         ) : (
           <div className="flex items-center gap-3">
             <span className="inline-block w-2 h-2 rounded-full bg-yellow-500" />
@@ -365,12 +447,149 @@ export default function EmailSetupPage() {
             </span>
           </div>
         )}
-        {!verifiedDomain && (
+        {!verifiedDomain && !hasAnyOAuth && (
           <p className="text-xs mt-2" style={{ color: "var(--color-text-secondary)" }}>
-            Add your own domain below so emails come from your brand. This makes way more emails land in the inbox instead of spam.
+            Connect your Gmail or Outlook below for quick setup, or add a custom domain for best deliverability.
           </p>
         )}
       </Card>
+
+      {/* ─── OPTION 2: CONNECT GMAIL / OUTLOOK ─── */}
+      <Card className="p-6 mb-6">
+        <div className="flex items-center gap-3 mb-1">
+          <h2 className="font-semibold text-lg">Connect Gmail or Outlook</h2>
+          <span
+            className="text-xs font-semibold px-2 py-0.5 rounded-full"
+            style={{ background: "#fef3c7", color: "#92400e" }}
+          >
+            ⚡ Quick Setup
+          </span>
+        </div>
+        <p className="text-sm mb-5" style={{ color: "var(--color-text-secondary)" }}>
+          Send dunning emails directly from your own email account — no DNS setup required.
+        </p>
+
+        {oauthLoading ? (
+          <div className="animate-pulse space-y-3">
+            <div className="h-12 bg-gray-200 rounded-lg" />
+            <div className="h-12 bg-gray-200 rounded-lg" />
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {/* Gmail */}
+            {gmailConnection ? (
+              <div
+                className="flex items-center justify-between rounded-lg px-4 py-3"
+                style={{ background: "#d1fae5", border: "1px solid #6ee7b7" }}
+              >
+                <div className="flex items-center gap-3">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="9" fill="#065f46" />
+                    <path d="M6 10 L9 13 L14 7" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <div>
+                    <span className="text-sm font-medium" style={{ color: "#065f46" }}>Gmail connected</span>
+                    <span className="text-xs ml-2" style={{ color: "#047857" }}>{gmailConnection.email}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleOAuthDisconnect("gmail")}
+                  disabled={disconnecting === "gmail"}
+                  className="text-xs font-medium px-3 py-1.5 rounded-md transition-opacity hover:opacity-70"
+                  style={{ color: "#991b1b", background: "#fee2e2" }}
+                >
+                  {disconnecting === "gmail" ? "Disconnecting..." : "Disconnect"}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleOAuthConnect("gmail")}
+                disabled={connectingProvider === "gmail"}
+                className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-text)",
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18.171 8.368h-.67V8.333H10v3.333h4.709A5 5 0 1 1 6.665 8.214V4.459A8.333 8.333 0 1 0 18.333 10c0-.558-.058-1.103-.163-1.632Z" fill="#FFC107"/>
+                  <path d="m1.128 5.298 3.246 2.382A5 5 0 0 1 10 5c1.274 0 2.434.478 3.322 1.26l2.357-2.358A8.286 8.286 0 0 0 10 1.667 8.33 8.33 0 0 0 1.128 5.298Z" fill="#FF3D00"/>
+                  <path d="M10 18.333a8.286 8.286 0 0 0 5.587-2.163L13.17 14.09A4.963 4.963 0 0 1 10 15a5 5 0 0 1-4.701-3.306l-3.211 2.474A8.327 8.327 0 0 0 10 18.333Z" fill="#4CAF50"/>
+                  <path d="M18.171 8.368H17.5V8.333H10v3.333h4.709a5.018 5.018 0 0 1-1.7 2.324h.002l2.416 2.08c-.17.156 2.573-1.877 2.573-6.07 0-.558-.058-1.103-.163-1.632Z" fill="#1976D2"/>
+                </svg>
+                {connectingProvider === "gmail" ? "Connecting..." : "Connect Gmail Account"}
+              </button>
+            )}
+
+            {/* Outlook */}
+            {outlookConnection ? (
+              <div
+                className="flex items-center justify-between rounded-lg px-4 py-3"
+                style={{ background: "#d1fae5", border: "1px solid #6ee7b7" }}
+              >
+                <div className="flex items-center gap-3">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="9" fill="#065f46" />
+                    <path d="M6 10 L9 13 L14 7" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <div>
+                    <span className="text-sm font-medium" style={{ color: "#065f46" }}>Outlook connected</span>
+                    <span className="text-xs ml-2" style={{ color: "#047857" }}>{outlookConnection.email}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleOAuthDisconnect("outlook")}
+                  disabled={disconnecting === "outlook"}
+                  className="text-xs font-medium px-3 py-1.5 rounded-md transition-opacity hover:opacity-70"
+                  style={{ color: "#991b1b", background: "#fee2e2" }}
+                >
+                  {disconnecting === "outlook" ? "Disconnecting..." : "Disconnect"}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleOAuthConnect("outlook")}
+                disabled={connectingProvider === "outlook"}
+                className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-text)",
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="4" width="18" height="12" rx="2" fill="#0078D4"/>
+                  <path d="M1 6.5 L10 12 L19 6.5" stroke="#fff" strokeWidth="1.2" fill="none"/>
+                  <path d="M1 4.5 L10 10 L19 4.5" stroke="#fff" strokeWidth="0.8" fill="none" opacity="0.5"/>
+                </svg>
+                {connectingProvider === "outlook" ? "Connecting..." : "Connect Outlook Account"}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Warning about sending limits */}
+        {hasAnyOAuth && (
+          <div
+            className="mt-4 rounded-lg px-4 py-3 text-xs"
+            style={{ background: "#fffbeb", border: "1px solid #fcd34d", color: "#92400e" }}
+          >
+            <strong>Sending limits:</strong> ~500/day for personal Gmail accounts, ~300/day for Outlook. For best deliverability on high volume, use Option 1 (Custom Domain) above.
+          </div>
+        )}
+      </Card>
+
+      {/* ─── OPTION 1: CUSTOM DOMAIN (DNS) ─── */}
+      <div className="flex items-center gap-3 mb-4 mt-8">
+        <h2 className="font-semibold text-lg">Custom Domain Setup</h2>
+        <span
+          className="text-xs font-semibold px-2 py-0.5 rounded-full"
+          style={{ background: "var(--color-brand-50)", color: "var(--color-brand-dark)" }}
+        >
+          Best Deliverability
+        </span>
+      </div>
 
       {/* Add domain form */}
       {showAdd && (

@@ -18,7 +18,9 @@ export type AuditAction =
   | "email_domain_verified"
   | "email_domain_deleted"
   | "plan_upgraded"
-  | "plan_downgraded";
+  | "plan_downgraded"
+  | "email_oauth_connected"
+  | "email_oauth_disconnected";
 
 /**
  * Log an audit event to the audit_log table.
