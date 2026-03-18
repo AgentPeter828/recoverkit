@@ -139,7 +139,7 @@ interface OAuthConnection {
 type SetupTab = "oauth" | "dns";
 
 export default function EmailSetupPage() {
-  const [activeTab, setActiveTab] = useState<SetupTab>("oauth");
+  const [activeTab, setActiveTab] = useState<SetupTab>("dns");
   const [domains, setDomains] = useState<EmailDomain[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
@@ -448,37 +448,6 @@ export default function EmailSetupPage() {
       >
         <button
           role="tab"
-          aria-selected={activeTab === "oauth"}
-          onClick={() => setActiveTab("oauth")}
-          className="relative rounded-xl border-2 p-4 text-left transition-all"
-          style={{
-            borderColor: activeTab === "oauth" ? "var(--color-brand)" : "var(--color-border)",
-            background: activeTab === "oauth" ? "var(--color-brand-50)" : "var(--color-bg)",
-          }}
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-semibold text-sm">Connect Gmail / Outlook</span>
-            <span
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide"
-              style={{ background: "#fef3c7", color: "#92400e" }}
-            >
-              Quick Setup
-            </span>
-          </div>
-          <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
-            Send from your own email account — ready in 30 seconds
-          </p>
-          {hasAnyOAuth && (
-            <span
-              className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full"
-              style={{ background: "#22c55e" }}
-              title="Connected"
-            />
-          )}
-        </button>
-
-        <button
-          role="tab"
           aria-selected={activeTab === "dns"}
           onClick={() => setActiveTab("dns")}
           className="relative rounded-xl border-2 p-4 text-left transition-all"
@@ -504,6 +473,37 @@ export default function EmailSetupPage() {
               className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full"
               style={{ background: "#22c55e" }}
               title="Verified"
+            />
+          )}
+        </button>
+
+        <button
+          role="tab"
+          aria-selected={activeTab === "oauth"}
+          onClick={() => setActiveTab("oauth")}
+          className="relative rounded-xl border-2 p-4 text-left transition-all"
+          style={{
+            borderColor: activeTab === "oauth" ? "var(--color-brand)" : "var(--color-border)",
+            background: activeTab === "oauth" ? "var(--color-brand-50)" : "var(--color-bg)",
+          }}
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-semibold text-sm">Connect Gmail / Outlook</span>
+            <span
+              className="text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide"
+              style={{ background: "#fef3c7", color: "#92400e" }}
+            >
+              Quick Setup
+            </span>
+          </div>
+          <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+            Send from your own email account — ready in 30 seconds
+          </p>
+          {hasAnyOAuth && (
+            <span
+              className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full"
+              style={{ background: "#22c55e" }}
+              title="Connected"
             />
           )}
         </button>
