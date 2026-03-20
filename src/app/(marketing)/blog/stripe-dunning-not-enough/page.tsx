@@ -113,7 +113,7 @@ export default function StripeDunningPost() {
         <li>• Tracking recovery metrics on a dedicated dashboard</li>
       </ul>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        Setup takes under 5 minutes. There&apos;s a free tier to test with, and paid plans start at $29/month — which pays for itself after recovering just one failed payment.
+        Setup takes under 5 minutes. There&apos;s a $5 trial (14 days) to test with, and paid plans start at $29/month — which pays for itself after recovering just one failed payment.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
         Stripe&apos;s built-in retry is a good start, but it&apos;s not enough. The difference between 30% and 66% recovery is the difference between losing revenue and protecting it. Use our <Link href="/alternatives/stripe-dunning" className="underline" style={{ color: "var(--color-brand)" }}>detailed comparison</Link> to see exactly what RecoverKit adds on top of Stripe&apos;s built-in system.

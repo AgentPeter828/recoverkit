@@ -91,7 +91,7 @@ export default function BuildDunningSequencePage() {
         Building all of this from scratch takes 2-4 weeks of development time. Maintaining it — handling edge cases, updating email templates, monitoring delivery rates — is an ongoing commitment.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> provides the complete dunning email system out of the box: AI-generated email sequences, automated scheduling, branded payment update pages, and recovery analytics. Setup takes 5 minutes, not weeks. <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>Try it free →</Link>
+        <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> provides the complete dunning email system out of the box: AI-generated email sequences, automated scheduling, branded payment update pages, and recovery analytics. Setup takes 5 minutes, not weeks. <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>Start trial →</Link>
       </p>
     </BlogPost>
   );

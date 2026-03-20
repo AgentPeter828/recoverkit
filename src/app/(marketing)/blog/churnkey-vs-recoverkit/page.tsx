@@ -30,7 +30,7 @@ export default function ChurnkeyVsRecoverKitPost() {
         <strong>Churnkey</strong> is a full-featured churn prevention platform. It includes payment recovery (dunning), but also offers cancellation flows, customer health scoring, retention offers, and churn analytics. It&apos;s designed for mid-to-large SaaS companies with dedicated retention teams. Pricing starts at $250 USD/month (~$355 AUD), billed yearly.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>RecoverKit</strong> is a focused payment recovery tool. It does one thing — recover failed subscription payments — and does it well. It includes smart retry logic, AI-generated dunning emails, and payment update pages. It&apos;s designed for indie SaaS founders and small teams. Pricing starts at $0 AUD/month (free tier) with paid plans from $29 AUD/month (~$20 USD).
+        <strong>RecoverKit</strong> is a focused payment recovery tool. It does one thing — recover failed subscription payments — and does it well. It includes smart retry logic, AI-generated dunning emails, and payment update pages. It&apos;s designed for indie SaaS founders and small teams. Pricing starts at $5 AUD for a 14-day trial, with paid plans from $29 AUD/month (~$20 USD).
       </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Feature Comparison</h2>
@@ -53,10 +53,10 @@ export default function ChurnkeyVsRecoverKitPost() {
               ["A/B testing", "❌", "✅ Core plan ($700+ USD/mo)"],
               ["Failed Payment Wall", "❌", "✅ Blocks access until paid"],
               ["AI email generation", "✅", "❌"],
-              ["Free tier", "✅", "❌ (14-day trial)"],
+              ["$5 trial (14 days)", "✅", "❌ (14-day trial)"],
               ["Self-serve setup", "✅ (5 min)", "⚠️ Trial available"],
               ["Monthly billing", "✅ No contracts", "⚠️ Billed yearly"],
-              ["Pricing", "$0-149 AUD/mo", "$250-825 USD/mo"],
+              ["Pricing", "$5 trial, $29-149 AUD/mo", "$250-825 USD/mo"],
             ].map(([feature, rk, ck]) => (
               <tr key={feature} className="border-t" style={{ borderColor: "var(--color-border)" }}>
                 <td className="px-4 py-2 font-medium">{feature}</td>
@@ -76,7 +76,7 @@ export default function ChurnkeyVsRecoverKitPost() {
         <strong>Churnkey</strong> starts at $250 USD/month (~$355 AUD) for their Starter plan (billed yearly), with Core at $700 USD/month and Intelligence at $825 USD/month. Pricing scales with your monthly churn volume.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>RecoverKit</strong> offers three paid tiers plus a free plan: Free ($0 AUD/mo, 10 recovery attempts), Starter ($29 AUD/mo, 100 attempts), Growth ($79 AUD/mo, 500 attempts), and Scale ($149 AUD/mo, unlimited). All plans are month-to-month with no contracts. All prices in AUD.
+        <strong>RecoverKit</strong> offers three paid tiers plus a $5 trial: Trial ($5 AUD for 14 days, 10 recovery attempts, auto-upgrades to Starter), Starter ($29 AUD/mo, 100 attempts), Growth ($79 AUD/mo, 500 attempts), and Scale ($149 AUD/mo, unlimited). All plans are month-to-month with no contracts. All prices in AUD.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
         The annual cost difference is significant:
@@ -136,7 +136,7 @@ export default function ChurnkeyVsRecoverKitPost() {
         For most indie SaaS founders and small teams, the math is clear: <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> provides the payment recovery features you need at a price that makes sense. You can always upgrade to a full churn suite later when your revenue justifies the investment.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Try RecoverKit free</strong> and see for yourself. No credit card required, no sales calls, no commitments. Just <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>connect your Stripe account</Link> and start recovering revenue in minutes. For a detailed feature comparison, see our <Link href="/alternatives/churnkey" className="underline" style={{ color: "var(--color-brand)" }}>full Churnkey vs RecoverKit comparison page</Link>.
+        <strong>Try RecoverKit for $5</strong> with our 14-day trial. No sales calls, no commitments. Just <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>connect your Stripe account</Link> and start recovering revenue in minutes. For a detailed feature comparison, see our <Link href="/alternatives/churnkey" className="underline" style={{ color: "var(--color-brand)" }}>full Churnkey vs RecoverKit comparison page</Link>.
       </p>
     </BlogPost>
   );

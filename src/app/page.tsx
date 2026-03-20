@@ -37,17 +37,17 @@ const features = [
 
 const pricingTiers = [
   {
-    name: "Free",
-    price: "$0",
-    period: "/month",
-    description: "Try it out",
+    name: "Trial",
+    price: "$5",
+    period: "for 14 days",
+    description: "Try it out — auto-upgrades to Starter",
     features: [
       "Up to 10 recovery attempts/month",
       "Basic retry scheduling",
       "Default email templates",
       "Recovery dashboard",
     ],
-    cta: "Get Started Free",
+    cta: "Start Trial — $5",
     highlighted: false,
   },
   {
@@ -77,7 +77,7 @@ const pricingTiers = [
       "Priority retry timing",
       "Email sequence builder",
     ],
-    cta: "Start Free Trial",
+    cta: "Start Trial",
     highlighted: true,
   },
   {
@@ -130,7 +130,7 @@ const homeFaqSchema = {
       name: "How much does RecoverKit cost?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit starts at $0 AUD/month with a free tier (10 recovery attempts). Paid plans start at $29 AUD/month (Starter), $79 AUD/month (Growth), and $149 AUD/month (Scale with unlimited attempts and API access). All plans are month-to-month with no contracts. All prices in AUD.",
+        text: "RecoverKit starts at $5 AUD for a 14-day trial (10 recovery attempts). Paid plans start at $29 AUD/month (Starter), $79 AUD/month (Growth), and $149 AUD/month (Scale with unlimited attempts and API access). The trial auto-upgrades to Starter unless cancelled. All plans are month-to-month with no contracts. All prices in AUD.",
       },
     },
     {
@@ -138,7 +138,7 @@ const homeFaqSchema = {
       name: "How does RecoverKit compare to Churnkey or other dunning tools?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit offers the same core payment recovery features (smart retries, dunning emails, payment pages) at a fraction of the cost. Churnkey starts at $250 USD/month (~$355 AUD) while RecoverKit starts at $0 AUD/month. RecoverKit is purpose-built for payment recovery with AI-powered features.",
+        text: "RecoverKit offers the same core payment recovery features (smart retries, dunning emails, payment pages) at a fraction of the cost. Churnkey starts at $250 USD/month (~$355 AUD) while RecoverKit starts at $5 AUD for a 14-day trial. RecoverKit is purpose-built for payment recovery with AI-powered features.",
       },
     },
     {
@@ -188,7 +188,7 @@ export default function HomePage() {
               </Link>
             </div>
             <p className="mt-4 text-sm" style={{ color: "var(--color-text-secondary)" }}>
-              Free plan available · No credit card required · 5-minute setup
+              $5 trial — 14 days · 5-minute setup
             </p>
           </div>
         </div>
@@ -362,7 +362,7 @@ export default function HomePage() {
                 </thead>
                 <tbody>
                   {[
-                    ["Starting price", "$0 AUD/mo", "$249 USD/mo", "Free (basic)"],
+                    ["Starting price", "$5 AUD trial", "$249 USD/mo", "Free (basic)"],
                     ["AI email generation", "✅", "❌", "❌"],
                     ["Smart retry timing", "✅", "✅", "⚠️ Basic"],
                     ["Custom email sequences", "✅", "✅", "❌"],
@@ -392,12 +392,12 @@ export default function HomePage() {
             </h2>
             <p className="mt-4 text-lg" style={{ color: "var(--color-text-secondary)" }}>
               RecoverKit helps SaaS founders recover lost MRR from failed payments
-              automatically. Start free — no credit card required.
+              automatically. Start your 14-day trial for just $5.
             </p>
             <div className="mt-10">
               <Link href="/auth/signup">
                 <Button variant="primary" size="lg">
-                  Start Recovering Revenue Free →
+                  Start Trial — $5 →
                 </Button>
               </Link>
             </div>

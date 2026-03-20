@@ -4,11 +4,11 @@ import { ComparisonPage } from "@/components/marketing/ComparisonPage";
 export const metadata: Metadata = {
   title: "RecoverKit vs Gravy Solutions — Flat-Rate Alternative | RecoverKit",
   description:
-    "Compare RecoverKit vs Gravy Solutions. Gravy uses custom pricing (contact sales). RecoverKit delivers automated recovery from $0 AUD/mo with published pricing.",
+    "Compare RecoverKit vs Gravy Solutions. Gravy uses custom pricing (contact sales). RecoverKit delivers automated recovery from $5 AUD (14-day trial) with published pricing.",
   openGraph: {
     title: "RecoverKit vs Gravy — Same Recovery, Transparent Pricing",
     description:
-      "Gravy requires a sales call for pricing. RecoverKit offers automated recovery with AI from $0 AUD/mo — no sales calls needed.",
+      "Gravy requires a sales call for pricing. RecoverKit offers automated recovery with AI from $5 AUD (14-day trial) — no sales calls needed.",
   },
 };
 
@@ -18,7 +18,7 @@ export default function GravyAlternativePage() {
       competitorName="Gravy Solutions"
       competitorSlug="gravy"
       headline="Enterprise-grade recovery at a transparent price."
-      subheadline="Gravy Solutions is a human-powered recovery service with custom flat-fee pricing — no public prices, you need to book a sales call. RecoverKit delivers automated recovery from $0 AUD/mo with fully transparent, published pricing."
+      subheadline="Gravy Solutions is a human-powered recovery service with custom flat-fee pricing — no public prices, you need to book a sales call. RecoverKit delivers automated recovery from $5 AUD (14-day trial) with fully transparent, published pricing."
       recoverKitPrice="$29 AUD/mo"
       recoverKitPriceDetail="Starter plan (~$20 USD) · Keep 100% of recovered revenue"
       competitorPrice="Custom (contact sales)"
@@ -26,7 +26,7 @@ export default function GravyAlternativePage() {
       setupTimeRecoverKit="Under 5 minutes"
       setupTimeCompetitor="1-2 weeks (human-powered)"
       features={[
-        { name: "Pricing model", recoverkit: "Flat-rate, published ($0-149 AUD)", competitor: "Custom flat fee (contact sales)" },
+        { name: "Pricing model", recoverkit: "Flat-rate, published ($5 trial, $29-149 AUD/mo)", competitor: "Custom flat fee (contact sales)" },
         { name: "Pricing transparency", recoverkit: "✅ Published on website", competitor: "❌ Requires sales call" },
         { name: "You keep", recoverkit: "100% of recoveries", competitor: "100% of recoveries" },
         { name: "Recovery method", recoverkit: "Automated (AI + smart retries)", competitor: "Human agents + automation" },
@@ -35,13 +35,13 @@ export default function GravyAlternativePage() {
         { name: "Payment update pages", recoverkit: "✅", competitor: "✅" },
         { name: "24/7 operation", recoverkit: "✅ Fully automated", competitor: "⚠️ Business hours focus" },
         { name: "Self-serve", recoverkit: "✅", competitor: "❌ Requires sales call" },
-        { name: "Free tier", recoverkit: "✅", competitor: "❌" },
+        { name: "$5 trial", recoverkit: "✅ 14 days", competitor: "❌" },
       ]}
       whySwitchReasons={[
         {
           title: "💰 Transparent pricing vs hidden costs",
           description:
-            "Gravy doesn't publish pricing — you have to book a sales call to find out what you'll pay. RecoverKit publishes all pricing on the website: $0, $29, $79, or $149 AUD/month. No surprises, no negotiations, no commitment before you know the cost.",
+            "Gravy doesn't publish pricing — you have to book a sales call to find out what you'll pay. RecoverKit publishes all pricing on the website: $5 trial (14 days), then $29, $79, or $149 AUD/month. No surprises, no negotiations, no commitment before you know the cost.",
         },
         {
           title: "⚡ Instant automated recovery vs waiting on humans",
@@ -70,7 +70,7 @@ export default function GravyAlternativePage() {
         {
           question: "How does Gravy's pricing work?",
           answer:
-            "Gravy uses a custom flat-fee model — they say 'one set price, zero worries' — but don't publish actual pricing. You need to book a consultation call to get a quote. RecoverKit publishes all pricing transparently: $0, $29, $79, or $149 AUD/mo.",
+            "Gravy uses a custom flat-fee model — they say 'one set price, zero worries' — but don't publish actual pricing. You need to book a consultation call to get a quote. RecoverKit publishes all pricing transparently: $5 trial (14 days), then $29, $79, or $149 AUD/mo.",
         },
         {
           question: "Is automated recovery as effective as Gravy's human agents?",

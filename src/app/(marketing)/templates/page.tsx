@@ -247,7 +247,7 @@ export default function TemplatesPage() {
             <div className="mt-8 flex items-center justify-center gap-4">
               <Link href="/auth/signup">
                 <Button variant="primary" size="lg">
-                  Try AI-Generated Emails Free →
+                  Try AI-Generated Emails →
                 </Button>
               </Link>
               <Link href="/blog/dunning-emails-that-recover-revenue">

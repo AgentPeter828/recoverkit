@@ -168,7 +168,7 @@ await db.webhookEvents.create({
         <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> handles all of this out of the box. Connect your Stripe account with one click, and RecoverKit automatically sets up webhook listeners, configures smart retry logic, sends AI-generated dunning emails, and provides branded payment update pages. Setup takes under 5 minutes.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>Start free →</Link>
+        <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>Start trial →</Link>
       </p>
     </BlogPost>
   );

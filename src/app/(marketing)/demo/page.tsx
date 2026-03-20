@@ -103,7 +103,7 @@ export default function DemoPage() {
           Ready to try it with your own business?
         </p>
         <Link href="/auth/signup">
-          <Button variant="primary" size="lg">Start Free — No Credit Card Required</Button>
+          <Button variant="primary" size="lg">Start Trial — $5</Button>
         </Link>
       </div>
     </div>
@@ -173,7 +173,7 @@ function SignupStep({ co }: { co: DemoCompany }) {
               Create Account
             </div>
           </div>
-          <p className="text-xs text-center mt-3" style={{ color: "var(--color-text-secondary)" }}>No credit card required</p>
+          <p className="text-xs text-center mt-3" style={{ color: "var(--color-text-secondary)" }}>14-day trial for $5</p>
         </div>
       </div>
     </StepCard>

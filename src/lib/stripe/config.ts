@@ -9,10 +9,10 @@ export interface Plan {
 
 export const plans: Plan[] = [
   {
-    name: "Free",
-    description: "Get started with payment recovery",
-    price: 0,
-    priceId: "",
+    name: "Trial",
+    description: "14-day trial — auto-upgrades to Starter",
+    price: 5,
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_TRIAL || "",
     features: [
       "10 recovery attempts/month",
       "Smart retry scheduling",

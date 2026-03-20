@@ -4,11 +4,11 @@ import { ComparisonPage } from "@/components/marketing/ComparisonPage";
 export const metadata: Metadata = {
   title: "RecoverKit vs Baremetrics Recover — Better Value | RecoverKit",
   description:
-    "Compare RecoverKit vs Baremetrics Recover for failed payment recovery. RecoverKit starts at $0 AUD/mo vs Baremetrics Recover at $69 USD/mo (~$98 AUD). No recovery caps, AI-powered emails.",
+    "Compare RecoverKit vs Baremetrics Recover for failed payment recovery. RecoverKit starts at $5 AUD (14-day trial) vs Baremetrics Recover at $69 USD/mo (~$98 AUD). No recovery caps, AI-powered emails.",
   openGraph: {
     title: "RecoverKit vs Baremetrics Recover — No Caps, Better Pricing",
     description:
-      "Baremetrics Recover starts at $69 USD/mo (~$98 AUD) and scales with MRR. RecoverKit offers AI-powered dunning from $0 AUD/mo with flat-rate pricing.",
+      "Baremetrics Recover starts at $69 USD/mo (~$98 AUD) and scales with MRR. RecoverKit offers AI-powered dunning from $5 AUD (14-day trial) with flat-rate pricing.",
   },
 };
 
@@ -20,13 +20,13 @@ export default function BaremetricsAlternativePage() {
       headline="RecoverKit vs Baremetrics Recover: Better features, better price"
       subheadline="Baremetrics Recover starts at $69 USD/mo (~$98 AUD) for up to $10K MRR and scales with your revenue — reaching $249 USD/mo at $100K MRR. RecoverKit offers flat-rate pricing in AUD, AI-powered emails, and no MRR-based scaling."
       recoverKitPrice="$29 AUD/mo"
-      recoverKitPriceDetail="Starter plan (~$20 USD) · Free plan at $0/mo"
+      recoverKitPriceDetail="Starter plan (~$20 USD) · $5 trial (14 days)"
       competitorPrice="$69 USD/mo"
       competitorPriceDetail="~$98 AUD/mo · Up to $10K MRR · Scales with revenue"
       setupTimeRecoverKit="Under 5 minutes"
       setupTimeCompetitor="15-30 minutes"
       features={[
-        { name: "Starting price", recoverkit: "$0 AUD/mo", competitor: "$69 USD/mo (~$98 AUD)" },
+        { name: "Starting price", recoverkit: "$5 AUD trial (14 days)", competitor: "$69 USD/mo (~$98 AUD)" },
         { name: "Pricing model", recoverkit: "Flat-rate (doesn't scale with MRR)", competitor: "MRR-based (scales as you grow)" },
         { name: "Smart retry logic", recoverkit: "✅ AI-optimized timing", competitor: "✅ Automatic scheduling" },
         { name: "Dunning emails", recoverkit: "✅ AI-generated sequences", competitor: "✅ Template-based" },
@@ -36,7 +36,7 @@ export default function BaremetricsAlternativePage() {
         { name: "SMS recovery", recoverkit: "❌", competitor: "❌" },
         { name: "Analytics dashboard", recoverkit: "✅ Recovery focused", competitor: "✅ Part of Baremetrics suite" },
         { name: "Standalone product", recoverkit: "✅ Purpose-built", competitor: "⚠️ Add-on to analytics platform" },
-        { name: "Free tier", recoverkit: "✅ 10 attempts/mo", competitor: "❌" },
+        { name: "$5 trial", recoverkit: "✅ 14 days, 10 attempts/mo", competitor: "❌" },
         { name: "Self-serve setup", recoverkit: "✅ One-click Stripe", competitor: "✅" },
       ]}
       whySwitchReasons={[
@@ -77,7 +77,7 @@ export default function BaremetricsAlternativePage() {
         {
           question: "How does RecoverKit's pricing compare as my SaaS grows?",
           answer:
-            "RecoverKit uses flat-rate AUD pricing: $0, $29, $79, or $149 AUD/mo depending on your volume needs. Baremetrics Recover scales with your MRR — at $100K MRR you're paying $249 USD/mo (~$354 AUD). With RecoverKit, a $100K MRR SaaS pays the same $149 AUD/mo as a $500K MRR SaaS.",
+            "RecoverKit uses flat-rate AUD pricing: $5 trial, then $29, $79, or $149 AUD/mo depending on your volume needs. Baremetrics Recover scales with your MRR — at $100K MRR you're paying $249 USD/mo (~$354 AUD). With RecoverKit, a $100K MRR SaaS pays the same $149 AUD/mo as a $500K MRR SaaS.",
         },
         {
           question: "Does Baremetrics Recover have AI features?",

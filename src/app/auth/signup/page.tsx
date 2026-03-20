@@ -24,7 +24,7 @@ export default function SignUpPage() {
           className="text-center mb-8 text-sm"
           style={{ color: "var(--color-text-secondary)" }}
         >
-          Get started with your free trial
+          Start your 14-day trial for $5
         </p>
         <SignUpForm />
         <p

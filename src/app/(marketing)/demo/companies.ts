@@ -131,7 +131,7 @@ export const DEMO_COMPANIES: DemoCompany[] = [
     discoveryProblem:
       "Marcus notices that students keep getting dropped mid-course because their payment fails and they never realize it. He's losing $4,200/mo in recurring revenue, and worse, students lose progress and access to live cohorts they're enrolled in.",
     discoveryFind:
-      'Marcus finds RecoverKit while searching for "dunning email tools for subscription businesses." At $29 AUD/mo to start, it costs less than a single recovered student subscription. He tries the free plan first.',
+      'Marcus finds RecoverKit while searching for "dunning email tools for subscription businesses." At $29 AUD/mo to start, it costs less than a single recovered student subscription. He starts the $5 trial first.',
     productNoun: "course materials, live cohort access, and learning progress",
     emails: [
       {

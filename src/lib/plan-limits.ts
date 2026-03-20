@@ -6,7 +6,7 @@ import { plans } from "@/lib/stripe/config";
  * Each plan tier unlocks specific features and limits.
  */
 
-export type PlanTier = "free" | "starter" | "growth" | "scale";
+export type PlanTier = "trial" | "starter" | "growth" | "scale";
 
 interface PlanFeatures {
   recoveryLimit: number;          // campaigns per month
@@ -22,7 +22,7 @@ interface PlanFeatures {
 }
 
 const PLAN_FEATURES: Record<PlanTier, PlanFeatures> = {
-  free: {
+  trial: {
     recoveryLimit: 10,
     aiEmailGeneration: false,
     customBranding: false,
@@ -76,12 +76,12 @@ const PLAN_FEATURES: Record<PlanTier, PlanFeatures> = {
  * Get the plan tier for a given Stripe price ID.
  */
 function getPlanTier(priceId: string | null): PlanTier {
-  if (!priceId) return "free";
+  if (!priceId) return "trial";
   const plan = plans.find((p) => p.priceId === priceId);
-  if (!plan) return "free";
+  if (!plan) return "trial";
   const name = plan.name.toLowerCase();
   if (name in PLAN_FEATURES) return name as PlanTier;
-  return "free";
+  return "trial";
 }
 
 /**
@@ -109,7 +109,7 @@ export async function getUserPlan(userId: string): Promise<{
   return {
     tier,
     features: PLAN_FEATURES[tier],
-    planName: planObj?.name ?? "Free",
+    planName: planObj?.name ?? "Trial",
   };
 }
 

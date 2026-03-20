@@ -295,7 +295,7 @@ export default function ROICalculatorPage() {
                 </p>
                 <Link href="/auth/signup">
                   <Button variant="primary" size="lg">
-                    Start Recovering Revenue Free →
+                    Start Trial — $5 →
                   </Button>
                 </Link>
               </Card>

@@ -188,7 +188,7 @@ console.log(\`Revenue recovered: $\${(stats.revenue_recovered / 100).toFixed(2)}
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Need Help?</h2>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        The API is available on the Scale plan ($149/mo). If you don&apos;t need API access, the dashboard provides full control over your recovery campaigns, email sequences, and analytics. <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>Get started free →</Link>
+        The API is available on the Scale plan ($149/mo). If you don&apos;t need API access, the dashboard provides full control over your recovery campaigns, email sequences, and analytics. <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>Start trial →</Link>
       </p>
     </BlogPost>
   );

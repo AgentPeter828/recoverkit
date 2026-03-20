@@ -101,7 +101,7 @@ export default function DunningEmailsPost() {
         Generic templates fall short here because urgency and loss-aversion messaging needs to reference <em>your</em> features, <em>your</em> customer&apos;s usage history, and <em>your</em> brand voice. That&apos;s why <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> uses AI to generate the full sequence — personalised to each customer and optimised for recovery.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <Link href="/auth/signup" className="underline font-semibold" style={{ color: "var(--color-brand)" }}>Sign up free →</Link> and generate your complete dunning sequence with one click.
+        <Link href="/auth/signup" className="underline font-semibold" style={{ color: "var(--color-brand)" }}>Start trial →</Link> and generate your complete dunning sequence with one click.
       </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Key Metrics to Track</h2>
@@ -120,7 +120,7 @@ export default function DunningEmailsPost() {
         In 2026, the best dunning tools use AI to generate personalized email copy. Instead of sending the same template to every customer, AI can adjust tone, emphasis, and messaging based on the customer&apos;s relationship with your product.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> includes AI-generated dunning emails that are personalized for each customer and optimized for recovery. You can generate an entire email sequence with one click, then customize it to match your brand voice. Try it free at <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>recoverkit.dev</Link>.
+        <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> includes AI-generated dunning emails that are personalized for each customer and optimized for recovery. You can generate an entire email sequence with one click, then customize it to match your brand voice. Start your trial at <Link href="/auth/signup" className="underline" style={{ color: "var(--color-brand)" }}>recoverkit.dev</Link>.
       </p>
     </BlogPost>
   );

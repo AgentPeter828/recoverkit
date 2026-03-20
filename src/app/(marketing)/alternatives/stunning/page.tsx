@@ -4,11 +4,11 @@ import { ComparisonPage } from "@/components/marketing/ComparisonPage";
 export const metadata: Metadata = {
   title: "RecoverKit vs Stunning — Modern Alternative | RecoverKit",
   description:
-    "Looking for a Stunning alternative? RecoverKit is the modern, AI-powered alternative with better pricing starting at $0/mo.",
+    "Looking for a Stunning alternative? RecoverKit is the modern, AI-powered alternative with better pricing starting at $5 AUD (14-day trial).",
   openGraph: {
     title: "RecoverKit — The Modern Stunning Alternative",
     description:
-      "Stunning charges ~$120/mo and scales with MRR. RecoverKit offers AI-powered payment recovery with modern features, starting at $0/mo.",
+      "Stunning charges ~$120/mo and scales with MRR. RecoverKit offers AI-powered payment recovery with modern features, starting at $5 AUD (14-day trial).",
   },
 };
 
@@ -18,15 +18,15 @@ export default function StunningAlternativePage() {
       competitorName="Stunning"
       competitorSlug="stunning"
       headline="Looking for a Stunning alternative? You've found it."
-      subheadline="Stunning is one of the original Stripe dunning tools with 14+ years of experience, but its MRR-based pricing (~$120 USD/mo at $40K MRR) adds up fast. RecoverKit is a modern, AI-powered alternative with flat-rate AUD pricing starting at $0/mo."
+      subheadline="Stunning is one of the original Stripe dunning tools with 14+ years of experience, but its MRR-based pricing (~$120 USD/mo at $40K MRR) adds up fast. RecoverKit is a modern, AI-powered alternative with flat-rate AUD pricing starting at $5 AUD (14-day trial)."
       recoverKitPrice="$29 AUD/mo"
-      recoverKitPriceDetail="Starter plan (~$20 USD) · Free plan at $0/mo"
+      recoverKitPriceDetail="Starter plan (~$20 USD) · $5 trial (14 days)"
       competitorPrice="~$120 USD/mo"
       competitorPriceDetail="~$170 AUD/mo · At $40K MRR · Scales with revenue"
       setupTimeRecoverKit="Under 5 minutes"
       setupTimeCompetitor="15-30 minutes"
       features={[
-        { name: "Starting price", recoverkit: "$0 AUD/mo", competitor: "~$120 USD/mo (~$170 AUD)" },
+        { name: "Starting price", recoverkit: "$5 AUD trial (14 days)", competitor: "~$120 USD/mo (~$170 AUD)" },
         { name: "AI email generation", recoverkit: "✅", competitor: "❌" },
         { name: "Smart retry logic", recoverkit: "✅ AI-optimized", competitor: "✅ Basic scheduling" },
         { name: "Payment update pages", recoverkit: "✅ Modern, branded", competitor: "✅ Dated design" },
@@ -34,7 +34,7 @@ export default function StunningAlternativePage() {
         { name: "Modern UI/UX", recoverkit: "✅ 2025 design", competitor: "❌ Dated interface" },
         { name: "API access", recoverkit: "✅ Scale plan", competitor: "⚠️ Limited" },
         { name: "Active support", recoverkit: "✅ Email + priority", competitor: "⚠️ Minimal" },
-        { name: "Free tier", recoverkit: "✅", competitor: "❌" },
+        { name: "$5 trial", recoverkit: "✅ 14 days", competitor: "❌" },
       ]}
       whySwitchReasons={[
         {
@@ -45,7 +45,7 @@ export default function StunningAlternativePage() {
         {
           title: "💰 Flat-rate pricing vs MRR-based scaling",
           description:
-            "Stunning's pricing scales with your MRR — at $40K MRR you're paying ~$120/mo, and it keeps climbing as you grow. RecoverKit charges flat rates ($0-149/mo) regardless of your MRR. Your recovery tool shouldn't get more expensive just because your business is growing.",
+            "Stunning's pricing scales with your MRR — at $40K MRR you're paying ~$120/mo, and it keeps climbing as you grow. RecoverKit charges flat rates ($5 trial, then $29-149/mo) regardless of your MRR. Your recovery tool shouldn't get more expensive just because your business is growing.",
         },
         {
           title: "🎯 No cancel flows overhead",
@@ -79,7 +79,7 @@ export default function StunningAlternativePage() {
         {
           question: "How is RecoverKit different from Stunning?",
           answer:
-            "RecoverKit is a modern, AI-powered payment recovery tool built for today's SaaS landscape. Key differences include: AI-generated dunning emails, AI-optimized retry timing, a modern dashboard and payment pages, and flat-rate pricing starting at $0/mo (vs Stunning's MRR-based pricing starting at ~$120/mo).",
+            "RecoverKit is a modern, AI-powered payment recovery tool built for today's SaaS landscape. Key differences include: AI-generated dunning emails, AI-optimized retry timing, a modern dashboard and payment pages, and flat-rate pricing starting at $5 AUD trial (vs Stunning's MRR-based pricing starting at ~$120/mo).",
         },
       ]}
     />

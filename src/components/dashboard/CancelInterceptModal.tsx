@@ -82,7 +82,7 @@ export function CancelInterceptModal({
     "All active recovery campaigns will stop",
     "Queued payment retries will be cancelled",
     "Custom email sequences will be deactivated",
-    "You'll revert to Free (10 recoveries/month)",
+    "You'll revert to Trial (10 recoveries/month)",
   ];
 
   return (

@@ -221,7 +221,7 @@ The cron endpoint \`/api/cron/retry-due\` runs periodically and retries all camp
 Your current RecoverKit plan and upgrade options.
 
 **Plans:**
-- **Free** — 10 recoveries/month (default)
+- **Trial ($5 for 14 days)** — 10 recoveries/month (default, auto-upgrades to Starter)
 - **Starter ($29/mo)** — 100 recoveries/month, smart retry scheduling
 - **Growth ($79/mo)** — 500 recoveries/month, AI emails, custom branding
 - **Scale ($149/mo)** — unlimited recoveries, priority scheduling, analytics

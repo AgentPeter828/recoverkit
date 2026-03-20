@@ -67,7 +67,7 @@ export function BlogPost({ title, date, readTime, category, children }: BlogPost
               style={{ color: "var(--color-text-secondary)" }}
             >
               RecoverKit uses AI-powered dunning emails and smart retry logic to
-              recover 66% of failed payments. Start free.
+              recover 66% of failed payments. Start your trial.
             </p>
             <div className="mt-6 flex items-center justify-center gap-4">
               <Link href="/auth/signup">

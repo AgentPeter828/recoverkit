@@ -126,7 +126,7 @@ export default function AlternativesPage() {
                         </span>{" "}
                         → <strong>RecoverKit:</strong>{" "}
                         <span style={{ color: "var(--color-brand)" }}>
-                          from $0 AUD/mo
+                          from $5 AUD trial
                         </span>
                       </p>
                     </div>
@@ -154,12 +154,12 @@ export default function AlternativesPage() {
               className="mt-4 text-lg"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              Start free. Set up in 5 minutes. No credit card required. All prices in AUD.
+              Start your 14-day trial for $5. Set up in 5 minutes. All prices in AUD.
             </p>
             <div className="mt-8">
               <Link href="/auth/signup">
                 <Button variant="primary" size="lg">
-                  Start Recovering Revenue Free →
+                  Start Trial — $5 →
                 </Button>
               </Link>
             </div>

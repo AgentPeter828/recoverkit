@@ -17,7 +17,7 @@ const steps = [
   {
     step: "1",
     title: "Sign up for RecoverKit",
-    description: "Create your free account at recoverkit.dev. No credit card required. Takes 30 seconds.",
+    description: "Create your account at recoverkit.dev and start your $5 trial. Takes 30 seconds.",
     time: "30 seconds",
   },
   {
@@ -230,7 +230,7 @@ export default function SwitchingGuidePage() {
                 },
                 {
                   q: "What if RecoverKit doesn't work as well?",
-                  a: "RecoverKit has a free tier — try it with no financial risk. If it's not right for you, simply disconnect Stripe and continue with your current tool. No contracts, no commitments.",
+                  a: "RecoverKit has a $5 trial (14 days) — try it with minimal risk. If it's not right for you, simply disconnect Stripe and cancel before the trial ends. No contracts, no commitments.",
                 },
                 {
                   q: "Do I need to change anything in my Stripe configuration?",
@@ -264,12 +264,12 @@ export default function SwitchingGuidePage() {
               className="mt-4 text-lg"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              Start free. Set up in 5 minutes. No credit card required.
+              Start your 14-day trial for $5. Set up in 5 minutes.
             </p>
             <div className="mt-8">
               <Link href="/auth/signup">
                 <Button variant="primary" size="lg">
-                  Start Recovering Revenue Free →
+                  Start Trial — $5 →
                 </Button>
               </Link>
             </div>

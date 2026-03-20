@@ -15,10 +15,10 @@ const pricingFaqSchema = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Is there a free plan?",
+      name: "Is there a free trial?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes — RecoverKit offers a free plan with up to 10 recovery attempts per month. No credit card required. It includes basic retry scheduling, default email templates, and the recovery dashboard.",
+        text: "Yes — RecoverKit offers a $5 AUD 14-day trial with up to 10 recovery attempts per month. It includes basic retry scheduling, default email templates, and the recovery dashboard. After 14 days, your trial automatically upgrades to the Starter plan ($29 AUD/mo) unless you cancel.",
       },
     },
     {
@@ -58,7 +58,7 @@ const pricingFaqSchema = {
       name: "How does RecoverKit pricing compare to Churnkey?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "RecoverKit is significantly more affordable. Churnkey starts at $250 USD/month (~$355 AUD). RecoverKit starts at $0 AUD/month (free tier) with paid plans from $29 AUD/month (~$20 USD). That's a 92% cost savings for the same core payment recovery features.",
+        text: "RecoverKit is significantly more affordable. Churnkey starts at $250 USD/month (~$355 AUD). RecoverKit starts at $5 AUD for a 14-day trial, with paid plans from $29 AUD/month (~$20 USD). That's a 92% cost savings for the same core payment recovery features.",
       },
     },
   ],
@@ -79,7 +79,7 @@ export default function PricingPage() {
           className="mt-4 text-lg"
           style={{ color: "var(--color-text-secondary)" }}
         >
-          Start free, then scale as you grow. No hidden fees. Cancel anytime.
+          Start your trial, then scale as you grow. No hidden fees. Cancel anytime.
         </p>
         <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm" style={{ borderColor: "var(--color-brand)", background: "rgba(79, 70, 229, 0.05)" }}>
           <span style={{ color: "var(--color-brand)" }}>💰</span>
@@ -121,11 +121,15 @@ export default function PricingPage() {
                 /month
               </span>
             </div>
-            {plan.price > 0 && (
+            {plan.name === "Trial" ? (
+              <p className="mt-1 text-xs" style={{ color: "var(--color-text-tertiary)" }}>
+                for 14 days · auto-upgrades to Starter
+              </p>
+            ) : plan.price > 0 ? (
               <p className="mt-1 text-xs" style={{ color: "var(--color-text-tertiary)" }}>
                 As low as ~${Math.round(plan.price * 0.68)}/mo after tax deductions*
               </p>
-            )}
+            ) : null}
             <ul className="mt-8 space-y-3 flex-1">
               {plan.features.map((feature) => (
                 <li key={feature} className="flex items-center gap-2 text-sm">
@@ -140,7 +144,7 @@ export default function PricingPage() {
                   variant={plan.highlighted ? "primary" : "outline"}
                   className="w-full"
                 >
-                  {plan.price === 0 ? "Start Free" : "Get Started"}
+                  {plan.name === "Trial" ? "Start Trial — $5" : "Get Started"}
                 </Button>
               </Link>
             </div>
@@ -169,7 +173,7 @@ export default function PricingPage() {
                   <th key={plan.name} className="px-4 py-4 text-center font-semibold" style={{ width: "15%" }}>
                     <div>{plan.name}</div>
                     <div className="text-xs font-normal mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
-                      {plan.price === 0 ? "Free" : `$${plan.price}/mo`}
+                      {plan.name === "Trial" ? "$5 trial" : `$${plan.price}/mo`}
                     </div>
                   </th>
                 ))}

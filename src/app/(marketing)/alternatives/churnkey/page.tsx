@@ -4,11 +4,11 @@ import { ComparisonPage } from "@/components/marketing/ComparisonPage";
 export const metadata: Metadata = {
   title: "RecoverKit vs Churnkey — Affordable Alternative | RecoverKit",
   description:
-    "Compare RecoverKit vs Churnkey for failed payment recovery. RecoverKit starts at $0 AUD/mo vs Churnkey's $250 USD/mo (~$355 AUD). Same core features, 92% less.",
+    "Compare RecoverKit vs Churnkey for failed payment recovery. RecoverKit starts at $5 AUD (14-day trial) vs Churnkey's $250 USD/mo (~$355 AUD). Same core features, 92% less.",
   openGraph: {
     title: "RecoverKit vs Churnkey — Save $325+ AUD/mo on Payment Recovery",
     description:
-      "Why pay $250 USD/month (~$355 AUD) for Churnkey when RecoverKit offers smart retry logic, AI dunning emails, and payment update pages starting at $0 AUD/mo?",
+      "Why pay $250 USD/month (~$355 AUD) for Churnkey when RecoverKit offers smart retry logic, AI dunning emails, and payment update pages starting at $5 AUD (14-day trial)?",
   },
 };
 
@@ -18,15 +18,15 @@ export default function ChurnkeyAlternativePage() {
       competitorName="Churnkey"
       competitorSlug="churnkey"
       headline="The affordable Churnkey alternative that doesn't compromise on features"
-      subheadline="Churnkey charges $250 USD/month (~$355 AUD) for payment recovery — and their best features require $700+ USD/mo plans. RecoverKit gives you the same core recovery features — smart retries, dunning emails, payment update pages — starting at $0 AUD/mo."
+      subheadline="Churnkey charges $250 USD/month (~$355 AUD) for payment recovery — and their best features require $700+ USD/mo plans. RecoverKit gives you the same core recovery features — smart retries, dunning emails, payment update pages — starting at $5 AUD (14-day trial)."
       recoverKitPrice="$29 AUD/mo"
-      recoverKitPriceDetail="Starter plan (~$20 USD) · Free plan available at $0/mo"
+      recoverKitPriceDetail="Starter plan (~$20 USD) · $5 trial (14 days)"
       competitorPrice="$250 USD/mo"
       competitorPriceDetail="~$355 AUD/mo · Starter plan, billed yearly"
       setupTimeRecoverKit="Under 5 minutes"
       setupTimeCompetitor="1-2 weeks with onboarding calls"
       features={[
-        { name: "Starting price", recoverkit: "$0 AUD/mo", competitor: "$250 USD/mo (~$355 AUD)" },
+        { name: "Starting price", recoverkit: "$5 AUD trial (14 days)", competitor: "$250 USD/mo (~$355 AUD)" },
         { name: "Smart retry logic", recoverkit: "✅ AI-optimized timing", competitor: "✅ Rules-based (Core $700+/mo)" },
         { name: "Dunning email sequences", recoverkit: "✅ AI-generated", competitor: "✅ Manual templates" },
         { name: "Payment update pages", recoverkit: "✅ Branded", competitor: "✅ Branded" },
@@ -35,7 +35,7 @@ export default function ChurnkeyAlternativePage() {
         { name: "Cancel flows", recoverkit: "❌ Payment recovery focus", competitor: "✅ All plans" },
         { name: "AI email generation", recoverkit: "✅", competitor: "❌" },
         { name: "Self-serve setup", recoverkit: "✅ 5-minute setup", competitor: "⚠️ 14-day trial available" },
-        { name: "Free tier", recoverkit: "✅ 10 attempts/mo", competitor: "❌ 14-day trial only" },
+        { name: "$5 trial", recoverkit: "✅ 14 days, 10 attempts/mo", competitor: "❌ 14-day trial only" },
         { name: "Monthly billing", recoverkit: "✅ No contracts", competitor: "⚠️ Billed yearly" },
         { name: "Failed Payment Wall", recoverkit: "❌", competitor: "✅ Blocks access until payment updated" },
       ]}

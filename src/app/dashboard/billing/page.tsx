@@ -94,10 +94,10 @@ export default function BillingPage() {
                 className="inline-block text-white text-sm font-semibold px-4 py-1.5 rounded-full"
                 style={{ background: "var(--color-brand)" }}
               >
-                {currentPlan?.name ?? "Free"}
+                {currentPlan?.name ?? "Trial"}
               </span>
               <span className="text-lg font-bold">
-                {currentPlan ? `$${currentPlan.price} AUD/mo` : "Free"}
+                {currentPlan ? `$${currentPlan.price} AUD/mo` : "Trial"}
               </span>
             </div>
             {isActive && currentPlan && (
@@ -132,7 +132,7 @@ export default function BillingPage() {
             style={{ background: "color-mix(in srgb, #f59e0b 10%, transparent)" }}
           >
             <p className="text-sm font-medium" style={{ color: "#92400e" }}>
-              Your subscription has been cancelled. You&apos;ll keep full access to all {currentPlan?.name} features until <strong>{periodEndDate}</strong>. After that, you&apos;ll be moved to the Free plan.
+              Your subscription has been cancelled. You&apos;ll keep full access to all {currentPlan?.name} features until <strong>{periodEndDate}</strong>. After that, you&apos;ll be moved to the Trial plan.
             </p>
           </div>
         )}
@@ -204,7 +204,7 @@ export default function BillingPage() {
             Cancel subscription
           </h2>
           <p className="text-sm mb-4" style={{ color: "var(--color-text-secondary)" }}>
-            If you cancel, your {currentPlan.name} plan stays active until <strong>{periodEndDate ?? "the end of your billing period"}</strong>. After that you&apos;ll be on the Free plan (10 recoveries/month).
+            If you cancel, your {currentPlan.name} plan stays active until <strong>{periodEndDate ?? "the end of your billing period"}</strong>. After that you&apos;ll be on the Trial plan (10 recoveries/month).
           </p>
           <button
             className="text-sm underline cursor-pointer"
@@ -219,7 +219,7 @@ export default function BillingPage() {
       {/* No subscription */}
       {!isActive && !currentPlan && (
         <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-          You&apos;re on the Free plan. Choose an upgrade above to unlock more recoveries and features.
+          You&apos;re on the Trial plan. Choose an upgrade above to unlock more recoveries and features.
         </p>
       )}
 

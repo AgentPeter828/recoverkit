@@ -88,7 +88,7 @@ export function ComparisonPage({
             <div className="mt-8 flex items-center justify-center gap-4">
               <Link href="/auth/signup">
                 <Button variant="primary" size="lg">
-                  Try RecoverKit Free →
+                  Start Trial — $5 →
                 </Button>
               </Link>
               <Link href="/pricing">
@@ -305,12 +305,12 @@ export function ComparisonPage({
               style={{ color: "var(--color-text-secondary)" }}
             >
               Set up RecoverKit in under 5 minutes. Start recovering failed
-              payments today — from $0/month.
+              payments today — $5 trial for 14 days.
             </p>
             <div className="mt-8 flex items-center justify-center gap-4">
               <Link href="/auth/signup">
                 <Button variant="primary" size="lg">
-                  Start Free →
+                  Start Trial — $5 →
                 </Button>
               </Link>
               <Link href="/guides/switching">

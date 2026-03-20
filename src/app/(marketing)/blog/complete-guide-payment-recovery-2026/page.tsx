@@ -106,7 +106,7 @@ export default function CompleteGuidePost() {
         <strong>Human-powered services (custom pricing):</strong> Services like Gravy Solutions use human agents to recover payments. Pricing isn&apos;t published — you need a sales call. Built for enterprise with high volume, overkill for most founders.
       </p>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Affordable dedicated tools ($0-149/mo):</strong> The newest category, led by tools like <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link>. Focused exclusively on payment recovery with flat-rate pricing, AI-powered features, and self-serve setup. Best for indie SaaS founders and small-to-medium teams. See our <Link href="/alternatives" className="underline" style={{ color: "var(--color-brand)" }}>full comparison of recovery tools</Link>.
+        <strong>Affordable dedicated tools ($5 trial, $29-149/mo):</strong> The newest category, led by tools like <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link>. Focused exclusively on payment recovery with flat-rate pricing, AI-powered features, and self-serve setup. Best for indie SaaS founders and small-to-medium teams. See our <Link href="/alternatives" className="underline" style={{ color: "var(--color-brand)" }}>full comparison of recovery tools</Link>.
       </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Chapter 4: AI in Payment Recovery</h2>
@@ -144,7 +144,7 @@ export default function CompleteGuidePost() {
         <strong>Today:</strong> Check your Stripe Dashboard for your current failed payment rate. Calculate how much you&apos;re losing monthly using our <Link href="/roi" className="underline" style={{ color: "var(--color-brand)" }}>ROI calculator</Link>.
       </p>
       <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>This week:</strong> Set up a dedicated recovery tool. <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> can be connected to your Stripe account in under 5 minutes with a free tier to test. No credit card required.
+        <strong>This week:</strong> Set up a dedicated recovery tool. <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> can be connected to your Stripe account in under 5 minutes with a $5 trial (14 days) to test.
       </p>
       <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
         <strong>This month:</strong> Monitor your recovery metrics. Review your dunning email performance. Adjust your email copy and timing based on the data.

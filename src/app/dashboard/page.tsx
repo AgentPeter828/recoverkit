@@ -245,7 +245,7 @@ export default async function DashboardPage() {
           <div className="space-y-4 mt-4">
             {!currentPlan && (
               <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-                You&apos;re on the <strong>Free</strong> plan (10 recoveries/month). Upgrade to recover more revenue.
+                You&apos;re on the <strong>Trial</strong> plan (10 recoveries/month). Upgrade to recover more revenue.
               </p>
             )}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
