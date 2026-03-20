@@ -10,7 +10,7 @@ import { mockDunningSequences, mockDunningEmails } from "@/lib/mock/data";
 import { analytics } from "@/lib/mixpanel";
 
 const TONES = [
-  { id: "friendly", label: "Friendly", emoji: "🤝", desc: "Casual, reassuring, human", preview: "Hey! Looks like your payment didn't go through. No worries — it happens to everyone. Could you update your card?" },
+  { id: "friendly", label: "Friendly", emoji: "🤝", desc: "Casual, reassuring, human", preview: "Hey! Looks like your payment didn't go through. No worries, it happens to everyone. Could you update your card?" },
   { id: "professional", label: "Professional", emoji: "💼", desc: "Clean, business-like", preview: "We noticed your recent payment was unsuccessful. Please update your billing information to continue your service." },
   { id: "direct", label: "Direct", emoji: "⚡", desc: "Short, action-oriented", preview: "Your payment failed. Update your card now to keep your subscription active." },
   { id: "empathetic", label: "Empathetic", emoji: "😊", desc: "Warm, understanding", preview: "We understand things happen! Your last payment didn't go through, and we want to help you sort it out easily." },
