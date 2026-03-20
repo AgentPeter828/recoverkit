@@ -59,6 +59,40 @@ async function handleCheckoutSessionCompleted(
     throw error;
   }
 
+  // If this is a trial checkout, create a subscription schedule to auto-upgrade to Starter after 14 days
+  const isTrial = session.metadata?.is_trial === "true";
+  const starterPriceId = session.metadata?.starter_price_id;
+
+  if (isTrial && starterPriceId && subscriptionId) {
+    try {
+      // Create a subscription schedule from the existing subscription
+      const schedule = await stripe.subscriptionSchedules.create({
+        from_subscription: subscriptionId,
+      });
+
+      // Update the schedule: current phase (trial $5) for 14 days, then Starter $29/mo ongoing
+      const trialEnd = Math.floor(Date.now() / 1000) + 14 * 24 * 60 * 60; // 14 days from now
+      await stripe.subscriptionSchedules.update(schedule.id, {
+        end_behavior: "release", // subscription continues after schedule ends
+        phases: [
+          {
+            items: [{ price: priceId!, quantity: 1 }],
+            end_date: trialEnd,
+          },
+          {
+            items: [{ price: starterPriceId, quantity: 1 }],
+            iterations: 1, // first Starter month, then released as ongoing subscription
+          },
+        ],
+      });
+
+      console.log(`[Stripe Webhook] Created trial→Starter schedule ${schedule.id} for user ${userId}`);
+    } catch (schedErr) {
+      console.error("[Stripe Webhook] Failed to create trial schedule:", schedErr);
+      // Non-fatal — subscription still works, just won't auto-upgrade
+    }
+  }
+
   // Fetch UTM params from profile for attribution
   const { data: profile } = await supabase
     .from("profiles")
@@ -66,9 +100,10 @@ async function handleCheckoutSessionCompleted(
     .eq("id", userId)
     .single();
 
-  await trackServerEvent("upgraded_to_paid", {
+  await trackServerEvent(isTrial ? "trial_started" : "upgraded_to_paid", {
     plan: priceId,
     stripe_customer_id: customerId,
+    is_trial: isTrial,
     ...(profile || {}),
   }, userId);
 

@@ -56,13 +56,20 @@ export async function POST(request: NextRequest) {
 
     const origin = request.headers.get("origin") ?? "http://localhost:3000";
 
+    const trialPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_TRIAL;
+    const starterPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER;
+    const isTrial = priceId === trialPriceId && trialPriceId && starterPriceId;
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${origin}/dashboard?checkout=success`,
       cancel_url: `${origin}/pricing?checkout=canceled`,
-      metadata: { supabase_user_id: user.id },
+      metadata: {
+        supabase_user_id: user.id,
+        ...(isTrial ? { is_trial: "true", starter_price_id: starterPriceId } : {}),
+      },
       // Stripe Tax — auto-calculate VAT/GST/sales tax by customer location
       automatic_tax: { enabled: true },
       // Collect billing address for accurate tax calculation
