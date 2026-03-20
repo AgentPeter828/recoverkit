@@ -346,7 +346,7 @@ export default function PrivacyPage() {
         <p>
           Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486)
           <br />
-          Melbourne, Victoria 3000, Australia
+          Melbourne, Victoria, Australia
         </p>
         <p>
           <strong>EU/EEA Representative (GDPR Art. 27):</strong> If you are
