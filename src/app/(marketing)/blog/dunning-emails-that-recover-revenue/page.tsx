@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Copy-paste dunning email templates that work. Learn the psychology behind effective payment recovery emails and the optimal send schedule.",
   openGraph: {
     title: "How to Write Dunning Emails That Actually Recover Revenue",
-    description: "5 dunning email templates with subject lines, timing, and copy you can use today.",
+    description: "Dunning email templates with subject lines, timing, and copy you can use today.",
   },
 };
 
@@ -47,14 +47,14 @@ export default function DunningEmailsPost() {
         Timing matters as much as copy. Here&apos;s the schedule that consistently performs best across thousands of SaaS businesses:
       </p>
       <ul className="mb-4 space-y-2" style={{ color: "var(--color-text-secondary)" }}>
-        <li>• <strong>Email 1:</strong> Day 0-1 after failure (within 24 hours)</li>
-        <li>• <strong>Email 2:</strong> Day 3-4 (first follow-up)</li>
+        <li>• <strong>Email 1:</strong> Day 0-1 after failure (within 24 hours) — <Link href="/templates" className="underline" style={{ color: "var(--color-brand)" }}>free template below</Link></li>
+        <li>• <strong>Email 2:</strong> Day 3-4 (first follow-up) — <Link href="/templates" className="underline" style={{ color: "var(--color-brand)" }}>free template below</Link></li>
         <li>• <strong>Email 3:</strong> Day 7 (mid-cycle urgency)</li>
         <li>• <strong>Email 4:</strong> Day 10-12 (final warning)</li>
         <li>• <strong>Email 5:</strong> Day 14+ (post-cancellation win-back)</li>
       </ul>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
-        Send dunning emails between 9-11am in the customer&apos;s local time zone. Avoid weekends — Tuesday through Thursday see the highest email engagement rates. For a complete collection of ready-to-use templates, visit our <Link href="/templates" className="underline" style={{ color: "var(--color-brand)" }}>template gallery</Link>.
+        Send dunning emails between 9-11am in the customer&apos;s local time zone. Avoid weekends — Tuesday through Thursday see the highest email engagement rates. We provide 2 free templates to get you started — grab them from our <Link href="/templates" className="underline" style={{ color: "var(--color-brand)" }}>template gallery</Link>. For the full personalised sequence, RecoverKit&apos;s AI generates it for you.
       </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Template 1: The Friendly First Notice</h2>
@@ -93,61 +93,16 @@ export default function DunningEmailsPost() {
         </p>
       </Card>
 
-      <h2 className="text-2xl font-bold mt-12 mb-4">Template 3: The Urgency Builder</h2>
-      <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Send timing:</strong> Day 7<br />
-        <strong>Tone:</strong> Direct, creates urgency without being aggressive<br />
-        <strong>Subject line:</strong> &quot;Action needed: Your [Product] account is at risk&quot;
+      <h2 className="text-2xl font-bold mt-12 mb-4">Templates 3-5: Urgency, Final Warning &amp; Win-Back</h2>
+      <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
+        The remaining emails in your dunning sequence — the urgency builder (day 7), the final cancellation warning (day 10-12), and the post-cancellation win-back (day 14+) — are where the real revenue recovery happens. These emails need to be highly personalised to your product, your customer relationship, and the specific value at stake.
       </p>
-      <Card className="p-6 my-4" style={{ background: "var(--color-bg-secondary)" }}>
-        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-          Hi [First Name],<br /><br />
-          We&apos;ve been trying to process your [Product] payment of [Amount] for the past week, but haven&apos;t been able to. Your account is now at risk of being deactivated.<br /><br />
-          Here&apos;s what you&apos;ll lose if your account is cancelled:<br />
-          • [Key feature/data point 1]<br />
-          • [Key feature/data point 2]<br />
-          • [Key feature/data point 3]<br /><br />
-          <strong>Update your payment method now to keep your account active:</strong><br /><br />
-          <strong>[Update Payment Method →]</strong><br /><br />
-          This takes less than a minute and will prevent any disruption to your service.<br /><br />
-          — The [Product] Team
-        </p>
-      </Card>
-
-      <h2 className="text-2xl font-bold mt-12 mb-4">Template 4: The Final Warning</h2>
-      <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Send timing:</strong> Day 10-12<br />
-        <strong>Tone:</strong> Serious, empathetic, final<br />
-        <strong>Subject line:</strong> &quot;Last chance to save your [Product] account&quot;
+      <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
+        Generic templates fall short here because urgency and loss-aversion messaging needs to reference <em>your</em> features, <em>your</em> customer&apos;s usage history, and <em>your</em> brand voice. That&apos;s why <Link href="/" className="underline" style={{ color: "var(--color-brand)" }}>RecoverKit</Link> uses AI to generate the full sequence — personalised to each customer and optimised for recovery.
       </p>
-      <Card className="p-6 my-4" style={{ background: "var(--color-bg-secondary)" }}>
-        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-          Hi [First Name],<br /><br />
-          This is our final notice before we have to cancel your [Product] subscription. We&apos;ve been unable to process your payment of [Amount] despite multiple attempts over the past [X] days.<br /><br />
-          <strong>Your account will be cancelled on [Date] unless you update your payment method.</strong><br /><br />
-          We&apos;d hate to see you go — you&apos;ve been using [Product] for [duration] and we know it&apos;s valuable to your workflow.<br /><br />
-          <strong>[Update Payment Method — Last Chance →]</strong><br /><br />
-          If you&apos;re having trouble or need help, just reply to this email and we&apos;ll sort it out together.<br /><br />
-          — The [Product] Team
-        </p>
-      </Card>
-
-      <h2 className="text-2xl font-bold mt-12 mb-4">Template 5: The Win-Back</h2>
-      <p className="mb-2" style={{ color: "var(--color-text-secondary)" }}>
-        <strong>Send timing:</strong> Day 14+ (after cancellation)<br />
-        <strong>Tone:</strong> Warm, no pressure, welcoming<br />
-        <strong>Subject line:</strong> &quot;We miss you at [Product] — come back anytime&quot;
+      <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>
+        <Link href="/auth/signup" className="underline font-semibold" style={{ color: "var(--color-brand)" }}>Sign up free →</Link> and generate your complete dunning sequence with one click.
       </p>
-      <Card className="p-6 my-4" style={{ background: "var(--color-bg-secondary)" }}>
-        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-          Hi [First Name],<br /><br />
-          Your [Product] subscription was cancelled due to a payment issue. We completely understand — these things happen.<br /><br />
-          If you&apos;d like to come back, we&apos;ve saved all your data and settings. You can reactivate your account instantly:<br /><br />
-          <strong>[Reactivate My Account →]</strong><br /><br />
-          No hard feelings either way. We&apos;re just glad you gave [Product] a try.<br /><br />
-          — The [Product] Team
-        </p>
-      </Card>
 
       <h2 className="text-2xl font-bold mt-12 mb-4">Key Metrics to Track</h2>
       <p className="mb-4" style={{ color: "var(--color-text-secondary)" }}>

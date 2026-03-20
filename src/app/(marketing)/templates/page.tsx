@@ -6,10 +6,10 @@ import { Card } from "@/components/ui/Card";
 export const metadata: Metadata = {
   title: "Dunning Email Templates — Free Payment Recovery Emails | RecoverKit",
   description:
-    "Free dunning email templates for SaaS payment recovery. Copy-paste subject lines, email body, and timing for each step of your recovery sequence.",
+    "Free dunning email templates for SaaS payment recovery. Copy-paste subject lines, email body, and timing for your recovery sequence.",
   openGraph: {
     title: "Free Dunning Email Templates for SaaS",
-    description: "5 proven dunning email templates with subject lines, send timing, and copy you can use today.",
+    description: "2 dunning email templates with subject lines, send timing, and copy you can use today.",
   },
 };
 
@@ -44,123 +44,31 @@ The {{product}} Team`,
     ],
   },
   {
-    id: "urgent-payment-required",
-    title: "Urgent Payment Required",
-    timing: "Send on day 7 after payment failure",
-    urgency: "High",
+    id: "follow-up-reminder",
+    title: "Follow-Up Reminder",
+    timing: "Send on day 3-5 after payment failure",
+    urgency: "Medium",
     urgencyColor: "#f59e0b",
-    subjectLine: "Action needed: Your {{product}} account is at risk",
-    preheader: "Your subscription payment is still pending. Update now to keep access",
+    subjectLine: "Your {{product}} payment still needs attention",
+    preheader: "Your subscription payment is still pending — update now to keep access",
     body: `Hi {{first_name}},
 
-We've been trying to process your {{product}} subscription payment of {{amount}} for the past week, but haven't been able to charge your card on file.
+Following up on our earlier note — your {{product}} subscription payment of {{amount}} is still pending. We want to make sure you don't lose access to your account.
 
-Your account is now at risk of being deactivated. Here's what you'd lose access to:
-
-• {{feature_1}}
-• {{feature_2}}
-• {{feature_3}}
-• All your saved data and configurations
-
-Update your payment method now to keep your account active:
-
-[Update Payment Method: Keep My Account →]
-
-This takes less than a minute and will prevent any disruption to your service. If you're having trouble, just reply to this email and we'll help sort it out.
-
-The {{product}} Team`,
-    tips: [
-      "List specific features/data the customer will lose. Make it tangible",
-      "Create urgency without being aggressive or threatening",
-      "Offer help in case they're having trouble (builds trust)",
-      "Use a more action-oriented CTA button",
-    ],
-  },
-  {
-    id: "final-notice",
-    title: "Final Notice Before Cancellation",
-    timing: "Send on day 10-12 after payment failure",
-    urgency: "Critical",
-    urgencyColor: "#ef4444",
-    subjectLine: "Last chance to save your {{product}} account",
-    preheader: "Your subscription will be cancelled on {{cancellation_date}} unless you act now",
-    body: `Hi {{first_name}},
-
-This is our final notice before we have to cancel your {{product}} subscription. We've been unable to process your payment of {{amount}} despite multiple attempts over the past {{days}} days.
-
-Your account will be cancelled on {{cancellation_date}} unless you update your payment method.
-
-We'd genuinely hate to see you go. You've been using {{product}} for {{customer_duration}} and we know it's been valuable to your workflow.
-
-[Update Payment Method: This Is My Last Chance →]
-
-If there's anything going on that we can help with, whether billing questions, a temporary pause, or anything else, please just reply to this email. We're real people and we want to help.
-
-The {{product}} Team`,
-    tips: [
-      "Be empathetic. Acknowledge the customer relationship",
-      "State the specific cancellation date to create real urgency",
-      "Mention how long they've been a customer (loss aversion)",
-      "Offer alternatives like pausing the subscription",
-    ],
-  },
-  {
-    id: "win-back",
-    title: "Win-Back After Failed Payment",
-    timing: "Send 2-3 days after cancellation (day 14-17)",
-    urgency: "Recovery",
-    urgencyColor: "#8b5cf6",
-    subjectLine: "We miss you at {{product}}. Come back anytime",
-    preheader: "Your data is safe and your account is ready to reactivate",
-    body: `Hi {{first_name}},
-
-Your {{product}} subscription was cancelled due to a payment issue. We completely understand. These things happen and it's nobody's fault.
-
-The good news: we've saved all your data, settings, and configurations. Everything is exactly as you left it.
-
-If you'd like to come back, you can reactivate your account instantly:
-
-[Reactivate My Account →]
-
-No setup needed. Just enter a new payment method and you're back in business. Everything will be right where you left it.
-
-No hard feelings either way. We're just glad you gave {{product}} a try, and the door is always open.
-
-Warmly,
-The {{product}} Team`,
-    tips: [
-      "Never guilt the customer. They didn't choose to leave",
-      "Emphasize that their data is safe (reduces reactivation anxiety)",
-      "Make reactivation sound effortless. Use words like 'instantly' and 'one click'",
-      "This email often has a 10-15% reactivation rate. Don't skip it",
-    ],
-  },
-  {
-    id: "card-expiring",
-    title: "Payment Method Expiring Soon",
-    timing: "Send 14 days before card expiration",
-    urgency: "Preventive",
-    urgencyColor: "#06b6d4",
-    subjectLine: "Your card ending in {{last4}} expires soon",
-    preheader: "Update your payment method to avoid any interruption to your {{product}} subscription",
-    body: `Hi {{first_name}},
-
-Just a friendly heads up. The credit card you have on file for your {{product}} subscription (ending in {{last4}}) expires on {{expiry_date}}.
-
-To avoid any interruption to your service, you can update your payment method now:
+The most common reason is an expired credit card. You can update your payment method in about 30 seconds:
 
 [Update Payment Method →]
 
-This takes about 30 seconds and will ensure your subscription continues smoothly. If you've already received a replacement card with a new number, this is a great time to add it.
+Your data and settings are all safe — we just need a valid payment method to keep things running.
 
-Thanks for being a {{product}} customer!
+If you're having trouble or have any questions, just reply to this email and we'll help sort it out.
 
 The {{product}} Team`,
     tips: [
-      "This is a PROACTIVE email. Send it BEFORE the payment fails",
-      "Proactive card update emails prevent 30-40% of expiration related failures",
-      "Reference the specific card (last 4 digits) so the customer knows exactly what to update",
-      "Keep it brief and action-oriented. No urgency needed yet",
+      "Reference the earlier email to create continuity",
+      "Keep the tone helpful, not pushy",
+      "Offer help in case they're having trouble (builds trust)",
+      "Reassure them their data is safe to reduce anxiety",
     ],
   },
 ];
@@ -183,7 +91,7 @@ export default function TemplatesPage() {
         name: "How many dunning emails should I send?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Most effective dunning sequences include 4-5 emails sent over 14 days, starting with a friendly reminder and escalating to a final cancellation warning, followed by a win-back email after cancellation.",
+          text: "Most effective dunning sequences include 3-5 emails sent over 14 days, starting with a friendly reminder and escalating in urgency. RecoverKit's AI generates a full personalized sequence for you — these two free templates are a starting point.",
         },
       },
       {
