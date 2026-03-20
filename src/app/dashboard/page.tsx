@@ -8,7 +8,7 @@ import { checkPlanLimit } from "@/lib/plan-limits";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { UpgradeButton } from "./UpgradeButton";
-import { ManageButton } from "./ManageButton";
+
 import { RecoveryStatsCards } from "@/components/dashboard/RecoveryStatsCards";
 import { RecentCampaigns } from "@/components/dashboard/RecentCampaigns";
 import { UsageBanner } from "@/components/dashboard/UsageBanner";
@@ -236,7 +236,7 @@ export default async function DashboardPage() {
                 ${currentPlan.price} AUD/month
               </span>
             </div>
-            <ManageButton />
+
           </div>
         ) : null}
 
