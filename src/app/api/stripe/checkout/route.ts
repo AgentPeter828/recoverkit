@@ -60,6 +60,12 @@ export async function POST(request: NextRequest) {
       success_url: `${origin}/dashboard?checkout=success`,
       cancel_url: `${origin}/pricing?checkout=canceled`,
       metadata: { supabase_user_id: user.id },
+      // Stripe Tax — auto-calculate VAT/GST/sales tax by customer location
+      automatic_tax: { enabled: true },
+      // Collect billing address for accurate tax calculation
+      billing_address_collection: "required",
+      // Let Stripe determine customer's tax location
+      customer_update: { address: "auto" },
     });
 
     return NextResponse.json({ url: session.url });
