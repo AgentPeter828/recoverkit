@@ -360,7 +360,13 @@ function SetupStep({
       </div>
 
       {/* Action */}
-      {!done && (
+      {done ? (
+        <Link href={href} className="shrink-0">
+          <Button variant="ghost" size="sm" style={{ color: "var(--color-text-secondary)" }}>
+            Edit
+          </Button>
+        </Link>
+      ) : (
         <Link href={href} className="shrink-0">
           <Button variant={priority ? "primary" : "outline"} size="sm">
             {buttonText}
