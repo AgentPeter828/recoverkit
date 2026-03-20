@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useConsent } from "@/lib/consent";
 
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
@@ -8,9 +9,13 @@ const REDDIT_PIXEL_ID = process.env.NEXT_PUBLIC_REDDIT_PIXEL_ID;
 
 /**
  * Conversion tracking pixels — Meta, Google Ads, Reddit.
- * Only loads when the corresponding env var is set.
+ * Only loads when consent is granted AND the corresponding env var is set.
  */
 export function ConversionPixels() {
+  const { consent } = useConsent();
+
+  if (consent !== "accepted") return null;
+
   return (
     <>
       {/* ── Meta Pixel ── */}

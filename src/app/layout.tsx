@@ -4,6 +4,7 @@ import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { MixpanelProvider } from "@/components/analytics/MixpanelProvider";
 import { UTMCapture } from "@/components/analytics/UTMCapture";
 import { ConversionPixels } from "@/components/analytics/ConversionPixels";
+import { CookieConsentProvider } from "@/components/CookieConsent";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MockToggle } from "@/components/MockToggle";
@@ -50,19 +51,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Plausible is cookie-free — no consent needed */}
         <PlausibleProvider />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
-        <PostHogProvider>
-          <MixpanelProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <MockToggle />
-            <UTMCapture />
-            <ConversionPixels />
-          </MixpanelProvider>
-        </PostHogProvider>
+        <CookieConsentProvider>
+          <PostHogProvider>
+            <MixpanelProvider>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <MockToggle />
+              <UTMCapture />
+              <ConversionPixels />
+            </MixpanelProvider>
+          </PostHogProvider>
+        </CookieConsentProvider>
       </body>
     </html>
   );

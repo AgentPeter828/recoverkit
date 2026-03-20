@@ -1,29 +1,36 @@
 import mixpanel from "mixpanel-browser";
+import { hasAnalyticsConsent } from "./consent";
 
 const token = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
-const isEnabled = typeof window !== "undefined" && !!token;
 
-if (isEnabled) {
-  mixpanel.init(token!, {
-    track_pageview: false, // we handle this manually on route change
+let initialized = false;
+
+function ensureInit() {
+  if (initialized) return true;
+  if (typeof window === "undefined" || !token) return false;
+  if (!hasAnalyticsConsent()) return false;
+
+  mixpanel.init(token, {
+    track_pageview: false,
     persistence: "localStorage",
     ignore_dnt: false,
   });
+  initialized = true;
+  return true;
 }
 
 /**
- * Mixpanel analytics helpers — env-gated.
- *
- * If NEXT_PUBLIC_MIXPANEL_TOKEN is not set, all calls are no-ops.
+ * Mixpanel analytics helpers — gated behind cookie consent + env var.
+ * All calls are no-ops until consent is granted.
  */
 export const analytics = {
   track(event: string, properties?: Record<string, unknown>) {
-    if (!isEnabled) return;
+    if (!ensureInit()) return;
     mixpanel.track(event, properties);
   },
 
   identify(userId: string, traits?: Record<string, unknown>) {
-    if (!isEnabled) return;
+    if (!ensureInit()) return;
     mixpanel.identify(userId);
     if (traits) {
       mixpanel.people.set(traits);
@@ -31,11 +38,9 @@ export const analytics = {
   },
 
   reset() {
-    if (!isEnabled) return;
+    if (!ensureInit()) return;
     mixpanel.reset();
   },
-
-  // --- Pre-defined events ---
 
   pageView(path: string) {
     this.track("Page Viewed", { path });
@@ -62,8 +67,6 @@ export const analytics = {
   ctaClicked(label: string, location?: string) {
     this.track("CTA Clicked", { label, location });
   },
-
-  // --- RecoverKit product-specific events ---
 
   paymentFailedDetected(properties?: {
     amount?: number;
