@@ -264,10 +264,35 @@ export default function SequencesPage() {
     }
   }
 
+  /** Convert HTML → plain text for textarea editing */
+  function htmlToPlainText(html: string): string {
+    return html
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p>\s*<p[^>]*>/gi, "\n\n")
+      .replace(/<\/?p[^>]*>/gi, "")
+      .replace(/<\/?[^>]+(>|$)/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'")
+      .replace(/&nbsp;/g, " ")
+      .trim();
+  }
+
+  /** Convert plain text back → HTML for storage */
+  function plainTextToHtml(text: string): string {
+    return text
+      .split(/\n/)
+      .map((line) => line.trim())
+      .map((line) => (line ? `<p>${line}</p>` : "<p><br></p>"))
+      .join("\n");
+  }
+
   function startEditing(email: DunningEmail) {
     setEditingStep(email.step_number);
     setEditSubject(email.subject);
-    setEditBodyHtml(email.body_html || email.body_text || "");
+    setEditBodyHtml(htmlToPlainText(email.body_html || email.body_text || ""));
   }
 
   function cancelEditing() {
@@ -279,16 +304,16 @@ export default function SequencesPage() {
   async function handleSaveEmail(emailId: string, stepNumber: number) {
     setSaving(true);
     try {
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = editBodyHtml;
-      const bodyText = tempDiv.textContent || tempDiv.innerText || "";
+      // editBodyHtml is now plain text from the textarea — convert back to HTML
+      const bodyHtml = plainTextToHtml(editBodyHtml);
+      const bodyText = editBodyHtml.trim();
 
       const res = await fetch(`/api/dunning-emails/${emailId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           subject: editSubject,
-          body_html: editBodyHtml,
+          body_html: bodyHtml,
           body_text: bodyText,
         }),
       });
@@ -297,7 +322,7 @@ export default function SequencesPage() {
         setEmails((prev) =>
           prev.map((e) =>
             e.id === emailId
-              ? { ...e, subject: editSubject, body_html: editBodyHtml, body_text: bodyText }
+              ? { ...e, subject: editSubject, body_html: bodyHtml, body_text: bodyText }
               : e
           )
         );
