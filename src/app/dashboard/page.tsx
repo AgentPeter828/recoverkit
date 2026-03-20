@@ -240,7 +240,7 @@ export default async function DashboardPage() {
           </div>
         ) : null}
 
-        {/* Plan options — show upgrade/downgrade for all non-Scale users */}
+        {/* Plan options — show upgrade for all non-Scale users */}
         {(!currentPlan || currentPlan.name !== "Scale") && (
           <div className="space-y-4 mt-4">
             {!currentPlan && (
@@ -249,7 +249,7 @@ export default async function DashboardPage() {
               </p>
             )}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {plans.filter((p) => p.price > 0 && p.name !== currentPlan?.name).map((plan) => (
+              {plans.filter((p) => p.price > 0 && p.name !== currentPlan?.name && p.price > (currentPlan?.price ?? 0)).map((plan) => (
                 <Card
                   key={plan.name}
                   className={`p-4 ${plan.highlighted ? "ring-2" : ""}`}

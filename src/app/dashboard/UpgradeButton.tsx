@@ -26,23 +26,10 @@ export function UpgradeButton({
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
 
-  const isDowngrade = hasSubscription && targetPlanPrice < currentPlanPrice;
-
   async function handlePlanChange() {
     setLoading(true);
     setError(null);
     setMessage(null);
-
-    // Confirm downgrades
-    if (isDowngrade) {
-      const confirmed = confirm(
-        `Downgrade to ${planName}? Your current plan stays active until the end of your billing period.`
-      );
-      if (!confirmed) {
-        setLoading(false);
-        return;
-      }
-    }
 
     try {
       if (hasSubscription) {
@@ -107,9 +94,7 @@ export function UpgradeButton({
 
   const buttonLabel = loading
     ? "Processing..."
-    : isDowngrade
-      ? `Downgrade to ${planName}`
-      : `Upgrade to ${planName}`;
+    : `Upgrade to ${planName}`;
 
   return (
     <div>

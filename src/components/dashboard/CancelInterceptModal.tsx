@@ -9,7 +9,7 @@ interface CancelInterceptModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentPlan: Plan;
-  downgradePlan: Plan | null; // the next plan down, null if on lowest paid
+  downgradePlan?: Plan | null;
 }
 
 export function CancelInterceptModal({

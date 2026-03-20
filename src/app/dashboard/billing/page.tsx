@@ -51,9 +51,8 @@ export default function BillingPage() {
   const isActive = subscription?.status === "active" || subscription?.status === "trialing";
   const upgradePlans = plans.filter((p) => p.price > currentPrice);
 
-  // For cancel modal: next plan down
-  const downgradePlans = plans.filter((p) => p.price > 0 && p.price < currentPrice);
-  const nextLowerPlan = downgradePlans.length > 0 ? downgradePlans[downgradePlans.length - 1] : null;
+  // No downgrade option — cancel modal only
+  const nextLowerPlan = null;
 
   const periodEndDate = subscription?.current_period_end
     ? new Date(subscription.current_period_end).toLocaleDateString("en-AU", {
