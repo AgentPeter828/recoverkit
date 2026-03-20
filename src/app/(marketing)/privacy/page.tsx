@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "RecoverKit Privacy Policy — effective 15 February 2026.",
+  description: "RecoverKit Privacy Policy — effective 21 March 2026.",
 };
 
 export default function PrivacyPage() {
@@ -14,7 +14,7 @@ export default function PrivacyPage() {
         style={{ color: "var(--color-text-secondary)" }}
       >
         <p>
-          <strong>Effective date:</strong> 15 February 2026
+          <strong>Effective date:</strong> 21 March 2026
         </p>
         <p>
           This Privacy Policy explains how RecoverKit (&quot;Service&quot;,
@@ -83,8 +83,10 @@ export default function PrivacyPage() {
           <li><strong>Resend</strong> — transactional email delivery (dunning emails)</li>
           <li><strong>OpenAI</strong> — email content personalisation</li>
           <li><strong>Vercel</strong> — application hosting</li>
-          <li><strong>Mixpanel</strong> — product analytics</li>
-          <li><strong>Meta Pixel, Google Ads, Reddit Pixel</strong> — advertising measurement and retargeting</li>
+          <li><strong>Mixpanel</strong> — product analytics (requires cookie consent)</li>
+          <li><strong>PostHog</strong> — product analytics (requires cookie consent)</li>
+          <li><strong>Plausible Analytics</strong> — privacy-friendly, cookie-free web analytics</li>
+          <li><strong>Meta Pixel, Google Ads, Reddit Pixel</strong> — advertising measurement and retargeting (requires cookie consent)</li>
         </ul>
         <p>
           These providers act as our sub-processors. Each processes data under
@@ -121,13 +123,18 @@ export default function PrivacyPage() {
           and advertising:
         </p>
         <ul className="list-disc pl-6 space-y-1">
-          <li><strong>Essential cookies</strong> — required for login and core functionality</li>
-          <li><strong>Analytics cookies</strong> — Mixpanel, to understand how the Service is used</li>
-          <li><strong>Advertising cookies</strong> — Meta Pixel, Google Ads tag, Reddit Pixel for ad measurement and retargeting</li>
+          <li><strong>Essential cookies</strong> — required for login and core functionality (always active, no consent needed)</li>
+          <li><strong>Analytics cookies</strong> — Mixpanel and PostHog, to understand how the Service is used (requires consent)</li>
+          <li><strong>Advertising cookies</strong> — Meta Pixel, Google Ads tag, Reddit Pixel for ad measurement and retargeting (requires consent)</li>
+          <li><strong>Cookie-free analytics</strong> — Plausible Analytics runs without cookies and does not require consent</li>
         </ul>
         <p>
-          You can manage cookie preferences in your browser settings. Disabling
-          non-essential cookies will not affect core functionality.
+          When you first visit RecoverKit, a cookie consent banner will ask for
+          your permission before loading any non-essential cookies. You can change
+          your cookie preferences at any time from the Settings page in your
+          dashboard, or by clearing the <code>rk_cookie_consent</code> value from
+          your browser&apos;s local storage. Rejecting non-essential cookies will
+          not affect core functionality.
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
@@ -147,8 +154,12 @@ export default function PrivacyPage() {
           We use industry-standard measures to protect data, including encryption
           in transit (TLS) and at rest, access controls, and regular security
           reviews. Stripe Connect tokens are stored securely and encrypted. No
-          system is 100% secure — we cannot guarantee absolute security but will
-          notify you of any breach as required by law.
+          system is 100% secure — we cannot guarantee absolute security. In the
+          event of a data breach affecting your personal data, we will notify
+          affected users and the relevant supervisory authority within 72 hours of
+          becoming aware of the breach, as required by the GDPR. We will also
+          comply with the Notifiable Data Breaches scheme under the Australian
+          Privacy Act.
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
@@ -200,16 +211,28 @@ export default function PrivacyPage() {
           12. Contact
         </h2>
         <p>
-          For privacy enquiries, contact us at{" "}
+          <strong>Data Protection Contact:</strong> For all privacy enquiries,
+          data subject access requests, or to exercise any of your rights, contact
+          our Data Protection Officer at{" "}
           <a href="mailto:privacy@recoverkit.com" className="underline">
             privacy@recoverkit.com
           </a>
-          .
+          . We will respond within 30 days.
         </p>
         <p>
           Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486)
           <br />
           Victoria, Australia
+        </p>
+        <p>
+          <strong>EU/EEA Representative (GDPR Art. 27):</strong> If you are
+          located in the EU/EEA and wish to exercise your data protection rights,
+          you may also contact us via{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>
+          . We are in the process of appointing a formal EU representative and
+          will update this policy with their details once confirmed.
         </p>
       </div>
     </div>

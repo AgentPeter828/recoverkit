@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "RecoverKit Terms of Service — effective 15 February 2026.",
+  description: "RecoverKit Terms of Service — effective 21 March 2026.",
 };
 
 export default function TermsPage() {
@@ -14,7 +14,7 @@ export default function TermsPage() {
         style={{ color: "var(--color-text-secondary)" }}
       >
         <p>
-          <strong>Effective date:</strong> 15 February 2026
+          <strong>Effective date:</strong> 21 March 2026
         </p>
         <p>
           These Terms of Service (&quot;Terms&quot;) govern your use of RecoverKit
@@ -101,10 +101,13 @@ export default function TermsPage() {
           6. Plans &amp; Pricing
         </h2>
         <p>
-          RecoverKit offers a free tier and paid plans at A$29/month, A$79/month,
-          and A$149/month (or as otherwise displayed at the time of purchase). All
-          prices are in Australian Dollars (AUD) and are inclusive of GST where
-          applicable.
+          RecoverKit offers a free tier and paid subscription plans as displayed
+          on our{" "}
+          <a href="/pricing" className="underline">pricing page</a>.
+          All prices are in Australian Dollars (AUD) unless otherwise stated.
+          Prices are exclusive of applicable taxes (including VAT, GST, and sales
+          tax), which will be calculated and added at checkout based on your
+          billing location via Stripe Tax.
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
@@ -123,10 +126,14 @@ export default function TermsPage() {
         <p>
           You may cancel your subscription at any time from your dashboard.
           Cancellation takes effect at the end of the current billing period — you
-          retain access until then. We do not provide pro-rata refunds for partial
-          months. Nothing in these Terms excludes or limits your rights under the
-          Australian Consumer Law, including any statutory right to a refund for a
-          major failure.
+          retain access until then. We do not generally provide pro-rata refunds
+          for partial months. However, if you are an EU/EEA consumer, you have a
+          14-day right of withdrawal from the date of purchase. To exercise this
+          right, contact us at{" "}
+          <a href="mailto:hello@recoverkit.com" className="underline">hello@recoverkit.com</a>{" "}
+          within 14 days. Nothing in these Terms excludes or limits your rights
+          under the Australian Consumer Law, including any statutory right to a
+          refund for a major failure.
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
@@ -144,7 +151,7 @@ export default function TermsPage() {
           10. Intellectual Property
         </h2>
         <p>
-          All rights in the Service (code, design, branding) remain with The
+          All rights in the Service (code, design, branding) remain with
           Act Two Pty Ltd. These Terms do not grant you any rights to our
           trademarks or proprietary materials beyond what is needed to use the
           Service.
@@ -186,7 +193,42 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          14. Termination
+          14. Free Trials
+        </h2>
+        <p>
+          If we offer a free trial, you may use the Service at no charge for the
+          specified trial period. At the end of the trial, your account will be
+          downgraded to the free tier unless you subscribe to a paid plan. We will
+          not charge you without your explicit consent.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          15. Indemnification
+        </h2>
+        <p>
+          You agree to indemnify and hold harmless Act Two Pty Ltd, its officers,
+          directors, and employees from any claims, damages, losses, liabilities,
+          and expenses (including reasonable legal fees) arising from: (a) your use
+          of the Service; (b) emails sent to your customers via the Service; (c)
+          your violation of these Terms or any applicable law; or (d) any third-party
+          claim related to the content of emails sent on your behalf. This
+          indemnification obligation survives termination of your account.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          16. Force Majeure
+        </h2>
+        <p>
+          Neither party shall be liable for any failure or delay in performing its
+          obligations where such failure or delay results from circumstances beyond
+          the reasonable control of that party, including but not limited to natural
+          disasters, acts of government, internet or infrastructure outages, cyber
+          attacks, pandemics, or failures of third-party service providers
+          (including Stripe, Supabase, or email delivery providers).
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          17. Termination
         </h2>
         <p>
           We may suspend or terminate your account if you breach these Terms. You
@@ -197,7 +239,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          15. Governing Law
+          18. Governing Law
         </h2>
         <p>
           These Terms are governed by the laws of Victoria, Australia. Any disputes
@@ -205,7 +247,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          16. Changes to These Terms
+          19. Changes to These Terms
         </h2>
         <p>
           We may update these Terms from time to time. We will notify you of
@@ -215,7 +257,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          17. Contact
+          20. Contact
         </h2>
         <p>
           Questions? Email us at{" "}
