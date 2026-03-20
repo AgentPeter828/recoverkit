@@ -179,7 +179,61 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          10. Intellectual Property
+          10. Feedback &amp; Ideas
+        </h2>
+        <p>
+          If you submit comments, ideas, suggestions, or feedback about the
+          Service (&quot;Feedback&quot;), you grant Act Two Pty Ltd a worldwide,
+          perpetual, irrevocable, royalty-free, fully sublicensable right and
+          licence to use, reproduce, modify, adapt, publish, and incorporate the
+          Feedback into any product or service without restriction, attribution,
+          or compensation to you. You acknowledge that Feedback is provided
+          voluntarily and on a non-confidential basis, and that Act Two Pty Ltd
+          is under no obligation to use any Feedback.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          11. Software Licence
+        </h2>
+        <p>
+          Subject to your compliance with these Terms, we grant you a limited,
+          non-exclusive, non-transferable, non-sublicensable, revocable licence
+          to access and use the Service solely for your internal business
+          purposes during the term of your subscription. You may not: (a) copy,
+          modify, or create derivative works of the Service; (b) reverse-engineer,
+          decompile, or disassemble any part of the Service; (c) sublicence,
+          sell, resell, or redistribute the Service; or (d) use the Service to
+          build a competing product or service.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          12. Confidentiality
+        </h2>
+        <p>
+          Each party (&quot;Receiving Party&quot;) agrees to hold in confidence
+          all non-public information disclosed by the other party
+          (&quot;Disclosing Party&quot;) that is designated as confidential or
+          that reasonably should be understood to be confidential
+          (&quot;Confidential Information&quot;). The Receiving Party will: (a)
+          use Confidential Information only as necessary to exercise its rights
+          or perform its obligations under these Terms; (b) not disclose
+          Confidential Information to any third party except employees,
+          contractors, or advisors who need to know and are bound by
+          confidentiality obligations at least as restrictive as these.
+        </p>
+        <p>
+          Confidential Information excludes information that: (i) is or becomes
+          publicly available through no fault of the Receiving Party; (ii) was
+          known to the Receiving Party prior to disclosure; (iii) is
+          independently developed without use of Confidential Information; or
+          (iv) is lawfully received from a third party without restriction.
+          Either party may disclose Confidential Information if required by law,
+          provided it gives prompt written notice (where legally permitted) to
+          allow the Disclosing Party to seek protective measures.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          13. Intellectual Property
         </h2>
         <p>
           All rights in the Service (code, design, branding) remain with
@@ -189,7 +243,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          11. Third-Party Services
+          14. Third-Party Services
         </h2>
         <p>
           The Service integrates with third parties including Stripe &amp; Stripe
@@ -200,7 +254,20 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          12. Limitation of Liability
+          15. Data Aggregation
+        </h2>
+        <p>
+          We may collect, compile, and use anonymised and aggregated data derived
+          from your use of the Service (&quot;Aggregated Data&quot;) for purposes
+          including but not limited to: benchmarking, product improvement,
+          industry reports, and marketing materials (e.g., average recovery rates
+          or churn benchmarks). Aggregated Data will not identify you, your
+          business, or your customers. You retain all rights to your raw,
+          non-aggregated data.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          16. Limitation of Liability
         </h2>
         <p>
           To the maximum extent permitted by law (including the Australian Consumer
@@ -213,7 +280,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          13. Disclaimer
+          17. Disclaimer
         </h2>
         <p>
           The Service is provided &quot;as is&quot; and &quot;as available&quot;.
@@ -224,7 +291,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          14. Free Trials
+          18. Free Trials
         </h2>
         <p>
           If we offer a free trial, you may use the Service at no charge for the
@@ -234,7 +301,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          15. Indemnification
+          19. Indemnification
         </h2>
         <p>
           You agree to indemnify and hold harmless Act Two Pty Ltd, its officers,
@@ -247,7 +314,43 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          16. Force Majeure
+          20. Business Transfers
+        </h2>
+        <p>
+          If Act Two Pty Ltd, or substantially all of its assets, is acquired by
+          or merged with another entity, or in the unlikely event that Act Two
+          Pty Ltd goes out of business or enters administration, user information
+          (including personal data) may be among the assets transferred to the
+          acquiring entity. You acknowledge and consent to such transfer. The
+          acquiring entity will be bound by the terms of this agreement and our
+          Privacy Policy with respect to your data. We will notify you by email
+          or prominent notice on the Service before your personal data is
+          transferred and becomes subject to a different privacy policy.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          21. Copyright &amp; DMCA
+        </h2>
+        <p>
+          We respect the intellectual property rights of others. If you believe
+          that content available through the Service infringes your copyright,
+          please send a notice to{" "}
+          <a href="mailto:hello@recoverkit.com" className="underline">
+            hello@recoverkit.com
+          </a>{" "}
+          containing: (a) identification of the copyrighted work claimed to be
+          infringed; (b) identification of the allegedly infringing material and
+          its location within the Service; (c) your contact information; (d) a
+          statement that you have a good-faith belief that the use is not
+          authorised by the copyright owner; and (e) a statement, under penalty
+          of perjury, that the information in the notice is accurate and that you
+          are the copyright owner or authorised to act on their behalf. We may
+          remove or disable access to allegedly infringing material and may
+          terminate the accounts of repeat infringers.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          22. Force Majeure
         </h2>
         <p>
           Neither party shall be liable for any failure or delay in performing its
@@ -259,7 +362,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          17. Termination
+          23. Termination
         </h2>
         <p>
           We may suspend or terminate your account if you breach these Terms. You
@@ -270,7 +373,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          18. Governing Law
+          24. Governing Law
         </h2>
         <p>
           These Terms are governed by the laws of Victoria, Australia. Any disputes
@@ -278,7 +381,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          19. Changes to These Terms
+          25. Changes to These Terms
         </h2>
         <p>
           We may update these Terms from time to time. We will notify you of
@@ -288,7 +391,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          20. Contact
+          26. Contact
         </h2>
         <p>
           Questions? Email us at{" "}

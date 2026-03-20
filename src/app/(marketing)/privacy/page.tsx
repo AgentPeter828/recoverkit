@@ -102,6 +102,12 @@ export default function PrivacyPage() {
           either address your concerns or offer to terminate your account
           without penalty.
         </p>
+        <p>
+          We may use anonymised and aggregated data derived from the Service for
+          benchmarking, product improvement, and industry reporting (e.g.,
+          average recovery rates or churn benchmarks). Such data will not
+          identify you, your business, or your customers.
+        </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
           4. AI Processing
@@ -205,7 +211,20 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          10. Your Rights
+          10. Business Transfers
+        </h2>
+        <p>
+          If Act Two Pty Ltd, or substantially all of its assets, is acquired by
+          or merged with another entity, or in the unlikely event that Act Two
+          Pty Ltd goes out of business or enters administration, personal data
+          may be among the assets transferred to the successor entity. We will
+          notify affected users by email before any such transfer takes effect.
+          The successor entity will be bound by this Privacy Policy with respect
+          to any personal data transferred to it.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          11. Your Rights
         </h2>
         <p>Depending on your jurisdiction, you may have the right to:</p>
         <ul className="list-disc pl-6 space-y-1">
@@ -295,7 +314,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          11. Children
+          12. Children
         </h2>
         <p>
           RecoverKit is a business tool not directed at children under 16. We do
@@ -303,7 +322,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          12. Changes to This Policy
+          13. Changes to This Policy
         </h2>
         <p>
           We may update this policy from time to time. We will notify you of
@@ -313,7 +332,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          13. Contact
+          14. Contact
         </h2>
         <p>
           <strong>Data Protection Contact:</strong> For all privacy enquiries,
@@ -327,7 +346,7 @@ export default function PrivacyPage() {
         <p>
           Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486)
           <br />
-          Victoria, Australia
+          Melbourne, Victoria 3000, Australia
         </p>
         <p>
           <strong>EU/EEA Representative (GDPR Art. 27):</strong> If you are
