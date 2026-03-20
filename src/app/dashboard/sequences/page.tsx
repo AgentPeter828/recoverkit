@@ -111,6 +111,11 @@ export default function SequencesPage() {
   const [confirmed, setConfirmed] = useState(false);
   const [showDunningExplainer, setShowDunningExplainer] = useState(false);
   const [hoveredTone, setHoveredTone] = useState<string | null>(null);
+  const [editingStep, setEditingStep] = useState<number | null>(null);
+  const [editSubject, setEditSubject] = useState("");
+  const [editBodyHtml, setEditBodyHtml] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [savedStep, setSavedStep] = useState<number | null>(null);
 
   // ─── Generate form state ───
   const [businessDescription, setBusinessDescription] = useState("");
@@ -256,6 +261,54 @@ export default function SequencesPage() {
       setError("Network error. Please try again.");
     } finally {
       setCreating(false);
+    }
+  }
+
+  function startEditing(email: DunningEmail) {
+    setEditingStep(email.step_number);
+    setEditSubject(email.subject);
+    setEditBodyHtml(email.body_html || email.body_text || "");
+  }
+
+  function cancelEditing() {
+    setEditingStep(null);
+    setEditSubject("");
+    setEditBodyHtml("");
+  }
+
+  async function handleSaveEmail(emailId: string, stepNumber: number) {
+    setSaving(true);
+    try {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = editBodyHtml;
+      const bodyText = tempDiv.textContent || tempDiv.innerText || "";
+
+      const res = await fetch(`/api/dunning-emails/${emailId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: editSubject,
+          body_html: editBodyHtml,
+          body_text: bodyText,
+        }),
+      });
+
+      if (res.ok) {
+        setEmails((prev) =>
+          prev.map((e) =>
+            e.id === emailId
+              ? { ...e, subject: editSubject, body_html: editBodyHtml, body_text: bodyText }
+              : e
+          )
+        );
+        setEditingStep(null);
+        setSavedStep(stepNumber);
+        setTimeout(() => setSavedStep(null), 2000);
+      }
+    } catch {
+      // Silent
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -556,28 +609,80 @@ export default function SequencesPage() {
                 {isExpanded && (
                   <div className="px-4 pb-4 pt-0">
                     <div className="border-t pt-4" style={{ borderColor: "var(--color-border)" }}>
-                      <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-text-secondary)" }}>
-                        Subject: {email.subject}
-                      </p>
-                      {email.body_html ? (
-                        <div
-                          className="prose prose-sm max-w-none text-sm p-4 rounded-lg mt-2 [&_a]:text-[var(--color-brand)] [&_a]:underline"
-                          style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
-                          dangerouslySetInnerHTML={{ __html: email.body_html }}
-                        />
+                      {editingStep === email.step_number ? (
+                        <>
+                          {/* Inline editor */}
+                          <div className="mb-3">
+                            <label className="block text-xs font-semibold mb-1.5" style={{ color: "var(--color-text-secondary)" }}>
+                              Subject line
+                            </label>
+                            <Input
+                              value={editSubject}
+                              onChange={(e) => setEditSubject(e.target.value)}
+                              placeholder="Subject line"
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label className="block text-xs font-semibold mb-1.5" style={{ color: "var(--color-text-secondary)" }}>
+                              Email body
+                            </label>
+                            <textarea
+                              value={editBodyHtml}
+                              onChange={(e) => setEditBodyHtml(e.target.value)}
+                              rows={8}
+                              className="w-full rounded-lg border px-4 py-3 text-sm resize-y focus:outline-none focus:ring-2"
+                              style={{
+                                borderColor: "var(--color-border)",
+                                background: "var(--color-bg)",
+                                color: "var(--color-text)",
+                                lineHeight: 1.7,
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              onClick={() => handleSaveEmail(email.id, email.step_number)}
+                              disabled={saving}
+                            >
+                              {saving ? "Saving..." : "Save changes"}
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={cancelEditing}>
+                              Cancel
+                            </Button>
+                          </div>
+                        </>
                       ) : (
-                        <pre
-                          className="whitespace-pre-wrap text-sm p-4 rounded-lg mt-2"
-                          style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
-                        >
-                          {email.body_text || "(No email content)"}
-                        </pre>
+                        <>
+                          {/* Read-only preview */}
+                          <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-text-secondary)" }}>
+                            Subject: {email.subject}
+                          </p>
+                          {email.body_html ? (
+                            <div
+                              className="prose prose-sm max-w-none text-sm p-4 rounded-lg mt-2 [&_a]:text-[var(--color-brand)] [&_a]:underline"
+                              style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+                              dangerouslySetInnerHTML={{ __html: email.body_html }}
+                            />
+                          ) : (
+                            <pre
+                              className="whitespace-pre-wrap text-sm p-4 rounded-lg mt-2"
+                              style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+                            >
+                              {email.body_text || "(No email content)"}
+                            </pre>
+                          )}
+                          <div className="mt-3 flex items-center gap-2">
+                            <Button variant="ghost" size="sm" onClick={() => startEditing(email)}>
+                              Edit this email
+                            </Button>
+                            {savedStep === email.step_number && (
+                              <span className="text-sm" style={{ color: "#22c55e" }}>✓ Saved</span>
+                            )}
+                          </div>
+                        </>
                       )}
-                      <div className="mt-3">
-                        <Link href={`/dashboard/sequences/${defaultSeq?.id}`}>
-                          <Button variant="ghost" size="sm">Edit this email</Button>
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 )}
