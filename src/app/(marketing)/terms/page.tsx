@@ -61,6 +61,15 @@ export default function TermsPage() {
           unrelated third parties, or retain it after you disconnect (subject to
           legal retention requirements).
         </p>
+        <p>
+          <strong>Stripe Data Usage Commitment:</strong> We access your Stripe
+          data solely to provide payment recovery services. We do not: (a) use
+          customer email addresses for our own marketing purposes; (b) share
+          Stripe data with unrelated third parties; (c) build profiles on or
+          train AI models using your Stripe data beyond what is required to
+          personalise recovery emails for the current campaign. We comply with
+          Stripe&apos;s Connected Account Agreement and Platform Requirements.
+        </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
           4. Emails Sent on Your Behalf
@@ -75,7 +84,15 @@ export default function TermsPage() {
           <li>Email content may be personalised using AI (OpenAI) based on payment context</li>
           <li>You are responsible for ensuring emails comply with applicable anti-spam laws (e.g., the Australian Spam Act 2003, CAN-SPAM, GDPR)</li>
           <li>We will include unsubscribe mechanisms where required by law</li>
+          <li>For Canadian recipients, you must ensure express or implied consent exists before dunning emails are sent, in compliance with CASL</li>
         </ul>
+        <p>
+          All emails sent via RecoverKit include accurate sender identification,
+          a clear subject line, a physical postal address, and a working
+          unsubscribe link, in compliance with the CAN-SPAM Act (US), the
+          Australian Spam Act 2003, and CASL (Canada). Opt-out requests are
+          honoured within 10 business days.
+        </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
           5. Data Processing
@@ -92,9 +109,23 @@ export default function TermsPage() {
           <li>Assist you in responding to data subject rights requests</li>
           <li>Delete or return your data upon termination (within 90 days)</li>
           <li>Make available information necessary to demonstrate compliance</li>
+          <li>Provide at least 14 days advance written notice of any new sub-processor or material change to existing sub-processor arrangements, with a right to object</li>
+          <li>Maintain a formal sub-processor register (see Privacy Policy Section 3) with explicit authorisation</li>
+          <li>Upon request, make available information necessary for audits and inspections to demonstrate compliance with data protection obligations</li>
+          <li>Cooperate with supervisory authorities where required</li>
         </ul>
         <p>
-          This section constitutes the data processing terms between you (controller) and us (processor) for the purposes of the GDPR and the Australian Privacy Act 1988.
+          This section, together with any Data Processing Agreement executed
+          between the parties, constitutes the data processing terms between you
+          (controller) and us (processor) for the purposes of GDPR Article 28,
+          the Australian Privacy Act 1988, PIPEDA, and applicable US state
+          privacy laws. A formal Data Processing Agreement (DPA) with detailed
+          schedules covering processing scope, duration, nature, purpose, and
+          Standard Contractual Clauses is available upon request at{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>
+          .
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>

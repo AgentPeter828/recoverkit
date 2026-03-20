@@ -20,8 +20,10 @@ export default function PrivacyPage() {
           This Privacy Policy explains how RecoverKit (&quot;Service&quot;,
           &quot;we&quot;, &quot;us&quot;), operated by Act Two Pty Ltd (ACN 674 342 486, ABN 56 674 342 486), a company registered in Victoria, Australia, collects, uses, and protects personal information.
           We comply with the Australian Privacy Act 1988 (Cth), the Australian
-          Privacy Principles (APPs), and the EU General Data Protection Regulation
-          (GDPR) where applicable.
+          Privacy Principles (APPs), the EU General Data Protection Regulation
+          (GDPR), the California Consumer Privacy Act / California Privacy Rights
+          Act (CCPA/CPRA), and the Canadian Personal Information Protection and
+          Electronic Documents Act (PIPEDA) where applicable.
         </p>
         <p>
           RecoverKit operates in two capacities: as a <strong>data controller</strong> for
@@ -93,6 +95,13 @@ export default function PrivacyPage() {
           their own privacy policy. We do not sell personal information to third
           parties.
         </p>
+        <p>
+          We will provide at least 14 days advance written notice (by email) of
+          any new sub-processor or material change to existing sub-processor
+          arrangements. You may object within 14 days. If you object, we will
+          either address your concerns or offer to terminate your account
+          without penalty.
+        </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
           4. AI Processing
@@ -104,15 +113,34 @@ export default function PrivacyPage() {
           full customer profiles. OpenAI processes this data under their data
           processing agreement and does not use it to train models.
         </p>
+        <p>
+          For users in the EU, in compliance with the EU AI Act: (a) dunning
+          emails generated with AI assistance are clearly disclosed as
+          AI-personalised; (b) you may request non-AI email alternatives or
+          manual review of email content; (c) we maintain processing logs for
+          audit and transparency purposes. To opt out of AI personalisation,
+          contact{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>
+          .
+        </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
           5. International Data Transfers
         </h2>
         <p>
           Some of our service providers are located outside Australia and the EU
-          (primarily in the United States). Where personal data is transferred
-          internationally, we ensure appropriate safeguards are in place, including
-          Standard Contractual Clauses (SCCs) where required by the GDPR.
+          (primarily in the United States). All international transfers to the
+          US and non-EU countries are governed by the EU Standard Contractual
+          Clauses (SCCs) approved by the EU Commission. Additionally, we
+          implement supplementary technical safeguards including encryption in
+          transit and at rest. Each sub-processor listed in Section 3 has
+          executed SCCs where required. For copies of applicable SCCs, contact{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>
+          .
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
@@ -138,7 +166,21 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          7. Data Retention
+          7. Email Compliance
+        </h2>
+        <p>
+          All commercial emails sent via RecoverKit include: (a) accurate sender
+          identity (From and Reply-To); (b) clear, non-deceptive subject lines;
+          (c) the sender business physical postal address; (d) a working
+          unsubscribe/opt-out link; and (e) opt-out requests are honoured within
+          10 business days. This applies under the CAN-SPAM Act (US), the
+          Australian Spam Act 2003, and CASL (Canada). For Canadian recipients,
+          we require that customers have express or implied consent before
+          sending commercial electronic messages, in compliance with CASL.
+        </p>
+
+        <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
+          8. Data Retention
         </h2>
         <ul className="list-disc pl-6 space-y-1">
           <li><strong>Your account data:</strong> retained while your account is active and deleted within 90 days of account deletion</li>
@@ -148,7 +190,7 @@ export default function PrivacyPage() {
         </ul>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          8. Data Security
+          9. Data Security
         </h2>
         <p>
           We use industry-standard measures to protect data, including encryption
@@ -163,7 +205,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          9. Your Rights
+          10. Your Rights
         </h2>
         <p>Depending on your jurisdiction, you may have the right to:</p>
         <ul className="list-disc pl-6 space-y-1">
@@ -181,6 +223,69 @@ export default function PrivacyPage() {
           email directly. They are the data controller for your information. If you
           need our help, email us and we will assist.
         </p>
+        <h3 className="text-xl font-semibold" style={{ color: "var(--color-text)" }}>
+          California Residents (CCPA/CPRA)
+        </h3>
+        <p>
+          Under the California Consumer Privacy Act and California Privacy
+          Rights Act, California residents have the right to: (1) know what
+          personal information is collected, used, and shared; (2) delete
+          personal information; (3) correct inaccurate information; (4) opt out
+          of the sale or sharing of personal information for cross-context
+          behavioural advertising; (5) limit use of sensitive personal
+          information; (6) non-discrimination for exercising these rights. We do
+          not sell personal information. However, certain analytics and
+          advertising cookies (Meta Pixel, Google Ads, Reddit Pixel) may
+          constitute sharing under CPRA. You may opt out via our cookie consent
+          banner or by contacting{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>
+          . We will respond within 45 days.
+        </p>
+
+        <h3 className="text-xl font-semibold" style={{ color: "var(--color-text)" }}>
+          Virginia Residents (VCDPA)
+        </h3>
+        <p>
+          Under the Virginia Consumer Data Protection Act, Virginia residents
+          have the right to access, correct, delete, and obtain a portable copy
+          of their personal data, and to opt out of the sale of personal data,
+          targeted advertising, and profiling. Contact{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>{" "}
+          to exercise these rights.
+        </p>
+
+        <h3 className="text-xl font-semibold" style={{ color: "var(--color-text)" }}>
+          Colorado &amp; Connecticut Residents
+        </h3>
+        <p>
+          Residents of Colorado (under the Colorado Privacy Act) and Connecticut
+          (under the Connecticut Data Privacy Act) have similar rights to
+          access, correct, delete, and port their personal data, and to opt out
+          of targeted advertising and the sale of personal data. Contact{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>{" "}
+          to exercise these rights.
+        </p>
+
+        <h3 className="text-xl font-semibold" style={{ color: "var(--color-text)" }}>
+          Canadian Residents (PIPEDA)
+        </h3>
+        <p>
+          Under PIPEDA, Canadian residents have the right to access their
+          personal information held by us, request corrections, and withdraw
+          consent. We comply with PIPEDA&apos;s 10 fair information principles.
+          Contact{" "}
+          <a href="mailto:privacy@recoverkit.com" className="underline">
+            privacy@recoverkit.com
+          </a>{" "}
+          to exercise these rights.
+        </p>
+
         <p>
           To exercise your rights, email us at{" "}
           <a href="mailto:privacy@recoverkit.com" className="underline">
@@ -190,7 +295,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          10. Children
+          11. Children
         </h2>
         <p>
           RecoverKit is a business tool not directed at children under 16. We do
@@ -198,7 +303,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          11. Changes to This Policy
+          12. Changes to This Policy
         </h2>
         <p>
           We may update this policy from time to time. We will notify you of
@@ -208,7 +313,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2 className="text-2xl font-semibold" style={{ color: "var(--color-text)" }}>
-          12. Contact
+          13. Contact
         </h2>
         <p>
           <strong>Data Protection Contact:</strong> For all privacy enquiries,
