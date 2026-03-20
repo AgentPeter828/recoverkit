@@ -195,8 +195,9 @@ export default function SequencesPage() {
         return;
       }
 
-      // Reload sequences and emails
+      // Reload sequences and emails, then scroll to top so user sees generated content
       await loadExistingSequences();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -558,12 +559,20 @@ export default function SequencesPage() {
                       <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-text-secondary)" }}>
                         Subject: {email.subject}
                       </p>
-                      <pre
-                        className="whitespace-pre-wrap text-sm p-4 rounded-lg mt-2"
-                        style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
-                      >
-                        {email.body_text || "(No plain text version)"}
-                      </pre>
+                      {email.body_html ? (
+                        <div
+                          className="prose prose-sm max-w-none text-sm p-4 rounded-lg mt-2 [&_a]:text-[var(--color-brand)] [&_a]:underline"
+                          style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+                          dangerouslySetInnerHTML={{ __html: email.body_html }}
+                        />
+                      ) : (
+                        <pre
+                          className="whitespace-pre-wrap text-sm p-4 rounded-lg mt-2"
+                          style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
+                        >
+                          {email.body_text || "(No email content)"}
+                        </pre>
+                      )}
                       <div className="mt-3">
                         <Link href={`/dashboard/sequences/${defaultSeq?.id}`}>
                           <Button variant="ghost" size="sm">Edit this email</Button>

@@ -34,7 +34,7 @@ const pricingFaqSchema = {
       name: "Can I cancel anytime?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes — all RecoverKit plans are month-to-month with no contracts. You can cancel, upgrade, or downgrade at any time from your dashboard. No cancellation fees.",
+        text: "Yes — all RecoverKit plans are month-to-month with no contracts. You can cancel or upgrade at any time from your dashboard. No cancellation fees.",
       },
     },
     {
@@ -245,7 +245,8 @@ const COMPARISON_FEATURES: ComparisonSection[] = [
       { name: "Smart retry scheduling", tooltip: "Automatic retries with exponential backoff", values: [true, true, true, true] },
       { name: "Priority retry timing", tooltip: "Retries sent at optimal times for higher success", values: [false, false, true, true] },
       { name: "Failed payment webhooks", values: [true, true, true, true] },
-      { name: "Basic recovery stats", tooltip: "Revenue recovered, success rate, active campaigns", values: [true, true, true, true] },
+      { name: "Recovery dashboard", tooltip: "Revenue recovered, success rate, active campaigns", values: [true, true, true, true] },
+      { name: "Advanced analytics", tooltip: "Detailed recovery trends, cohort analysis", values: [false, false, false, true] },
     ],
   },
   {
@@ -261,9 +262,15 @@ const COMPARISON_FEATURES: ComparisonSection[] = [
   {
     category: "Branding & Pages",
     features: [
-      { name: "Recovery dashboard", values: [true, true, true, true] },
-      { name: "Custom branding", tooltip: "Your logo and colors on payment pages", values: [false, false, true, true] },
+      { name: "Custom branding", tooltip: "Your logo and colors on payment pages and emails", values: [false, false, true, true] },
       { name: "Custom payment pages", tooltip: "Branded pages for customers to update their card", values: [false, false, false, true] },
+    ],
+  },
+  {
+    category: "Developer",
+    features: [
+      { name: "API access", tooltip: "REST API for custom integrations", values: [false, false, false, true] },
+      { name: "Priority support", values: [false, false, false, true] },
     ],
   },
 ];
