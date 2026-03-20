@@ -70,9 +70,23 @@ function RichTextEditor({
   const editorRef = useRef<HTMLDivElement>(null);
   const [activeFormats, setActiveFormats] = useState<Set<string>>(new Set());
 
+  /* Strip browser-inserted <p> wrappers → <br> line breaks */
+  function stripParagraphs(html: string): string {
+    return html
+      .replace(/<p[^>]*><br\s*\/?><\/p>/gi, "<br>")
+      .replace(/<p[^>]*>(.*?)<\/p>/gi, "$1<br>")
+      .replace(/(<br>\s*)+$/i, ""); // trim trailing <br>
+  }
+
   useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== initialHtml) {
-      editorRef.current.innerHTML = initialHtml;
+    if (editorRef.current) {
+      // Set default paragraph separator to <br> to prevent <p> wrapping
+      document.execCommand("defaultParagraphSeparator", false, "br");
+      // Clean any existing <p> tags from stored HTML before rendering
+      const cleaned = stripParagraphs(initialHtml);
+      if (editorRef.current.innerHTML !== cleaned) {
+        editorRef.current.innerHTML = cleaned;
+      }
     }
     // Only set initial content on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,10 +102,46 @@ function RichTextEditor({
 
   const handleInput = useCallback(() => {
     if (editorRef.current) {
-      onChange(editorRef.current.innerHTML);
+      // Strip any <p> tags the browser may have snuck in
+      const raw = editorRef.current.innerHTML;
+      const cleaned = stripParagraphs(raw);
+      if (raw !== cleaned) {
+        // Save cursor position, rewrite, restore
+        const sel = window.getSelection();
+        const range = sel?.rangeCount ? sel.getRangeAt(0) : null;
+        editorRef.current.innerHTML = cleaned;
+        if (range && sel) {
+          try {
+            sel.removeAllRanges();
+            sel.addRange(range);
+          } catch {
+            // If range is invalid after rewrite, move cursor to end
+            const newRange = document.createRange();
+            newRange.selectNodeContents(editorRef.current);
+            newRange.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(newRange);
+          }
+        }
+      }
+      onChange(cleaned);
     }
     updateActiveFormats();
   }, [onChange, updateActiveFormats]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      // Force Enter to insert <br> instead of <p>/<div>
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        document.execCommand("insertLineBreak");
+        if (editorRef.current) {
+          onChange(stripParagraphs(editorRef.current.innerHTML));
+        }
+      }
+    },
+    [onChange]
+  );
 
   const execCmd = useCallback(
     (command: string, value?: string) => {
@@ -155,6 +205,7 @@ function RichTextEditor({
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
+        onKeyDown={handleKeyDown}
         onKeyUp={updateActiveFormats}
         onMouseUp={updateActiveFormats}
         className="min-h-[160px] px-4 py-3 text-sm rounded-b-lg border focus:outline-none focus:ring-2"
