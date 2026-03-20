@@ -4,6 +4,7 @@ import { getSubscription } from "@/lib/stripe/billing";
 import { createServerComponentClient } from "@/lib/supabase/server";
 import { plans } from "@/lib/stripe/config";
 import { logAudit } from "@/lib/audit";
+import { trackServerEvent } from "@/lib/mixpanel-server";
 
 export const runtime = "nodejs";
 
@@ -51,6 +52,8 @@ export async function POST(request: NextRequest) {
     if (subscription.price_id === priceId) {
       return NextResponse.json({ error: "Already on this plan" }, { status: 400 });
     }
+
+    await trackServerEvent("plan_selected", { priceId }, user.id);
 
     // Retrieve the Stripe subscription to get the item ID
     const stripeSub = await stripe.subscriptions.retrieve(subscription.stripe_subscription_id);

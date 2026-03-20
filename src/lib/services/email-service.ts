@@ -443,7 +443,12 @@ export function buildDunningEmailHtml(params: {
   paymentUpdateUrl: string;
   businessName?: string;
   bodyHtml: string;
+  dunningEmailId?: string;
 }): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const trackingPixel = params.dunningEmailId
+    ? `<img src="${appUrl}/api/track/open?id=${params.dunningEmailId}" width="1" height="1" alt="" style="display:none;" />`
+    : "";
   return `
 <!DOCTYPE html>
 <html>
@@ -460,6 +465,7 @@ export function buildDunningEmailHtml(params: {
     This email was sent regarding a failed payment of ${params.amount} ${params.currency.toUpperCase()}.
     If you believe this is an error, please contact support.
   </p>
+  ${trackingPixel}
 </body>
 </html>`;
 }

@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
     currency: campaign.currency,
     paymentUpdateUrl,
     bodyHtml: template.body_html,
+    dunningEmailId: dunning_email_id,
   });
 
   const result = await sendEmail({

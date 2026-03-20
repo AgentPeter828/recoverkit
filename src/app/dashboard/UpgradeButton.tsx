@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { analytics } from "@/lib/mixpanel";
 
 interface UpgradeButtonProps {
   priceId: string;
@@ -30,6 +31,8 @@ export function UpgradeButton({
     setLoading(true);
     setError(null);
     setMessage(null);
+
+    analytics.track("plan_selected", { priceId });
 
     try {
       if (hasSubscription) {

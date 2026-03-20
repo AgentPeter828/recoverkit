@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
 import { createOrGetCustomer, getSubscription } from "@/lib/stripe/billing";
 import { createServerComponentClient } from "@/lib/supabase/server";
+import { trackServerEvent } from "@/lib/mixpanel-server";
 
 export const runtime = "nodejs";
 
@@ -50,6 +51,8 @@ export async function POST(request: NextRequest) {
       user.id,
       user.email ?? ""
     );
+
+    await trackServerEvent("plan_selected", { priceId }, user.id);
 
     const origin = request.headers.get("origin") ?? "http://localhost:3000";
 

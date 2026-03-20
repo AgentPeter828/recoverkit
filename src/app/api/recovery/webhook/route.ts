@@ -130,6 +130,16 @@ export async function POST(request: NextRequest) {
     customer_email: invoice.customer_email,
   });
 
+  // Track campaign start (only for active campaigns, not queued)
+  if (!isQueued) {
+    await trackServerEvent("campaign_started", {
+      amount: invoice.amount_due,
+      currency: invoice.currency,
+      customer_email: invoice.customer_email,
+      stripe_invoice_id: invoice.id,
+    }, connection.user_id);
+  }
+
   // Track in Mixpanel
   await trackServerEvent(isQueued ? "payment_queued" : "payment_failed_detected", {
     amount: invoice.amount_due,

@@ -149,6 +149,7 @@ async function processDunningEmails(supabase: ReturnType<typeof getSupabaseAdmin
         currency: campaign.currency,
         paymentUpdateUrl,
         bodyHtml: emailToSend.body_html,
+        dunningEmailId: emailToSend.id,
       });
 
       // Determine sender
